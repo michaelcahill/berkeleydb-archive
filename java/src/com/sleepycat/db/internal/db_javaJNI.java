@@ -81,7 +81,6 @@ class db_javaJNI {
   public final static native String Db_get_filename(long jarg1) throws com.sleepycat.db.DatabaseException;
   public final static native String Db_get_dbname(long jarg1) throws com.sleepycat.db.DatabaseException;
   public final static native int Db_get_encrypt_flags(long jarg1) throws com.sleepycat.db.DatabaseException;
-  public final static native String Db_get_errpfx(long jarg1) /* no exception */;
   public final static native int Db_get_flags(long jarg1) throws com.sleepycat.db.DatabaseException;
   public final static native int Db_get_lorder(long jarg1) throws com.sleepycat.db.DatabaseException;
   public final static native long Db_get_mpf(long jarg1) throws com.sleepycat.db.DatabaseException;
@@ -111,7 +110,6 @@ class db_javaJNI {
   public final static native void Db_set_cachesize(long jarg1, long jarg2, int jarg3) throws com.sleepycat.db.DatabaseException;
   public final static native void Db_set_dup_compare(long jarg1, java.util.Comparator jarg2) throws com.sleepycat.db.DatabaseException;
   public final static native void Db_set_encrypt(long jarg1, String jarg2, int jarg3) throws com.sleepycat.db.DatabaseException;
-  public final static native void Db_set_errpfx(long jarg1, String jarg2) /* no exception */;
   public final static native void Db_set_feedback(long jarg1, com.sleepycat.db.FeedbackHandler jarg2) throws com.sleepycat.db.DatabaseException;
   public final static native void Db_set_flags(long jarg1, int jarg2) throws com.sleepycat.db.DatabaseException;
   public final static native void Db_set_h_ffactor(long jarg1, int jarg2) throws com.sleepycat.db.DatabaseException;
@@ -144,7 +142,6 @@ class db_javaJNI {
   public final static native void DbEnv_errx(long jarg1, String jarg2) /* no exception */;
   public final static native String[] DbEnv_get_data_dirs(long jarg1) throws com.sleepycat.db.DatabaseException;
   public final static native int DbEnv_get_encrypt_flags(long jarg1) throws com.sleepycat.db.DatabaseException;
-  public final static native String DbEnv_get_errpfx(long jarg1) /* no exception */;
   public final static native int DbEnv_get_flags(long jarg1) throws com.sleepycat.db.DatabaseException;
   public final static native String DbEnv_get_home(long jarg1) throws com.sleepycat.db.DatabaseException;
   public final static native int DbEnv_get_open_flags(long jarg1) throws com.sleepycat.db.DatabaseException;
@@ -158,7 +155,6 @@ class db_javaJNI {
   public final static native void DbEnv_set_data_dir(long jarg1, String jarg2) throws com.sleepycat.db.DatabaseException;
   public final static native void DbEnv_set_encrypt(long jarg1, String jarg2, int jarg3) throws com.sleepycat.db.DatabaseException;
   public final static native void DbEnv_set_errcall(long jarg1, com.sleepycat.db.ErrorHandler jarg2) /* no exception */;
-  public final static native void DbEnv_set_errpfx(long jarg1, String jarg2) /* no exception */;
   public final static native void DbEnv_set_flags(long jarg1, int jarg2, boolean jarg3) throws com.sleepycat.db.DatabaseException;
   public final static native void DbEnv_set_feedback(long jarg1, com.sleepycat.db.FeedbackHandler jarg2) throws com.sleepycat.db.DatabaseException;
   public final static native void DbEnv_set_mp_mmapsize(long jarg1, long jarg2) throws com.sleepycat.db.DatabaseException;

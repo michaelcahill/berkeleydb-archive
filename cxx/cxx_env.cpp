@@ -848,7 +848,7 @@ int DbEnv::set_rep_transport(int myid,
 DBENV_METHOD(rep_elect,
     (int nsites,
     int nvotes, int priority, u_int32_t timeout, int *eidp, u_int32_t flags),
-    (dbenv, nvotes, nsites, priority, timeout, eidp, flags))
+    (dbenv, nsites, nvotes, priority, timeout, eidp, flags))
 
 int DbEnv::rep_process_message(Dbt *control,
     Dbt *rec, int *idp, DbLsn *ret_lsnp)

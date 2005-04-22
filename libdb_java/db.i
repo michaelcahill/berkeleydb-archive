@@ -186,7 +186,6 @@ struct Db
 		errno = self->get_env(self, &env);
 		return env;
 	}
-#endif
 
 	const char *get_errpfx() {
 		const char *ret;
@@ -194,6 +193,7 @@ struct Db
 		self->get_errpfx(self, &ret);
 		return ret;
 	}
+#endif
 
 	u_int32_t get_flags() {
 		u_int32_t ret;
@@ -362,11 +362,11 @@ struct Db
 	void set_errcall(void (*db_errcall_fcn)(const DB_ENV *, const char *, const char *)) {
 		self->set_errcall(self, db_errcall_fcn);
 	}
-#endif /* SWIGJAVA */
 
 	void set_errpfx(const char *errpfx) {
 		self->set_errpfx(self, errpfx);
 	}
+#endif /* SWIGJAVA */
 
 	JAVA_EXCEPT(DB_RETOK_STD, DB2JDBENV)
 	db_ret_t set_feedback(void (*db_feedback_fcn)(DB *, int, int)) {
@@ -568,12 +568,14 @@ struct DbEnv
 		return ret;
 	}
 
+#ifndef SWIGJAVA
 	const char *get_errpfx() {
 		const char *ret;
 		errno = 0;
 		self->get_errpfx(self, &ret);
 		return ret;
 	}
+#endif /* SWIGJAVA */
 
 	u_int32_t get_flags() {
 		u_int32_t ret;
@@ -647,9 +649,11 @@ struct DbEnv
 		self->set_errcall(self, db_errcall_fcn);
 	}
 
+#ifndef SWIGJAVA
 	void set_errpfx(const char *errpfx) {
 		self->set_errpfx(self, errpfx);
 	}
+#endif
 
 	JAVA_EXCEPT(DB_RETOK_STD, JDBENV)
 	db_ret_t set_flags(u_int32_t flags, int_bool onoff) {

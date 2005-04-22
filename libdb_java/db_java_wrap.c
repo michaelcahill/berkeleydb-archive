@@ -679,7 +679,7 @@ const struct {
 	    "(L" DB_PKG "DatabaseEntry;L" DB_PKG "LogSequenceNumber;I)I" },
 	{ &env_feedback_method, &dbenv_class, "handle_env_feedback", "(II)V" },
 	{ &errcall_method, &dbenv_class, "handle_error",
-	    "(Ljava/lang/String;Ljava/lang/String;)V" },
+	    "(Ljava/lang/String;)V" },
 	{ &msgcall_method, &dbenv_class, "handle_message",
 	    "(Ljava/lang/String;)V" },
 	{ &paniccall_method, &dbenv_class, "handle_panic",
@@ -1328,11 +1328,11 @@ static void __dbj_error(const DB_ENV *dbenv, const char *prefix, const char *msg
 	JNIEnv *jenv = __dbj_get_jnienv();
 	jobject jdbenv = (jobject)DB_ENV_INTERNAL(dbenv);
 
+	COMPQUIET(prefix, NULL);
+
 	if (jdbenv != NULL)
 		(*jenv)->CallNonvirtualVoidMethod(jenv, jdbenv, dbenv_class,
-		    errcall_method,
-		    (*jenv)->NewStringUTF(jenv, prefix),
-		    (*jenv)->NewStringUTF(jenv, msg));
+		    errcall_method, (*jenv)->NewStringUTF(jenv, msg));
 }
 
 static void __dbj_env_feedback(DB_ENV *dbenv, int opcode, int percent)
@@ -1810,12 +1810,6 @@ u_int32_t Db_get_encrypt_flags(struct Db *self){
 		errno = self->get_encrypt_flags(self, &ret);
 		return ret;
 	}
-char const *Db_get_errpfx(struct Db *self){
-		const char *ret;
-		errno = 0;
-		self->get_errpfx(self, &ret);
-		return ret;
-	}
 u_int32_t Db_get_flags(struct Db *self){
 		u_int32_t ret;
 		errno = self->get_flags(self, &ret);
@@ -1934,9 +1928,6 @@ db_ret_t Db_set_dup_compare(struct Db *self,int (*dup_compare_fcn)(DB *,DBT cons
 	}
 db_ret_t Db_set_encrypt(struct Db *self,char const *passwd,u_int32_t flags){
 		return self->set_encrypt(self, passwd, flags);
-	}
-void Db_set_errpfx(struct Db *self,char const *errpfx){
-		self->set_errpfx(self, errpfx);
 	}
 db_ret_t Db_set_feedback(struct Db *self,void (*db_feedback_fcn)(DB *,int,int)){
 		return self->set_feedback(self, db_feedback_fcn);
@@ -2061,12 +2052,6 @@ u_int32_t DbEnv_get_encrypt_flags(struct DbEnv *self){
 		errno = self->get_encrypt_flags(self, &ret);
 		return ret;
 	}
-char const *DbEnv_get_errpfx(struct DbEnv *self){
-		const char *ret;
-		errno = 0;
-		self->get_errpfx(self, &ret);
-		return ret;
-	}
 u_int32_t DbEnv_get_flags(struct DbEnv *self){
 		u_int32_t ret;
 		errno = self->get_flags(self, &ret);
@@ -2121,9 +2106,6 @@ db_ret_t DbEnv_set_encrypt(struct DbEnv *self,char const *passwd,u_int32_t flags
 	}
 void DbEnv_set_errcall(struct DbEnv *self,void (*db_errcall_fcn)(DB_ENV const *,char const *,char const *)){
 		self->set_errcall(self, db_errcall_fcn);
-	}
-void DbEnv_set_errpfx(struct DbEnv *self,char const *errpfx){
-		self->set_errpfx(self, errpfx);
 	}
 db_ret_t DbEnv_set_flags(struct DbEnv *self,u_int32_t flags,int_bool onoff){
 		return self->set_flags(self, flags, onoff);
@@ -2965,34 +2947,6 @@ JNIEXPORT jint JNICALL Java_com_sleepycat_db_internal_db_1javaJNI_Db_1get_1encry
     }
     
     jresult = (jint)result; 
-    return jresult;
-}
-
-
-JNIEXPORT jstring JNICALL Java_com_sleepycat_db_internal_db_1javaJNI_Db_1get_1errpfx(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-    jstring jresult = 0 ;
-    struct Db *arg1 = (struct Db *) 0 ;
-    char *result;
-    
-    (void)jenv;
-    (void)jcls;
-    arg1 = *(struct Db **)&jarg1; 
-    
-    if (jarg1 == 0) {
-        __dbj_throw(jenv, EINVAL, "call on closed handle", NULL, NULL);
-        return 0;
-    }
-    
-    errno = 0;
-    result = (char *)Db_get_errpfx(arg1);
-    
-    if (!DB_RETOK_STD(errno)) {
-        __dbj_throw(jenv, errno, NULL, NULL, DB2JDBENV);
-    }
-    
-    {
-        if(result) jresult = (*jenv)->NewStringUTF(jenv, result); 
-    }
     return jresult;
 }
 
@@ -3916,33 +3870,6 @@ JNIEXPORT void JNICALL Java_com_sleepycat_db_internal_db_1javaJNI_Db_1set_1encry
     if (!DB_RETOK_STD(result)) {
         __dbj_throw(jenv, result, NULL, NULL, DB2JDBENV);
     }
-    
-    {
-        if (arg2) (*jenv)->ReleaseStringUTFChars(jenv, jarg2, arg2); 
-    }
-}
-
-
-JNIEXPORT void JNICALL Java_com_sleepycat_db_internal_db_1javaJNI_Db_1set_1errpfx(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
-    struct Db *arg1 = (struct Db *) 0 ;
-    char *arg2 ;
-    
-    (void)jenv;
-    (void)jcls;
-    arg1 = *(struct Db **)&jarg1; 
-    {
-        arg2 = 0;
-        if (jarg2) {
-            arg2 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg2, 0);
-            if (!arg2) return ;
-        }
-    }
-    
-    if (jarg1 == 0) {
-        __dbj_throw(jenv, EINVAL, "call on closed handle", NULL, NULL);
-        return ;
-    }
-    Db_set_errpfx(arg1,(char const *)arg2);
     
     {
         if (arg2) (*jenv)->ReleaseStringUTFChars(jenv, jarg2, arg2); 
@@ -4991,34 +4918,6 @@ JNIEXPORT jint JNICALL Java_com_sleepycat_db_internal_db_1javaJNI_DbEnv_1get_1en
 }
 
 
-JNIEXPORT jstring JNICALL Java_com_sleepycat_db_internal_db_1javaJNI_DbEnv_1get_1errpfx(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-    jstring jresult = 0 ;
-    struct DbEnv *arg1 = (struct DbEnv *) 0 ;
-    char *result;
-    
-    (void)jenv;
-    (void)jcls;
-    arg1 = *(struct DbEnv **)&jarg1; 
-    
-    if (jarg1 == 0) {
-        __dbj_throw(jenv, EINVAL, "call on closed handle", NULL, NULL);
-        return 0;
-    }
-    
-    errno = 0;
-    result = (char *)DbEnv_get_errpfx(arg1);
-    
-    if (!DB_RETOK_STD(errno)) {
-        __dbj_throw(jenv, errno, NULL, NULL, JDBENV);
-    }
-    
-    {
-        if(result) jresult = (*jenv)->NewStringUTF(jenv, result); 
-    }
-    return jresult;
-}
-
-
 JNIEXPORT jint JNICALL Java_com_sleepycat_db_internal_db_1javaJNI_DbEnv_1get_1flags(JNIEnv *jenv, jclass jcls, jlong jarg1) {
     jint jresult = 0 ;
     struct DbEnv *arg1 = (struct DbEnv *) 0 ;
@@ -5390,33 +5289,6 @@ JNIEXPORT void JNICALL Java_com_sleepycat_db_internal_db_1javaJNI_DbEnv_1set_1er
     }
     DbEnv_set_errcall(arg1,arg2);
     
-}
-
-
-JNIEXPORT void JNICALL Java_com_sleepycat_db_internal_db_1javaJNI_DbEnv_1set_1errpfx(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
-    struct DbEnv *arg1 = (struct DbEnv *) 0 ;
-    char *arg2 ;
-    
-    (void)jenv;
-    (void)jcls;
-    arg1 = *(struct DbEnv **)&jarg1; 
-    {
-        arg2 = 0;
-        if (jarg2) {
-            arg2 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg2, 0);
-            if (!arg2) return ;
-        }
-    }
-    
-    if (jarg1 == 0) {
-        __dbj_throw(jenv, EINVAL, "call on closed handle", NULL, NULL);
-        return ;
-    }
-    DbEnv_set_errpfx(arg1,(char const *)arg2);
-    
-    {
-        if (arg2) (*jenv)->ReleaseStringUTFChars(jenv, jarg2, arg2); 
-    }
 }
 
 

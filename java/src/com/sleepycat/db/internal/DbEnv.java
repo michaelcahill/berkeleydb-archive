@@ -48,6 +48,7 @@ public class DbEnv {
 	private LogRecordHandler app_dispatch_handler;
 	private FeedbackHandler env_feedback_handler;
 	private ErrorHandler error_handler;
+	private String errpfx;
 	private MessageHandler message_handler;
 	private PanicHandler panic_handler;
 	private ReplicationTransport rep_transport_handler;
@@ -101,8 +102,16 @@ public class DbEnv {
 		return env_feedback_handler;
 	}
 
-	private final void handle_error(String errpfx, String msg) {
-		error_handler.error(wrapper, errpfx, msg);
+	public void set_errpfx(String errpfx) /* no exception */ {
+		this.errpfx = errpfx;
+	}
+
+	public String get_errpfx() /* no exception */ {
+		return errpfx;
+	}
+
+	private final void handle_error(String msg) {
+		error_handler.error(wrapper, this.errpfx, msg);
 	}
 
 	public ErrorHandler get_errcall() /* no exception */ {
@@ -210,10 +219,6 @@ public class DbEnv {
 
   public int get_encrypt_flags() throws com.sleepycat.db.DatabaseException { return db_javaJNI.DbEnv_get_encrypt_flags(swigCPtr); }
 
-  public String get_errpfx() /* no exception */ {
-    return db_javaJNI.DbEnv_get_errpfx(swigCPtr);
-  }
-
   public int get_flags() throws com.sleepycat.db.DatabaseException { return db_javaJNI.DbEnv_get_flags(swigCPtr); }
 
   public String get_home() throws com.sleepycat.db.DatabaseException {
@@ -244,10 +249,6 @@ public class DbEnv {
 
   public void set_errcall(com.sleepycat.db.ErrorHandler db_errcall_fcn) /* no exception */ {
     db_javaJNI.DbEnv_set_errcall(swigCPtr,  (error_handler = db_errcall_fcn) );
-  }
-
-  public void set_errpfx(String errpfx) /* no exception */ {
-    db_javaJNI.DbEnv_set_errpfx(swigCPtr, errpfx);
   }
 
   public void set_flags(int flags, boolean onoff) throws com.sleepycat.db.DatabaseException { db_javaJNI.DbEnv_set_flags(swigCPtr, flags, onoff); }

@@ -18,11 +18,11 @@ static void __dbj_error(const DB_ENV *dbenv, const char *prefix, const char *msg
 	JNIEnv *jenv = __dbj_get_jnienv();
 	jobject jdbenv = (jobject)DB_ENV_INTERNAL(dbenv);
 
+	COMPQUIET(prefix, NULL);
+
 	if (jdbenv != NULL)
 		(*jenv)->CallNonvirtualVoidMethod(jenv, jdbenv, dbenv_class,
-		    errcall_method,
-		    (*jenv)->NewStringUTF(jenv, prefix),
-		    (*jenv)->NewStringUTF(jenv, msg));
+		    errcall_method, (*jenv)->NewStringUTF(jenv, msg));
 }
 
 static void __dbj_env_feedback(DB_ENV *dbenv, int opcode, int percent)

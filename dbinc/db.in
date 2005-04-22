@@ -1114,7 +1114,8 @@ typedef enum {
 #define	DB_QAMOLDVER	3		/* Oldest queue version supported. */
 #define	DB_QAMMAGIC	0x042253
 
-#define	DB_SEQUENCE_VERSION 1		/* Current sequence version. */
+#define	DB_SEQUENCE_VERSION 2		/* Current sequence version. */
+#define	DB_SEQUENCE_OLDVER  1		/* Oldest queue version supported. */
 
 /*
  * DB access method and cursor operation values.  Each value is an operation

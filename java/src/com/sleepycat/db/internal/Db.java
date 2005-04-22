@@ -189,14 +189,6 @@ public class Db {
 		dbenv.set_errcall(db_errcall_fcn);
 	}
 
-	public MessageHandler get_msgcall() /* no exception */ {
-		return dbenv.get_msgcall();
-	}
-
-	public void set_msgcall(MessageHandler db_msgcall_fcn) /* no exception */ {
-		dbenv.set_msgcall(db_msgcall_fcn);
-	}
-
 	public java.io.OutputStream get_error_stream() /* no exception */ {
 		return dbenv.get_error_stream();
 	}
@@ -205,12 +197,28 @@ public class Db {
 		dbenv.set_error_stream(stream);
 	}
 
+	public void set_errpfx(String errpfx) /* no exception */ {
+		dbenv.set_errpfx(errpfx);
+	}
+
+	public String get_errpfx() /* no exception */ {
+		return dbenv.get_errpfx();
+	}
+
 	public java.io.OutputStream get_message_stream() /* no exception */ {
 		return dbenv.get_message_stream();
 	}
 
 	public void set_message_stream(java.io.OutputStream stream) /* no exception */ {
 		dbenv.set_message_stream(stream);
+	}
+
+	public MessageHandler get_msgcall() /* no exception */ {
+		return dbenv.get_msgcall();
+	}
+
+	public void set_msgcall(MessageHandler db_msgcall_fcn) /* no exception */ {
+		dbenv.set_msgcall(db_msgcall_fcn);
 	}
 
 	public void set_paniccall(PanicHandler db_panic_fcn)
@@ -273,10 +281,6 @@ public class Db {
   }
 
   public int get_encrypt_flags() throws com.sleepycat.db.DatabaseException { return db_javaJNI.Db_get_encrypt_flags(swigCPtr); }
-
-  public String get_errpfx() /* no exception */ {
-    return db_javaJNI.Db_get_errpfx(swigCPtr);
-  }
 
   public int get_flags() throws com.sleepycat.db.DatabaseException { return db_javaJNI.Db_get_flags(swigCPtr); }
 
@@ -355,10 +359,6 @@ public class Db {
   public void set_dup_compare(java.util.Comparator dup_compare_fcn) throws com.sleepycat.db.DatabaseException { db_javaJNI.Db_set_dup_compare(swigCPtr,  (dup_compare_handler = dup_compare_fcn) ); }
 
   public void set_encrypt(String passwd, int flags) throws com.sleepycat.db.DatabaseException { db_javaJNI.Db_set_encrypt(swigCPtr, passwd, flags); }
-
-  public void set_errpfx(String errpfx) /* no exception */ {
-    db_javaJNI.Db_set_errpfx(swigCPtr, errpfx);
-  }
 
   public void set_feedback(com.sleepycat.db.FeedbackHandler db_feedback_fcn) throws com.sleepycat.db.DatabaseException { db_javaJNI.Db_set_feedback(swigCPtr,  (db_feedback_handler = db_feedback_fcn) ); }
 

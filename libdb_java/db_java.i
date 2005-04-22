@@ -64,6 +64,7 @@ import java.util.Comparator;
 	private LogRecordHandler app_dispatch_handler;
 	private FeedbackHandler env_feedback_handler;
 	private ErrorHandler error_handler;
+	private String errpfx;
 	private MessageHandler message_handler;
 	private PanicHandler panic_handler;
 	private ReplicationTransport rep_transport_handler;
@@ -117,8 +118,16 @@ import java.util.Comparator;
 		return env_feedback_handler;
 	}
 
-	private final void handle_error(String errpfx, String msg) {
-		error_handler.error(wrapper, errpfx, msg);
+	public void set_errpfx(String errpfx) {
+		this.errpfx = errpfx;
+	}
+
+	public String get_errpfx() {
+		return errpfx;
+	}
+
+	private final void handle_error(String msg) {
+		error_handler.error(wrapper, this.errpfx, msg);
 	}
 
 	public ErrorHandler get_errcall() {
@@ -357,14 +366,6 @@ import java.util.Comparator;
 		dbenv.set_errcall(db_errcall_fcn);
 	}
 
-	public MessageHandler get_msgcall() {
-		return dbenv.get_msgcall();
-	}
-
-	public void set_msgcall(MessageHandler db_msgcall_fcn) {
-		dbenv.set_msgcall(db_msgcall_fcn);
-	}
-
 	public java.io.OutputStream get_error_stream() {
 		return dbenv.get_error_stream();
 	}
@@ -373,12 +374,28 @@ import java.util.Comparator;
 		dbenv.set_error_stream(stream);
 	}
 
+	public void set_errpfx(String errpfx) {
+		dbenv.set_errpfx(errpfx);
+	}
+
+	public String get_errpfx() {
+		return dbenv.get_errpfx();
+	}
+
 	public java.io.OutputStream get_message_stream() {
 		return dbenv.get_message_stream();
 	}
 
 	public void set_message_stream(java.io.OutputStream stream) {
 		dbenv.set_message_stream(stream);
+	}
+
+	public MessageHandler get_msgcall() {
+		return dbenv.get_msgcall();
+	}
+
+	public void set_msgcall(MessageHandler db_msgcall_fcn) {
+		dbenv.set_msgcall(db_msgcall_fcn);
 	}
 
 	public void set_paniccall(PanicHandler db_panic_fcn)

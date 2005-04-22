@@ -19,6 +19,7 @@
 #include "db_int.h"
 #include "dbinc/db_shash.h"
 #include "dbinc/db_page.h"
+#include "dbinc/db_swap.h"
 #include "dbinc/db_am.h"
 #include "dbinc/mp.h"
 #include "dbinc_auto/sequence_ext.h"
@@ -31,6 +32,34 @@
 #define	SEQ_ILLEGAL_BEFORE_OPEN(seq, name)				\
 	if (seq->seq_key.data == NULL)					\
 		return (__db_mi_open((seq)->seq_dbp->dbenv, name, 0));
+
+#define SEQ_SWAP(rp)	\
+	do {							\
+		M_32_SWAP((rp)->seq_version);			\
+		M_32_SWAP((rp)->flags);				\
+		M_64_SWAP((rp)->seq_value);			\
+		M_64_SWAP((rp)->seq_max);			\
+		M_64_SWAP((rp)->seq_min);			\
+	} while (0)
+
+#define SEQ_SWAP_IN(seq) \
+	do {								\
+		if (__db_isbigendian()) {				\
+			memcpy(&seq->seq_record, seq->seq_data.data,	\
+			     sizeof(seq->seq_record));			\
+			SEQ_SWAP(&seq->seq_record);			\
+		}							\
+	} while (0)
+		
+#define SEQ_SWAP_OUT(seq) \
+	do {								\
+		if (__db_isbigendian()) {				\
+			memcpy(seq->seq_data.data,			\
+			     &seq->seq_record, sizeof(seq->seq_record));\
+			SEQ_SWAP((DB_SEQ_RECORD*)seq->seq_data.data);	\
+		}							\
+	} while (0)
+		
 
 static int __seq_close __P((DB_SEQUENCE *, u_int32_t));
 static int __seq_get __P((DB_SEQUENCE *,
@@ -119,11 +148,12 @@ __seq_open(seq, txn, keyp, flags)
 	DB_MPOOL *dbmp;
 	DB_SEQ_RECORD *rp;
 	u_int32_t tflags;
-	int ret;
+	int txn_local, ret;
 #define	SEQ_OPEN_FLAGS (DB_AUTO_COMMIT | DB_CREATE | DB_EXCL | DB_THREAD)
 
 	dbp = seq->seq_dbp;
 	dbenv = dbp->dbenv;
+	txn_local = 0;
 
 	SEQ_ILLEGAL_AFTER_OPEN(seq, "DB_SEQUENCE->open");
 	if (keyp->size == 0) {
@@ -151,9 +181,18 @@ __seq_open(seq, txn, keyp, flags)
 	}
 
 	memset(&seq->seq_data, 0, sizeof(DBT));
-	seq->seq_data.data = &seq->seq_record;
-	seq->seq_data.size = seq->seq_data.ulen = sizeof(seq->seq_record);
-	seq->seq_data.flags = DB_DBT_USERMEM;
+	if (__db_isbigendian()) {
+		if ((ret = __os_umalloc(dbenv,
+		     sizeof(seq->seq_record), &seq->seq_data.data)) != 0)
+			goto err;
+		seq->seq_data.flags = DB_DBT_REALLOC;
+	} else {
+		seq->seq_data.data = &seq->seq_record;
+		seq->seq_data.flags = DB_DBT_USERMEM;
+	}
+
+	seq->seq_data.ulen = seq->seq_data.size = sizeof(seq->seq_record);
+	seq->seq_rp = &seq->seq_record;
 
 	memset(&seq->seq_key, 0, sizeof(DBT));
 	if ((ret = __os_malloc(dbenv, keyp->size, &seq->seq_key.data)) != 0)
@@ -162,23 +201,21 @@ __seq_open(seq, txn, keyp, flags)
 	seq->seq_key.size = seq->seq_key.ulen = keyp->size;
 	seq->seq_key.flags = DB_DBT_USERMEM;
 
-	seq->seq_rp = rp = &seq->seq_record;
+		
 
 retry:	if ((ret = dbp->get(dbp, txn, &seq->seq_key, &seq->seq_data, 0)) != 0) {
 		if (ret == DB_BUFFER_SMALL &&
 		    seq->seq_data.size > sizeof(seq->seq_record)) {
-			if ((ret = __os_malloc(dbenv,
-			    seq->seq_data.size, &seq->seq_data.data)) != 0)
-				goto err;
-			seq->seq_data.ulen = seq->seq_data.size;
-			rp = seq->seq_rp = seq->seq_data.data;
+			seq->seq_data.flags = DB_DBT_REALLOC;
+			seq->seq_data.data = NULL;
 			goto retry;
 		}
 		if ((ret != DB_NOTFOUND && ret != DB_KEYEMPTY) ||
 		    !LF_ISSET(DB_CREATE))
 			goto err;
-
 		ret = 0;
+
+		rp = &seq->seq_record;
 		tflags = DB_NOOVERWRITE;
 		tflags |= LF_ISSET(DB_AUTO_COMMIT);
 		if (!F_ISSET(rp, DB_SEQ_RANGE_SET)) {
@@ -196,10 +233,13 @@ retry:	if ((ret = dbp->get(dbp, txn, &seq->seq_key, &seq->seq_data, 0)) != 0) {
 			__db_err(dbenv, "Sequence value out of range");
 			ret = EINVAL;
 			goto err;
-		} else if ((ret = dbp->put(dbp, txn,
-		    &seq->seq_key, &seq->seq_data, tflags)) != 0) {
-			__db_err(dbenv, "Sequence create failed");
-			goto err;
+		} else {
+			SEQ_SWAP_OUT(seq);
+			if ((ret = dbp->put(dbp, txn,
+			    &seq->seq_key, &seq->seq_data, tflags)) != 0) {
+				__db_err(dbenv, "Sequence create failed");
+				goto err;
+			}
 		}
 	} else if (LF_ISSET(DB_CREATE) && LF_ISSET(DB_EXCL)) {
 		ret = EEXIST;
@@ -207,6 +247,60 @@ retry:	if ((ret = dbp->get(dbp, txn, &seq->seq_key, &seq->seq_data, 0)) != 0) {
 	} else if (seq->seq_data.size < sizeof(seq->seq_record)) {
 		__db_err(dbenv, "Bad sequence record format");
 		ret = EINVAL;
+		goto err;
+	}
+
+	if (!__db_isbigendian())
+		seq->seq_rp = seq->seq_data.data;
+
+	/*
+	 * The first release was stored in native mode.
+	 * Check the verison number before swapping.
+	 */
+	rp = seq->seq_data.data;
+	if (rp->seq_version == DB_SEQUENCE_OLDVER) {
+oldver:		rp->seq_version = DB_SEQUENCE_VERSION;
+		if (__db_isbigendian()) {
+			if (IS_AUTO_COMMIT(dbp, txn, flags)) {
+				if ((ret =
+				     __db_txn_auto_init(dbenv, &txn)) != 0)
+					return (ret);
+				txn_local = 1;
+				LF_CLR(DB_AUTO_COMMIT);
+				goto retry;
+			} else
+				txn_local = 0;
+			memcpy(&seq->seq_record, rp, sizeof(seq->seq_record));
+			SEQ_SWAP_OUT(seq);
+		}
+		if ((ret = dbp->put(dbp,
+		     txn, &seq->seq_key, &seq->seq_data, 0)) != 0)
+			goto err;
+	}
+	rp = seq->seq_rp;
+
+	SEQ_SWAP_IN(seq);
+
+	if (rp->seq_version != DB_SEQUENCE_VERSION) {
+		/*
+		 * The database may have moved from one type
+		 * of machine to another, check here.
+		 * If we moved from little-end to big-end then
+		 * the swap above will make the version correct.
+		 * If the move was from big to little
+		 * then we need to swap to see if this
+		 * is an old version.
+		 */
+		if (rp->seq_version == DB_SEQUENCE_OLDVER)
+			goto oldver;
+		M_32_SWAP(rp->seq_version);
+		if (rp->seq_version == DB_SEQUENCE_OLDVER) {
+			SEQ_SWAP(rp);
+			goto oldver;
+		}
+		M_32_SWAP(rp->seq_version);
+		__db_err(dbenv,
+		     "Unknown sequence version: %d", rp->seq_version);
 		goto err;
 	}
 
@@ -220,7 +314,7 @@ err:	if (ret != 0) {
 		__os_free(dbenv, seq->seq_key.data);
 		seq->seq_key.data = NULL;
 	}
-	return (ret);
+	return (txn_local ? __db_txn_auto_resolve(dbenv, txn, 0, ret) : ret);
 }
 
 /*
@@ -348,8 +442,8 @@ __seq_get_range(seq, minp, maxp)
 	SEQ_ILLEGAL_BEFORE_OPEN(seq, "DB_SEQUENCE->get_range");
 
 	F_SET(seq->seq_rp, DB_SEQ_RANGE_SET);
-	*minp = seq->seq_record.seq_min;
-	*maxp = seq->seq_record.seq_max;
+	*minp = seq->seq_rp->seq_min;
+	*maxp = seq->seq_rp->seq_max;
 	return (0);
 }
 
@@ -373,8 +467,8 @@ __seq_set_range(seq, min, max)
 		return (EINVAL);
 	}
 
-	seq->seq_record.seq_min = min;
-	seq->seq_record.seq_max = max;
+	seq->seq_rp->seq_min = min;
+	seq->seq_rp->seq_max = max;
 	F_SET(seq->seq_rp, DB_SEQ_RANGE_SET);
 
 	return (0);
@@ -395,7 +489,6 @@ __seq_update(seq, txn, delta, flags)
 
 	dbp = seq->seq_dbp;
 	dbenv = dbp->dbenv;
-	rp = seq->seq_rp;
 
 	if (LF_ISSET(DB_AUTO_COMMIT) &&
 	    (ret = __db_txn_auto_init(dbenv, &txn)) != 0)
@@ -404,15 +497,17 @@ retry:
 	if ((ret = dbp->get(dbp, txn, &seq->seq_key, &seq->seq_data, 0)) != 0) {
 		if (ret == DB_BUFFER_SMALL &&
 		    seq->seq_data.size > sizeof(seq->seq_record)) {
-			if ((ret = __os_malloc(dbenv,
-			    seq->seq_data.size, &seq->seq_data.data)) != 0)
-				goto err;
-			seq->seq_data.ulen = seq->seq_data.size;
-			rp = seq->seq_rp = seq->seq_data.data;
+			seq->seq_data.flags = DB_DBT_REALLOC;
+			seq->seq_data.data = NULL;
 			goto retry;
 		}
 		goto err;
 	}
+
+	if (!__db_isbigendian())
+		seq->seq_rp = seq->seq_data.data;
+	SEQ_SWAP_IN(seq);
+	rp = seq->seq_rp;
 
 	if (seq->seq_data.size < sizeof(seq->seq_record)) {
 		__db_err(dbenv, "Bad sequence record format");
@@ -458,6 +553,7 @@ overflow:			__db_err(dbenv, "Sequence overflow");
 	}
 
 	rp->seq_value += adjust;
+	SEQ_SWAP_OUT(seq);
 	ret = dbp->put(dbp, txn, &seq->seq_key, &seq->seq_data, 0);
 	rp->seq_value -= adjust;
 	if (ret != 0) {
@@ -514,7 +610,6 @@ __seq_get(seq, txn, delta, retp, flags)
 		   (ret = __seq_update(seq, txn, delta, flags)) != 0)
 			goto err;
 
-		/* _update may change seq->seq_rp. */
 		rp = seq->seq_rp;
 		*retp = rp->seq_value;
 		rp->seq_value += delta;
@@ -592,8 +687,9 @@ __seq_close(seq, flags)
 	}
 	if (seq->seq_key.data != NULL)
 		__os_free(dbenv, seq->seq_key.data);
-	if (seq->seq_data.data != &seq->seq_record)
-		__os_free(dbenv, seq->seq_data.data);
+	if (seq->seq_data.data != NULL &&
+	    seq->seq_data.data != &seq->seq_record)
+		__os_ufree(dbenv, seq->seq_data.data);
 	seq->seq_key.data = NULL;
 	memset(seq, CLEAR_BYTE, sizeof(*seq));
 	__os_free(dbenv, seq);

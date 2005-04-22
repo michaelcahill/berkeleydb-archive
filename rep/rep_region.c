@@ -104,6 +104,8 @@ __rep_region_init(dbenv)
 		rep->max_gap = DB_REP_MAX_GAP;
 		F_SET(rep, REP_F_NOARCHIVE);
 		(void)time(&renv->rep_timestamp);
+		renv->op_timestamp = 0;
+		F_CLR(renv, DB_REGENV_REPLOCKED);
 	} else
 		rep = R_ADDR(infop, renv->rep_off);
 	MUTEX_UNLOCK(dbenv, &renv->mutex);

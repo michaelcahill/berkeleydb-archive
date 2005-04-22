@@ -39,6 +39,50 @@
 #define	_DB_SWAP_H_
 
 /*
+ * Little endian <==> big endian 64-bit swap macros.
+ *	M_64_SWAP	swap a memory location
+ *	P_64_COPY	copy potentially unaligned 4 byte quantities
+ *	P_64_SWAP	swap a referenced memory location
+ */
+#undef	M_64_SWAP
+#define	M_64_SWAP(a) {							\
+	u_int64_t _tmp;							\
+	_tmp = a;							\
+	((u_int8_t *)&a)[0] = ((u_int8_t *)&_tmp)[7];			\
+	((u_int8_t *)&a)[1] = ((u_int8_t *)&_tmp)[6];			\
+	((u_int8_t *)&a)[2] = ((u_int8_t *)&_tmp)[5];			\
+	((u_int8_t *)&a)[3] = ((u_int8_t *)&_tmp)[4];			\
+	((u_int8_t *)&a)[4] = ((u_int8_t *)&_tmp)[3];			\
+	((u_int8_t *)&a)[5] = ((u_int8_t *)&_tmp)[2];			\
+	((u_int8_t *)&a)[6] = ((u_int8_t *)&_tmp)[1];			\
+	((u_int8_t *)&a)[7] = ((u_int8_t *)&_tmp)[0];			\
+}
+#undef	P_64_COPY
+#define	P_64_COPY(a, b) {						\
+	((u_int8_t *)b)[0] = ((u_int8_t *)a)[0];			\
+	((u_int8_t *)b)[1] = ((u_int8_t *)a)[1];			\
+	((u_int8_t *)b)[2] = ((u_int8_t *)a)[2];			\
+	((u_int8_t *)b)[3] = ((u_int8_t *)a)[3];			\
+	((u_int8_t *)b)[4] = ((u_int8_t *)a)[4];			\
+	((u_int8_t *)b)[5] = ((u_int8_t *)a)[5];			\
+	((u_int8_t *)b)[6] = ((u_int8_t *)a)[6];			\
+	((u_int8_t *)b)[7] = ((u_int8_t *)a)[7];			\
+}
+#undef	P_64_SWAP
+#define	P_64_SWAP(a) {							\
+	u_int64_t _tmp;							\
+	P_64_COPY(a, &_tmp);						\
+	((u_int8_t *)a)[0] = ((u_int8_t *)&_tmp)[7];			\
+	((u_int8_t *)a)[1] = ((u_int8_t *)&_tmp)[6];			\
+	((u_int8_t *)a)[2] = ((u_int8_t *)&_tmp)[5];			\
+	((u_int8_t *)a)[3] = ((u_int8_t *)&_tmp)[4];			\
+	((u_int8_t *)a)[4] = ((u_int8_t *)&_tmp)[3];			\
+	((u_int8_t *)a)[5] = ((u_int8_t *)&_tmp)[2];			\
+	((u_int8_t *)a)[6] = ((u_int8_t *)&_tmp)[1];			\
+	((u_int8_t *)a)[7] = ((u_int8_t *)&_tmp)[0];			\
+}
+
+/*
  * Little endian <==> big endian 32-bit swap macros.
  *	M_32_SWAP	swap a memory location
  *	P_32_COPY	copy potentially unaligned 4 byte quantities

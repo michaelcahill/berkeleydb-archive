@@ -659,7 +659,7 @@ const struct {
 	    "(L" DB_PKG "DatabaseEntry;L" DB_PKG "LogSequenceNumber;I)I" },
 	{ &env_feedback_method, &dbenv_class, "handle_env_feedback", "(II)V" },
 	{ &errcall_method, &dbenv_class, "handle_error",
-	    "(Ljava/lang/String;Ljava/lang/String;)V" },
+	    "(Ljava/lang/String;)V" },
 	{ &msgcall_method, &dbenv_class, "handle_message",
 	    "(Ljava/lang/String;)V" },
 	{ &paniccall_method, &dbenv_class, "handle_panic",

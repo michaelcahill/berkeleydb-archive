@@ -47,6 +47,12 @@
 #define	vsnprintf		_vsnprintf
 
 /*
+ * Windows defines off_t to long (i.e., 32 bits).
+ */
+#define	off_t	__db_off_t
+typedef __int64 off_t;
+
+/*
  * Win32 does not define getopt and friends in any header file, so we must.
  */
 #if defined(__cplusplus)
