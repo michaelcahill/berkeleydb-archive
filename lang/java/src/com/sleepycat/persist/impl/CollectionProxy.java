@@ -142,7 +142,9 @@ abstract class CollectionProxy<E>
     static void copyElements(RecordInput input,
                              Format format,
                              Format keyFormat,
-                             Set results) {
+                             Set results)
+        throws RefreshException {
+
         /*
          * This could be optimized by traversing the byte format of the
          * collection's elements array.

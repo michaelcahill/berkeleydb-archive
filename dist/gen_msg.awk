@@ -404,7 +404,10 @@ function emit_unmarshal()
 			}
 			printf("\tDB_NTOHL_COPYIN(env, argp->%s.size, bp);\n", \
                             vars[i]) >> CFILE;
-			printf("\targp->%s.data = bp;\n", vars[i]) >> CFILE;
+			printf("\tif (argp->%s.size == 0)\n", vars[i]) >> CFILE;
+			printf("\t\targp->%s.data = NULL;\n", vars[i]) >> CFILE;
+			printf("\telse\n") >> CFILE;
+			printf("\t\targp->%s.data = bp;\n", vars[i]) >> CFILE;
 			printf("\tneeded += (size_t)argp->%s.size;\n", \
                             vars[i]) >> CFILE;
 			printf("\tif (max < needed)\n") >> CFILE;

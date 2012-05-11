@@ -38,7 +38,9 @@ class RawArrayInput extends RawAbstractInput {
     }
 
     @Override
-    Object readNext() {
+    Object readNext()
+        throws RefreshException {
+
         Object o = array[index++];
         return checkAndConvert(o, componentFormat);
     }

@@ -31,7 +31,9 @@ class RawSingleInput extends RawAbstractInput {
     }
 
     @Override
-    Object readNext() {
+    Object readNext()
+        throws RefreshException {
+
         return checkAndConvert(singleValue, declaredFormat);
     }
 }

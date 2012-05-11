@@ -14,6 +14,11 @@ import com.sleepycat.db.internal.DbEnv;
 /** Specifies the attributes of a verification operation. */
 public final class VerboseConfig {
     /**
+    Display additional information when performing hot backup.
+    */
+    public static final VerboseConfig BACKUP =
+        new VerboseConfig("BACKUP", DbConstants.DB_VERB_BACKUP);
+    /**
     Display additional information when doing deadlock detection.
     */
     public static final VerboseConfig DEADLOCK =

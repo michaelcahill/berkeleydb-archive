@@ -180,6 +180,7 @@ struct __vrfy_pageinfo {
 #define	VRFY_IS_RRECNO		0x1000
 #define	VRFY_OVFL_LEAFSEEN	0x2000
 #define	VRFY_HAS_COMPRESS	0x4000
+#define	VRFY_NONEXISTENT	0x8000
 	u_int32_t	flags;
 
 	LIST_ENTRY(__vrfy_pageinfo) links;

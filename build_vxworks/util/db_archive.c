@@ -76,6 +76,12 @@ db_archive_main(argc, argv)
 			LF_SET(DB_ARCH_LOG);
 			break;
 		case 'P':
+			if (passwd != NULL) {
+				fprintf(stderr, DB_STR("5135",
+					"Password may not be specified twice"));
+				free(passwd);
+				return (EXIT_FAILURE);
+			}
 			passwd = strdup(optarg);
 			memset(optarg, 0, strlen(optarg));
 			if (passwd == NULL) {

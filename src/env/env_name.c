@@ -184,6 +184,10 @@ __db_appname(env, appname, file, dirp, namep)
 		if (dbenv != NULL)
 			dir = dbenv->db_tmp_dir;
 		break;
+	case DB_APP_META:
+		if (dbenv != NULL)
+			dir = dbenv->db_md_dir;
+		break;
 	}
 
 	/*

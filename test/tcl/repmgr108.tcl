@@ -19,10 +19,10 @@ proc repmgr108 { } {
 	file mkdir [set cdir $testdir/CLIENT]
 
 	make_dbconfig $mdir \
-            [list [list repmgr_site localhost $mport db_local_site on]]
+            [list [list repmgr_site 127.0.0.1 $mport db_local_site on]]
 	make_dbconfig $cdir \
-            [list [list repmgr_site localhost $cport db_local_site on] \
-                 [list repmgr_site localhost $mport db_bootstrap_helper on]]
+            [list [list repmgr_site 127.0.0.1 $cport db_local_site on] \
+                 [list repmgr_site 127.0.0.1 $mport db_bootstrap_helper on]]
 
 	puts "\tRepmgr$tnum.a: Set up a pair of sites, two processes each."
 	set cmds {

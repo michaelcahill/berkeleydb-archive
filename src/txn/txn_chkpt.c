@@ -327,7 +327,7 @@ err:	MUTEX_UNLOCK(env, region->mtx_ckp);
  *	 We check both the file and offset for 0 since the lsn may be in
  *	 transition.  If it is then we don't care about this txn because it
  *	 must be starting after we set the initial value of lsnp in the caller.
- *	 All txns must initalize their begin_lsn before writing to the log.
+ *	 All txns must initialize their begin_lsn before writing to the log.
  *
  * PUBLIC: int __txn_getactive __P((ENV *, DB_LSN *));
  */

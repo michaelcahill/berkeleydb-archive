@@ -42,6 +42,10 @@ namespace BerkeleyDB {
         /// The underlying database page (and bucket) size, in bytes.
         /// </summary>
         public uint PageSize { get { return st.heap_pagesize; } }
+       /// <summary>
+       /// The region size of the Heap database.
+       /// </summary>
+       public uint RegionSize { get { return st.heap_regionsize; } }
         /// <summary>
         /// The version of the Heap database. 
         /// </summary>

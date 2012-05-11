@@ -33,7 +33,9 @@ class RawComplexInput extends RawAbstractInput {
     }
 
     @Override
-    Object readNext() {
+    Object readNext()
+        throws RefreshException {
+
         RawObject raw = objects[index];
         FieldInfo field = fields[index];
         index += 1;

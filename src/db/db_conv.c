@@ -847,7 +847,7 @@ __db_recordswap(op, size, hdr, data, pgin)
 	case P_HASH:
 	case P_HASH_UNSORTED:
 		switch (OP_MODE_GET(op)) {
-		/* KEYDATA and DUPLICATE records do not inclued the header. */
+		/* KEYDATA and DUPLICATE records do not include the header. */
 		case H_KEYDATA:
 			break;
 		case H_DUPLICATE:

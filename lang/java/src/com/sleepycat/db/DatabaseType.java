@@ -62,6 +62,8 @@ public final class DatabaseType {
             return BTREE;
         case DbConstants.DB_HASH:
             return HASH;
+        case DbConstants.DB_HEAP:
+            return HEAP;
         case DbConstants.DB_QUEUE:
             return QUEUE;
         case DbConstants.DB_RECNO:

@@ -20,6 +20,7 @@ import com.sleepycat.db.DatabaseEntry;
 import com.sleepycat.db.DatabaseException;
 import com.sleepycat.db.JoinCursor;
 import com.sleepycat.db.LockMode;
+import com.sleepycat.db.DatabaseException;
 import com.sleepycat.db.OperationStatus;
 import com.sleepycat.db.Transaction;
 

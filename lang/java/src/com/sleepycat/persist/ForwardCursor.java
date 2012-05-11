@@ -7,6 +7,7 @@
 
 package com.sleepycat.persist;
 
+import java.io.Closeable;
 import java.util.Iterator;
 
 import com.sleepycat.db.DatabaseException;
@@ -26,7 +27,8 @@ import com.sleepycat.db.LockMode;
  *
  * @author Mark Hayes
  */
-public interface ForwardCursor<V> extends Iterable<V> {
+public interface ForwardCursor<V> extends Iterable<V>
+    {
 
     /**
      * Moves the cursor to the next value and returns it, or returns null

@@ -159,6 +159,8 @@ class BasicCursor<V> implements EntityCursor<V> {
         return cursor.count();
     }
 
+
+
     public Iterator<V> iterator() {
         return iterator(null);
     }

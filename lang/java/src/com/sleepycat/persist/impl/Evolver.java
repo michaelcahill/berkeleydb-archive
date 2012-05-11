@@ -323,7 +323,7 @@ class Evolver {
         Format newFormat;
         String newFormatException;
         try {
-            Class newClass = SimpleCatalog.classForName(newName);
+            Class newClass = catalog.resolveClass(newName);
             try {
                 newFormat = catalog.createFormat(newClass, newFormats);
                 assert newFormat != oldFormat : newFormat.getClassName();

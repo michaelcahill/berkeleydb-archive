@@ -66,6 +66,8 @@ typedef struct __db_globals {
 
 	pid_t *active_pids;		/* array active pids */
 
+	char *saved_errstr;		/* saved error string from backup */
+
 	/* Underlying OS interface jump table.*/
 	void	(*j_assert) __P((const char *, const char *, int));
 	int	(*j_close) __P((int));	

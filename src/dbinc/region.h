@@ -121,6 +121,8 @@ extern "C" {
 #define	DB_REGION_PREFIX	"__db"		/* DB file name prefix. */
 #define	DB_REGION_FMT		"__db.%03d"	/* Region file name format. */
 #define	DB_REGION_ENV		"__db.001"	/* Primary environment name. */
+#define IS_DB_FILE(name)	(strncmp(name, DB_REGION_PREFIX,	\
+				    sizeof(DB_REGION_PREFIX) - 1) == 0)
 
 #define	INVALID_REGION_ID	0	/* Out-of-band region ID. */
 #define	REGION_ID_ENV		1	/* Primary environment ID. */

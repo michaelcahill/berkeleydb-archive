@@ -287,6 +287,7 @@ __env_print_dbenv_all(env, flags)
 	STAT_ISSET("ThreadIdString", dbenv->thread_id_string);
 
 	STAT_STRING("Log dir", dbenv->db_log_dir);
+	STAT_STRING("Metadata dir", dbenv->db_md_dir);
 	STAT_STRING("Tmp dir", dbenv->db_tmp_dir);
 	if (dbenv->db_data_dir == NULL)
 		STAT_ISSET("Data dir", dbenv->db_data_dir);

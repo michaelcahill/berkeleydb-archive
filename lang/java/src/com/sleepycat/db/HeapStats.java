@@ -72,6 +72,12 @@ public class HeapStats extends DatabaseStats {
         return heap_nregions;
     }
 
+    private int heap_regionsize;
+    /** TODO */
+    public int getHeapRegionSize() {
+        return heap_regionsize;
+    }
+
     /**
     For convenience, the HeapStats class has a toString method
     that lists all the data fields.
@@ -85,6 +91,7 @@ public class HeapStats extends DatabaseStats {
             + "\n  heap_pagecnt=" + heap_pagecnt
             + "\n  heap_pagesize=" + heap_pagesize
             + "\n  heap_nregions=" + heap_nregions
+            + "\n  heap_regionsize=" + heap_regionsize
             ;
     }
 }

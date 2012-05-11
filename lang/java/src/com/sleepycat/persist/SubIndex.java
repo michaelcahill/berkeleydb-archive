@@ -159,7 +159,8 @@ class SubIndex<PK, E> implements EntityIndex<PK, E> {
         if (transactional &&
             txn == null &&
             DbCompat.getThreadTransaction(env) == null) {
-            txn = env.beginTransaction(null, null);
+            txn = env.beginTransaction
+                (null, secIndex.getAutoCommitTransactionConfig());
             autoCommit = true;
         }
 

@@ -460,9 +460,8 @@ __mutex_resource_return(env, infop)
 		    (size -= sizeof(*mutexp)) < sizeof(*mutexp)) {
 			mutexp = __env_get_chunk(&mtxmgr->reginfo,
 			    &chunk, &size);
-			mutexp = ALIGNP_INC(mutexp,
-			    mtxregion->stat.st_mutex_align);
 		}
+		mutexp = ALIGNP_INC(mutexp, mtxregion->stat.st_mutex_align);
 	}
 	env->mutex_handle = orig_handle;
 }

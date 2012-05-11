@@ -193,7 +193,8 @@ namespace BerkeleyDB {
     DatabaseEntry rec, LSN lsn, int envid, uint flags);
     /// <summary>
     /// The function that creates the set of secondary keys corresponding to a
-    /// given primary key and data pair. 
+    /// given primary key and data pair.  To create multiple secondary keys,
+    /// return a <see cref="MultipleDatabaseEntry"/>.
     /// </summary>
     /// <param name="key">The primary key</param>
     /// <param name="data">The primary data item</param>

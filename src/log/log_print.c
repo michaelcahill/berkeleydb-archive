@@ -126,6 +126,15 @@ __log_print_record(env, recbuf, lsnp, name, spec, info)
 			case DBREG_REOPEN:
 				s = "REOPEN";
 				break;
+			case DBREG_XCHKPNT:
+				s = "XCHKPNT";
+				break;
+			case DBREG_XOPEN:
+				s = "XOPEN";
+				break;
+			case DBREG_XREOPEN:
+				s = "XREOPEN";
+				break;
 			default:
 				s = "UNKNOWN";
 				break;
@@ -319,6 +328,9 @@ __log_print_dbregister(env, recbuf, dblp)
 	case DBREG_CHKPNT:
 	case DBREG_OPEN:
 	case DBREG_REOPEN:
+	case DBREG_XCHKPNT:
+	case DBREG_XOPEN:
+	case DBREG_XREOPEN:
 		if (dbp != NULL) {
 			if (memcmp(dbp->fileid,
 			    argp->uid.data, DB_FILE_ID_LEN) == 0 &&
@@ -344,6 +356,8 @@ __log_print_dbregister(env, recbuf, dblp)
 			F_SET(dbp, DB_AM_CHKSUM);
 		if (FLD_ISSET(argp->opcode, DBREG_ENCRYPT))
 			F_SET(dbp, DB_AM_ENCRYPT);
+		if (FLD_ISSET(argp->opcode, DBREG_EXCL))
+			F2_SET(dbp, DB2_AM_EXCL);
 		dbe->dbp = dbp;
 		break;
 	case DBREG_CLOSE:

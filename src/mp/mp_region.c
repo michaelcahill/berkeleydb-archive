@@ -567,7 +567,7 @@ __memp_env_refresh(env)
 not_priv:
 	/* Discard DB_MPOOLFILEs. */
 	while ((dbmfp = TAILQ_FIRST(&dbmp->dbmfq)) != NULL)
-		if ((t_ret = __memp_fclose(dbmfp, 0)) != 0 && ret == 0)
+		if ((t_ret = __memp_fclose(dbmfp, DB_FLUSH)) != 0 && ret == 0)
 			ret = t_ret;
 
 	/* Discard DB_MPREGs. */

@@ -54,8 +54,19 @@ public class ReplicationManagerSiteInfo
     }
 
     /**
-    The replication site is connected.
-    */
+     * The status of the replication site's connection.
+     *
+     */
+    public ReplicationManagerConnectionStatus getConnectionStatus() {
+        return ReplicationManagerConnectionStatus.fromInt(this.status);
+    }
+
+    /**
+     * The replication site is connected.
+     *
+     * @deprecated  Replaced by {@link #getConnectionStatus()}
+     */
+    @Deprecated
     public boolean isConnected() {
         return (this.status == DbConstants.DB_REPMGR_CONNECTED);
     }

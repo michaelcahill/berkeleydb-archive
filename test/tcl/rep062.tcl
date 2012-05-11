@@ -244,6 +244,9 @@ proc rep062_sub { method tnum logset recargs largs } {
 		puts "\tRep$tnum.c: Add a few records to test db."
 		set nentries 10
 		set start 0
+		if { $encryptenv == 1 } {
+			set encrypt 1
+		}
 		eval rep_test $method1 \
 		    $masterenv $db1 $nentries $start $start 0 $args1
 		incr start $nentries

@@ -139,7 +139,6 @@ main(argc, argv)
 	char *argv[];
 {
 	extern char *optarg;
-	extern int optind;
 	DB *dbp;
 	DB_ENV *dbenv;
 	DBTYPE dbtype;

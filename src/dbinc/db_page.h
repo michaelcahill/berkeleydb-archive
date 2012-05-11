@@ -392,8 +392,9 @@ typedef struct __heaphdrsplt {
 	F_ISSET((dbp), DB_AM_CHKSUM) ? HEAPPG_CHKSUM : HEAPPG_NORMAL)
 
 /* Each byte in the bitmap describes 4 pages (2 bits per page.) */
-#define HEAP_REGION_COUNT(size) ((size - HEAPPG_SZ(dbp)) * 4)
-#define HEAP_DEFAULT_REGION_MAX	HEAP_REGION_COUNT(8 * 1024)
+#define HEAP_REGION_COUNT(dbp, size) (((size) - HEAPPG_SZ(dbp)) * 4)
+#define HEAP_DEFAULT_REGION_MAX(dbp)				\
+	(HEAP_REGION_COUNT(dbp, (u_int32_t)8 * 1024))
 #define	HEAP_REGION_SIZE(dbp)	(((HEAP*) (dbp)->heap_internal)->region_size)
 
 /* Figure out which region a given page belongs to. */

@@ -10,6 +10,7 @@ package com.sleepycat.persist;
 import java.util.Iterator;
 
 import com.sleepycat.db.CursorConfig;
+import com.sleepycat.db.DatabaseConfig;
 import com.sleepycat.db.DatabaseException;
 import com.sleepycat.db.LockMode;
 import com.sleepycat.db.Transaction;
@@ -576,8 +577,9 @@ public interface EntityCursor<V> extends ForwardCursor<V> {
 
     /**
      * Returns the number of values (duplicates) for the key at the cursor
-     * position, or returns zero if all values for the key have been deleted,
+     * position, or returns zero if all values for the key have been deleted.
      * Returns one or zero if the underlying index has unique keys.
+     *
      *
      * <p>{@link LockMode#DEFAULT} is used implicitly.</p>
      *
@@ -591,6 +593,11 @@ public interface EntityCursor<V> extends ForwardCursor<V> {
      */
     int count()
         throws DatabaseException;
+  
+
+
+
+
 
     /**
      * Returns an iterator over the key range, starting with the value

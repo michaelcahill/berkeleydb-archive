@@ -116,7 +116,7 @@ public class EvolveTest extends EvolveTestBase {
              */
             PersistCatalog.expectNoClassChanges = true;
             try {
-                openStoreReadOnly();
+                assertTrue(openStoreReadOnly());
             } finally {
                 PersistCatalog.expectNoClassChanges = false;
             }
@@ -233,7 +233,7 @@ public class EvolveTest extends EvolveTestBase {
         closeStore();
 
         /* Open read-only and double check that everything is OK. */
-        openStoreReadOnly();
+        assertTrue(openStoreReadOnly());
         caseObj.checkEvolvedModel
             (store.getModel(), env, true /*oldTypesExist*/);
         caseObj.readObjects(store, false /*doUpdate*/);

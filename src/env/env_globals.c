@@ -38,6 +38,7 @@ DB_GLOBALS __db_global_values = {
 	0,				/* num_active_pids */
 	0,				/* size_active_pids */
 	NULL,                           /* active_pids */
+	NULL,                           /* saved_errstr */
 	NULL,				/* j_assert */
 	NULL,				/* j_close */
 	NULL,				/* j_dirfree */

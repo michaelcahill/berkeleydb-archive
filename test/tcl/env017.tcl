@@ -281,7 +281,7 @@ proc env017_rep_stat { } {
 		{ "Elections won"	    st_elections_won }
 		{ "Election phase"	    st_election_status }
 		{ "Election winner"	    st_election_cur_winner }
-		{ "Election generation number"	    st_election_gen }
+		{ "Election winner generation number"	    st_election_gen }
 		{ "Election data generation number"	    st_election_datagen }
 		{ "Election max LSN"	    st_election_lsn }
 		{ "Election sites"	    st_election_nsites }

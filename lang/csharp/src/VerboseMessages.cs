@@ -15,6 +15,10 @@ namespace BerkeleyDB {
     /// </summary>
     public class VerboseMessages {
         /// <summary>
+        /// Display additional information when performing hot backup.
+        /// </summary>
+        public bool Backup;
+        /// <summary>
         /// Display additional information when doing deadlock detection.
         /// </summary>
         public bool Deadlock;
@@ -94,6 +98,7 @@ namespace BerkeleyDB {
         internal uint MessagesOn {
             get {
                 uint ret = 0;
+                ret |= Backup ? DbConstants.DB_VERB_BACKUP : 0;
                 ret |= Deadlock ? DbConstants.DB_VERB_DEADLOCK : 0;
                 ret |= FileOps ? DbConstants.DB_VERB_FILEOPS : 0;
                 ret |= AllFileOps ? DbConstants.DB_VERB_FILEOPS_ALL : 0;
@@ -116,6 +121,7 @@ namespace BerkeleyDB {
         internal uint MessagesOff {
             get{
                 uint ret = 0;
+                ret |= Backup ? 0 : DbConstants.DB_VERB_BACKUP;
                 ret |= Deadlock ? 0 : DbConstants.DB_VERB_DEADLOCK;
                 ret |= FileOps ? 0 : DbConstants.DB_VERB_FILEOPS;
                 ret |= AllFileOps ? 0 : DbConstants.DB_VERB_FILEOPS_ALL;
@@ -139,6 +145,7 @@ namespace BerkeleyDB {
         internal static VerboseMessages FromFlags(uint flags) {
             VerboseMessages ret = new VerboseMessages();
 
+            ret.Backup = ((flags & DbConstants.DB_VERB_BACKUP) != 0);
             ret.Deadlock = ((flags & DbConstants.DB_VERB_DEADLOCK) != 0);
             ret.FileOps = ((flags & DbConstants.DB_VERB_FILEOPS) != 0);
             ret.AllFileOps = ((flags & DbConstants.DB_VERB_FILEOPS_ALL) != 0);

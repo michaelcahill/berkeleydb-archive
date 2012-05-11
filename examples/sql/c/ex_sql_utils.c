@@ -72,7 +72,8 @@ print_column_callback(void *data, int n_columns,
 
 	printf("  "); /* Display indent. */
 	for (i = 0; i < n_columns; i++) {
-		printf("%s\t", col_values[i]);
+		printf("%s\t", 
+		    col_values[i] == NULL ? "" : col_values[i]);
 	}
 	printf("\n");
 

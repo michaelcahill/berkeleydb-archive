@@ -71,7 +71,7 @@ static __inline int get_handle(env, mutexp, eventp)
  * __db_win32_mutex_lock_int
  *	Internal function to lock a win32 mutex
  *
- *	If the wait paramter is 0, this function will return DB_LOCK_NOTGRANTED
+ *	If the wait parameter is 0, this function will return DB_LOCK_NOTGRANTED
  *	rather than wait.
  *
  */

@@ -27,9 +27,14 @@ interface Reader extends Serializable {
                           int initVersion,
                           Format oldFormat);
 
-    Object newInstance(EntityInput input, boolean rawAccess);
+    Object newInstance(EntityInput input, boolean rawAccess)
+        throws RefreshException;
 
-    void readPriKey(Object o, EntityInput input, boolean rawAccess);
+    void readPriKey(Object o, EntityInput input, boolean rawAccess)
+        throws RefreshException;
 
-    Object readObject(Object o, EntityInput input, boolean rawAccess);
+    Object readObject(Object o, EntityInput input, boolean rawAccess)
+        throws RefreshException;
+        
+    Accessor getAccessor(boolean rawAccess);
 }

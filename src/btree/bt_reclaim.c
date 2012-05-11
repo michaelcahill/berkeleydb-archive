@@ -44,7 +44,7 @@ __bam_reclaim(dbp, ip, txn, flags)
 
 	/* Walk the tree, freeing pages. */
 	ret = __bam_traverse(dbc, DB_LOCK_WRITE,
-	    PGNO_INVALID, __db_reclaim_callback, (void*)(uintptr_t)flags);
+	    PGNO_INVALID, __db_reclaim_callback, &flags);
 
 	if ((t_ret = __TLPUT(dbc, meta_lock)) != 0 && ret == 0)
 		ret = t_ret;

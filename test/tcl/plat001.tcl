@@ -17,6 +17,12 @@ proc plat001 { method {tnum "001"} args } {
 	global fixed_len
 	global util_path
 
+	# Heap doesn't support sequences. 
+        if { [is_heap $method] } {
+	        puts "Plat001 skipping for method $method."
+		return
+	}
+
 	# Fixed_len must be increased from the default to
 	# accommodate fixed-record length methods.
 	set orig_fixed_len $fixed_len

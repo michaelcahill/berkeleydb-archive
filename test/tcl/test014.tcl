@@ -203,7 +203,12 @@ proc test014_body { method flagp chars increase {nentries 10000} args } {
 			puts $oid $i
 		}
 		close $oid
-		file rename -force $t1 $t3
+	        if { [is_heap $method] == 1 } {
+			# No ordering in heap
+			filesort $t1 $t3 -n
+	        } else {
+			file rename -force $t1 $t3
+	        }
 	} else {
 		set q q
 		filehead $nentries $dict $t3

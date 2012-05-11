@@ -43,7 +43,7 @@ proc repmgr111 { } {
 	make_dbconfig $clientdir {{rep_set_config db_repmgr_conf_2site_strict off}}
 	puts $client "output $testdir/coutput"
 	puts $client "open_env"
-	puts $client "remote localhost $master_port"
+	puts $client "remote 127.0.0.1 $master_port"
 	puts $client "start client"
 	error_check_match start_client [gets $client] "*Successful*"
 

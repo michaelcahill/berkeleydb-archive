@@ -31,8 +31,8 @@ public class TupleTupleMarshalledBinding<E extends
     /**
      * Creates a tuple-tuple marshalled binding object.
      *
-     * <p>The given class is used to instantiate entity objects using
-     * {@link Class#forName}, and therefore must be a public class and have a
+     * <p>The given class is used to instantiate entity objects using {@link
+     * Class#newInstance}, and therefore must be a public class and have a
      * public no-arguments constructor.  It must also implement the {@link
      * MarshalledTupleEntry} and {@link MarshalledTupleKeyEntity}
      * interfaces.</p>

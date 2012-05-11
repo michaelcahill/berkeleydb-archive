@@ -28,7 +28,7 @@
  * inode number, and the first 4 bytes on Windows systems are the FileIndexLow
  * bytes.  This is followed by a random number.  The inode values tend
  * to increment fairly slowly and are not good for hashing.  So, we use
- * the XOR of the page number and the four bytes of the file id randome
+ * the XOR of the page number and the four bytes of the file id random
  * number to produce a 32-bit hash value.
  *
  * We have no particular reason to believe that this algorithm will produce

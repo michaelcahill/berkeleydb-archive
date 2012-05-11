@@ -77,7 +77,7 @@ __bam_split(dbc, arg, root_pgnop)
 
 	/*
 	 * First get a lock on the metadata page, we will have to allocate
-	 * pages and cannot get a lock while we have the search tree pinnned.
+	 * pages and cannot get a lock while we have the search tree pinned.
 	 */
 
 	pgno = PGNO_BASE_MD;

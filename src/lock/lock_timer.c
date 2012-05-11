@@ -103,7 +103,7 @@ __lock_inherit_timeout(env, parent, locker)
 	LOCK_REGION_LOCK(env);
 
 	/*
-	 * If the parent is not there yet, thats ok.  If it
+	 * If the parent is not there yet, that's ok.  If it
 	 * does not have any timouts set, then avoid creating
 	 * the child locker at this point.
 	 */

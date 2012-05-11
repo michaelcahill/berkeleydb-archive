@@ -67,6 +67,10 @@ public class DbCompat {
 
     /* Methods used by the collections package. */
 
+    public static ClassLoader getClassLoader(Environment env) {
+        return null;
+    }
+
     public static boolean getInitializeCache(EnvironmentConfig config) {
         return config.getInitializeCache();
     }

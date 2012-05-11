@@ -38,10 +38,12 @@ __memp_fcreate_pp(dbenv, retp, flags)
 	env = dbenv->env;
 
 	/* Validate arguments. */
-	if ((ret = __db_fchk(env, "DB_ENV->memp_fcreate", flags, 0)) != 0)
+	if ((ret =
+	    __db_fchk(env, "DB_ENV->memp_fcreate", flags, DB_VERIFY)) != 0)
 		return (ret);
 
-	if (REP_ON(env)) {
+	/* We look the other way on mpool operations if we're verifying. */
+	if (REP_ON(env) && !LF_ISSET(DB_VERIFY)) {
 		__db_errx(env, DB_STR("3029",
 "DB_ENV->memp_fcreate: method not permitted when replication is configured"));
 		return (EINVAL);

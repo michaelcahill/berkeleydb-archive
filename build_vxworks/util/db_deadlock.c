@@ -102,6 +102,12 @@ db_deadlock_main(argc, argv)
 			logfile = optarg;
 			break;
 		case 'P':
+			if (passwd != NULL) {
+				fprintf(stderr, DB_STR("5136",
+					"Password may not be specified twice"));
+				free(passwd);
+				return (EXIT_FAILURE);
+			}
 			passwd = strdup(optarg);
 			memset(optarg, 0, strlen(optarg));
 			if (passwd == NULL) {

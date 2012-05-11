@@ -526,7 +526,7 @@ done:
 	    (ret = __txn_checkpoint(env,
 		0, 0, DB_CKP_INTERNAL | DB_FORCE)) != 0) {
 		/*
-		 * If there was no space for the checkpoint or flushng db
+		 * If there was no space for the checkpoint or flushing db
 		 * pages we can still bring the environment up, if only for
 		 * read-only access. We must not close the open files because a
 		 * subsequent recovery might still need to redo this portion
@@ -925,7 +925,7 @@ __env_init_rec(env, version)
 	 * the recovery functions in reverse log version order.
 	 */
 	/*
-	 * DB_LOGVERSION_52 is a strict superset of DB_LOGVERSION_50.
+	 * DB_LOGVERSION_53 is a strict superset of DB_LOGVERSION_50.
 	 * So, only check > DB_LOGVERSION_48p2.  If/When log records are
 	 * altered, the condition below will need to change.
 	 */

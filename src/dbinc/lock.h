@@ -26,7 +26,7 @@ extern "C" {
 /*
  * A locker's deadlock resolution priority is stored as a 32 bit unsigned
  * integer.  The maximum priority is DB_LOCK_MAXPRIORITY and the default
- * priorit is DB_LOCK_DEFPRIORITY.
+ * priority is DB_LOCK_DEFPRIORITY.
  */
 #define	DB_LOCK_DEFPRIORITY	100
 #define DB_LOCK_MAXPRIORITY	UINT32_MAX

@@ -266,8 +266,8 @@ __lock_get_list(env, locker, flags, lock_mode, list)
 		do {
 			if ((ret = __lock_get_internal(lt, locker,
 			     flags, &obj_dbt, lock_mode, 0, &ret_lock)) != 0) {
-			     lock->pgno = save_pgno;
-			     goto err;
+				lock->pgno = save_pgno;
+				goto err;
 			}
 			if (npgno != 0)
 				GET_PGNO(dp, lock->pgno);

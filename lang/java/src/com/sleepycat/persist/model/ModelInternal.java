@@ -22,4 +22,21 @@ public class ModelInternal {
     public static void setCatalog(EntityModel model, PersistCatalog catalog) {
         model.setCatalog(catalog);
     }
+
+    /**
+     * Internal access method that should not be used by applications.
+     */
+    public static void setClassLoader(EntityModel model, ClassLoader loader) {
+        /* Do not overwrite loader with null value. */
+        if (loader != null) {
+            model.setClassLoader(loader);
+        }
+    }
+
+    /**
+     * Internal access method that should not be used by applications.
+     */
+    public static ClassLoader getClassLoader(EntityModel model) {
+        return model.getClassLoader();
+    }
 }

@@ -404,7 +404,7 @@ __rep_print_stats(env, flags)
     "Master generation number of the winner of the current or last election",
 		    (u_long)sp->st_election_gen);
 		__db_dl(env,
-    "Master data generation number of the winner of the current or last election",
+  "Master data generation number of the winner of the current or last election",
 		    (u_long)sp->st_election_datagen);
 		__db_msg(env,
     "%lu/%lu\tMaximum LSN of the winner of the current or last election",

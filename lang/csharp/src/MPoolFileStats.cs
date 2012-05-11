@@ -19,6 +19,10 @@ namespace BerkeleyDB {
         }
 
         /// <summary>
+        /// Number of spins by a backup.
+        /// </summary>
+        public ulong BackupSpins { get { return st.st_backup_spins; } }
+        /// <summary>
         /// File name.
         /// </summary>
         public string FileName { get { return st.file_name; } }

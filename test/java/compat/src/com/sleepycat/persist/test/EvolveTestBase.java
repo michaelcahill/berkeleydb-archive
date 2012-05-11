@@ -226,6 +226,22 @@ public abstract class EvolveTestBase extends TestCase {
         null,
         "FieldAddAndConvert",
         null,
+        "RenameSecFieldDestroyOrder_1",
+        null,
+        "RenameSecFieldDestroyOrder_2",
+        null,
+        "RenameSecFieldDestroyOrder_3",
+        null,
+        "DeleteSecAnnotationDestroyOrder",
+        null,
+        "ProxyClassFieldChanged",
+        null,
+        "ProxyClassObjectFieldChanged",
+        null,
+        "ProxyClassArrayFieldChanged",
+        null,
+        "ProxyClassObjectArrayFieldChanged",
+        null,
 //*/
     };
 
@@ -340,15 +356,16 @@ public abstract class EvolveTestBase extends TestCase {
             }
         } catch (Exception e) {
             if (expectException != null) {
-                //e.printStackTrace();
                 String actualMsg = e.getMessage();
                 if (e instanceof IncompatibleClassException) {
                     actualMsg = actualMsg.substring
                         (0, actualMsg.lastIndexOf("\n---\n(Note that"));
                 }
-                EvolveCase.checkEquals
-                    (expectException,
-                     e.getClass().getName() + ": " + actualMsg);
+                actualMsg = e.getClass().getName() + ": " + actualMsg;
+                if (!expectException.equals(actualMsg)) {
+                    e.printStackTrace();
+                }
+                EvolveCase.checkEquals(expectException, actualMsg);
                 return false;
             } else {
                 throw e;

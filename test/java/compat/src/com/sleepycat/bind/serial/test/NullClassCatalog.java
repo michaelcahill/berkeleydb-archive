@@ -33,4 +33,8 @@ class NullClassCatalog implements ClassCatalog {
     public ObjectStreamClass getClassFormat(byte[] classID) {
         return null; // ObjectInput not supported
     }
+
+    public ClassLoader getClassLoader() {
+        return null;
+    }
 }

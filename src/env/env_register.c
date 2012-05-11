@@ -611,7 +611,7 @@ __envreg_isalive(dbenv, pid, tid, flags )
 	u_int32_t flags;
 {
 	/* in this case we really do not care about tid, simply for lint */
-	COMPQUIET(tid, 0);
+	DB_THREADID_INIT(tid);
 
 	/* if is not an expected value then return early */
 	if (!((flags == 0) || (flags == DB_MUTEX_PROCESS_ONLY)))

@@ -620,7 +620,6 @@ __lock_wakeup(env, obj)
 	return (__db_nolocking(env));
 }
 
-
 int
 __lock_change(env, old_lock, new_lock)
 	ENV *env;

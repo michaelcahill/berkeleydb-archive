@@ -7,6 +7,7 @@
 
 package com.sleepycat.collections;
 
+import java.io.Closeable;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -50,7 +51,8 @@ import com.sleepycat.util.RuntimeExceptionWrapper;
  * @author Mark Hayes
  */
 public class StoredIterator<E> extends BaseIterator<E>
-    implements ListIterator<E>, Cloneable {
+    implements ListIterator<E>, Cloneable
+    {
 
     /**
      * Closes the given iterator using {@link #close()} if it is a {@link

@@ -153,7 +153,6 @@ db_tuner_main(argc, argv)
 	char *argv[];
 {
 	extern char *optarg;
-	extern int optind, __db_getopt_reset;
 	DB *dbp;
 	DB_ENV *dbenv;
 	DBTYPE dbtype;

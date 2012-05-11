@@ -304,6 +304,8 @@ struct __db_foreign_info {
  */
 #define	DB_CHK_META	0x01	/* Checksum the meta page. */
 #define	DB_CHK_NOLSN	0x02	/* Don't check the LSN. */
+#define	DB_CHK_ONLY	0x04	/* Only do the checksum. */
+#define	DB_SKIP_CHK	0x08	/* Don't checksum or decrypt the meta page. */
 
 /*
  * Flags to __db_truncate_page.

@@ -8,6 +8,7 @@
 package com.sleepycat.persist.impl;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -69,4 +70,14 @@ abstract class MapProxy<K, V> implements PersistentProxy<Map<K, V>> {
             return new TreeMap<K, V>();
         }
     }
+     
+    @Persistent(proxyFor=LinkedHashMap.class) 
+    static class LinkedHashMapProxy<K, V> extends MapProxy<K, V> { 
+ 
+        protected LinkedHashMapProxy() {} 
+ 
+        protected Map<K, V> newInstance(int size) { 
+            return new LinkedHashMap<K, V>(); 
+        } 
+    } 
 }

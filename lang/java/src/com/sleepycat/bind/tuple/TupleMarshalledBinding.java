@@ -28,8 +28,8 @@ public class TupleMarshalledBinding<E extends MarshalledTupleEntry>
      * Creates a tuple marshalled binding object.
      *
      * <p>The given class is used to instantiate key or data objects using
-     * {@link Class#forName}, and therefore must be a public class and have a
-     * public no-arguments constructor.  It must also implement the {@link
+     * {@link Class#newInstance}, and therefore must be a public class and have
+     * a public no-arguments constructor.  It must also implement the {@link
      * MarshalledTupleEntry} interface.</p>
      *
      * @param cls is the class of the key or data objects.

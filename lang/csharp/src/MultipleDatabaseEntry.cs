@@ -180,6 +180,30 @@ namespace BerkeleyDB {
         }
 
         /// <summary>
+        /// Return the number of records in the DBT.
+        /// </summary>
+        internal int nRecs {
+            get {
+                uint pos = ulen - 4;
+                int ret = 0;
+                if (_recno) {
+                    int recno;
+                    while ((recno = BitConverter.ToInt32(_data, (int)pos)) != 0) {
+                        ret++;
+                        pos -= 12;
+                    }
+                } else {
+                    int off;
+                    while ((off = BitConverter.ToInt32(_data, (int)pos)) >= 0) {
+                        ret++;
+                        pos -= 8;
+                    }
+                }
+                return ret;
+            }
+        }
+
+        /// <summary>
         /// Whether the bulk buffer is for recno or queue database.
         /// </summary>
         public bool Recno {

@@ -174,7 +174,8 @@ int db_container::construct_db_file_name(string &filename) const
 
 	// avoid name clash
 	len = _snprintf(name, 64, "tmpdb_db_map_%lu_%d_%u.db", 
-	    (u_long)((uintptr_t)tid + ts.tv_nsec), rand(), g_db_file_suffix_++);
+	    (u_long)((uintptr_t)&tid + ts.tv_nsec),
+	    rand(), g_db_file_suffix_++);
 	filename = name;
 
 	return 0;

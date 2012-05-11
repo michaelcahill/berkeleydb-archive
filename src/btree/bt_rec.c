@@ -256,7 +256,7 @@ check_next:	/*
 
 		/*
 		 * Check the state of the split page.  If its a rootsplit
-		 * then thats the rootpage otherwise its the left page.
+		 * then that's the rootpage otherwise its the left page.
 		 */
 		if (rootsplit) {
 			DB_ASSERT(env, pgno == argp->ppgno);
@@ -587,7 +587,7 @@ check_next:	/*
 
 		/*
 		 * Check the state of the split page.  If its a rootsplit
-		 * then thats the rootpage otherwise its the left page.
+		 * then that's the rootpage otherwise its the left page.
 		 */
 		if (rootsplit) {
 			DB_ASSERT(env, pgno == argp->ppgno);

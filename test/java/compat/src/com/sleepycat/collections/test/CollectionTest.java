@@ -965,7 +965,7 @@ public class CollectionTest extends TestCase {
                         assertNotNull(iter.previous());
                         iter.remove();
                     }
-                    assertTrue(!iter.hasNext());
+                    assertTrue(map.toString(), !iter.hasNext());
                     assertTrue(!iter.hasPrevious());
                     assertTrue(map.isEmpty());
                 } finally {

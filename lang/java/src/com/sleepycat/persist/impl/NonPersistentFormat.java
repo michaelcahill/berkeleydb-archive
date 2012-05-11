@@ -23,8 +23,8 @@ class NonPersistentFormat extends Format {
 
     private static final long serialVersionUID = -7488355830875148784L;
 
-    NonPersistentFormat(Class type) {
-        super(type);
+    NonPersistentFormat(Catalog catalog, Class type) {
+        super(catalog, type);
     }
 
     @Override

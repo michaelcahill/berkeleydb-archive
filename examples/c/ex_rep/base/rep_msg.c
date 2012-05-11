@@ -342,7 +342,7 @@ connect_all(args)
 		goto err;
 	}
 
-	if (nsites > 0 && (hm_thr = calloc(nsites, sizeof(int))) == NULL) {
+	if (nsites > 0 && (hm_thr = calloc(nsites, sizeof(thread_t))) == NULL) {
 		dbenv->err(dbenv, errno, "connect_all");
 		ret = 1;
 		goto err;
