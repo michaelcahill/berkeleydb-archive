@@ -192,6 +192,6 @@ proc repmgr110 { } {
 	set elections [stat_field $aenv rep_stat "Elections held"]
 	error_check_good bumped_gen [expr $elections > $initial_value] 1
 
-	$aenv close
 	close $a
+	$aenv close
 }

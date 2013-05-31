@@ -73,7 +73,7 @@ public class CacheFileStats {
     }
 
     private long st_backup_spins;
-    /** TODO */
+    /** Spins while trying to back up the file. */
     public long getBackupSpins() {
         return st_backup_spins;
     }

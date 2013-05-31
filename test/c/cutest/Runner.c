@@ -85,9 +85,9 @@ int main(int argc, char **argv)
 		}
 	}
 	while(num_suites != 0)
-		free(suites[num_suites--]);
+		free(suites[--num_suites]);
 	while(num_tests != 0)
-		free(tests[num_tests--]);
+		free(tests[--num_tests]);
 	if (failed > 0)
 		return (1);
 	else

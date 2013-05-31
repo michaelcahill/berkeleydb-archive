@@ -43,6 +43,11 @@ proc test044 { method {nprocs 5} {nfiles 10} {cont 0} args } {
 		puts "Test044 skipping for env $env"
 		return
 	}
+	# This test throws spurious errors with AIX's mutex implementation.
+	if { $is_aix_test == 1 } {
+		puts "Test044 skipping for AIX."
+		return
+	}
 	if { $encrypt != 0 } {
 		puts "Test044 skipping for security"
 		return

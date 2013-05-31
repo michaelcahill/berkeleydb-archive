@@ -4,7 +4,7 @@
  * Copyright (c) 2011, 2013 Oracle and/or its affiliates.  All rights reserved.
  *
  */
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -35,4 +35,4 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("5.3.28")]
+[assembly: AssemblyVersion("6.0.19")]

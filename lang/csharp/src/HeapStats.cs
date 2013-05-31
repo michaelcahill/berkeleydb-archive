@@ -27,6 +27,10 @@ namespace BerkeleyDB {
         /// </summary>
         public uint MetadataFlags { get { return st.heap_metaflags; } }
         /// <summary>
+        /// Number of blob records.
+        /// </summary>
+        public uint nBlobRecords { get { return st.heap_nblobs; } }
+        /// <summary>
         /// The number of pages in the database.
         /// </summary>
         public uint nPages { get { return st.heap_pagecnt; } }

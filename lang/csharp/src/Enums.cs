@@ -171,6 +171,11 @@ namespace BerkeleyDB {
         /// </remarks>
         PANIC = DbConstants.DB_EVENT_PANIC,
         /// <summary>
+        /// The replication manager subordinate process was unable to take over
+        /// as the replication process.
+        /// </summary>
+        REP_AUTOTAKEOVER_FAILED = DbConstants.DB_EVENT_REP_AUTOTAKEOVER_FAILED,
+        /// <summary>
         /// The local site is now a replication client.
         /// </summary>
         REP_CLIENT = DbConstants.DB_EVENT_REP_CLIENT,

@@ -136,10 +136,13 @@ public class TestUtils
             } else if(!deldir.isDirectory()) {
                 return false;
             } else {
-                // The following will fail if the directory contains sub-dirs.
                 File[] contents = deldir.listFiles();
-                for (int i = 0; i < contents.length; i++)
-                    contents[i].delete();
+                for (int i = 0; i < contents.length; i++) {
+                    if (contents[i].isDirectory())
+                        removeDir(contents[i].toString());
+                    else 
+                        contents[i].delete();
+                }
                 deldir.delete();
             }
         } catch (Exception e) {

@@ -295,7 +295,6 @@ proc rep063_sub { method nclients tnum logset recargs largs } {
 	# Client1: ......................  (0 priority for real)
 	# Client2: ........... (0/Electable)
 	#
-	#
 	set pri(0) $electable_pri
 	set pri(1) 0
 	set pri(2) $electable_pri

@@ -125,6 +125,13 @@ typedef struct {
 		timespecadd((vvp), &__tmp);			        \
 	} while (0)
 
+#define	TIMESPEC_SUB_DB_TIMEOUT(vvp, t)					\
+	do {								\
+		db_timespec __tmp;					\
+		DB_TIMEOUT_TO_TIMESPEC(t, &__tmp);			\
+		timespecsub((vvp), &__tmp);				\
+	} while (0)
+
 #if defined(__cplusplus)
 }
 #endif

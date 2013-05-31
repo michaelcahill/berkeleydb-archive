@@ -1621,6 +1621,37 @@ err:
 	return (ret);
 }
 
+/*
+ * __log_rep_write --
+ *	Way for replication clients to write the log buffer for the
+ * DB_TXN_WRITE_NOSYNC option.  This is just a thin PUBLIC wrapper
+ * for __log_write that is similar to __log_flush_commit.
+ *
+ * Note that the REP->mtx_clientdb should be held when this is called.
+ * Note that we acquire the log region mutex while holding mtx_clientdb.
+ *
+ * PUBLIC: int __log_rep_write __P((ENV *));
+ */
+int
+__log_rep_write(env)
+	ENV *env;
+{
+	DB_LOG *dblp;
+	LOG *lp;
+	int ret;
+
+	dblp = env->lg_handle;
+	lp = dblp->reginfo.primary;
+	ret = 0;
+	LOG_SYSTEM_LOCK(env);
+	if (!lp->db_log_inmemory && lp->b_off != 0)
+		if ((ret = __log_write(dblp, dblp->bufp,
+		    (u_int32_t)lp->b_off)) == 0)
+			lp->b_off = 0;
+	LOG_SYSTEM_UNLOCK(env);
+	return (ret);
+}
+
 static int
 __log_encrypt_record(env, dbt, hdr, orig)
 	ENV *env;

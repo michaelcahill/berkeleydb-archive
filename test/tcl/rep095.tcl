@@ -23,7 +23,7 @@ proc rep095 { method { niter 200 } { tnum "095" } args } {
 		return $test_methods
 	}
 	if { [is_btree $method] == 0 } {
-		puts "Rep091: Skipping for method $method."
+		puts "Rep$tnum: Skipping for method $method."
 		return
 	}
 

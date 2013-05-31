@@ -191,6 +191,10 @@ __db_truncate(dbp, ip, txn, countp)
 	if (dbc != NULL && (t_ret = __dbc_close(dbc)) != 0 && ret == 0)
 		ret = t_ret;
 
+	/* Delete all blob files. */
+	if (ret == 0)
+		ret = __blob_del_all(dbp, txn, 1);
+
 	DB_TEST_RECOVERY(dbp, DB_TEST_POSTDESTROY, ret, NULL);
 
 DB_TEST_RECOVERY_LABEL

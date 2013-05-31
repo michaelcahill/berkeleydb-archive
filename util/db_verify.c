@@ -33,7 +33,7 @@ main(argc, argv)
 	u_int32_t flags, cache;
 	int ch, exitval, mflag, nflag, private;
 	int quiet, resize, ret;
-	char *dname, *fname, *home, *passwd;
+	char *blob_dir, *dname, *fname, *home, *passwd;
 
 	if ((progname = __db_rpath(argv[0])) == NULL)
 		progname = argv[0];
@@ -48,9 +48,12 @@ main(argc, argv)
 	cache = MEGABYTE;
 	exitval = mflag = nflag = quiet = 0;
 	flags = 0;
-	home = passwd = NULL;
-	while ((ch = getopt(argc, argv, "h:mNoP:quV")) != EOF)
+	blob_dir = home = passwd = NULL;
+	while ((ch = getopt(argc, argv, "b:h:mNoP:quV")) != EOF)
 		switch (ch) {
+		case 'b':
+			blob_dir = optarg;
+			break;
 		case 'h':
 			home = optarg;
 			break;
@@ -121,6 +124,12 @@ retry:	if ((ret = db_env_create(&dbenv, 0)) != 0) {
 	if (!quiet) {
 		dbenv->set_errfile(dbenv, stderr);
 		dbenv->set_errpfx(dbenv, progname);
+	}
+
+	if (blob_dir != NULL &&
+	    (ret = dbenv->set_blob_dir(dbenv, blob_dir)) != 0) {
+		dbenv->err(dbenv, ret, "set_blob_dir");
+		goto err;
 	}
 
 	if (nflag) {

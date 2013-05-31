@@ -30,7 +30,7 @@ namespace BerkeleyDB {
             get { return  cdata.compact_deadlock; }
         }
         /// <summary>
-        /// The number of empty hash buckets that were found the compaction
+        /// The number of empty hash buckets that were found in the compaction
         /// phase.
         /// </summary>
         public uint EmptyBuckets {

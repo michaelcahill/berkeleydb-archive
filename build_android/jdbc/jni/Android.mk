@@ -1,6 +1,6 @@
 # DO NOT EDIT: automatically built by dist/s_android.
 # Makefile for building Android.JDBC for DBSQL
-# Berkeley DB 11g Release 2, library version 11.2.5.3.28: (September  9, 2013)
+# Berkeley DB 12c Release 1, library version 12.1.6.0.19: (May 31, 2013)
 #
 # This Makefile will generate 3 files:
 #   1. Static libdb_sql library. An internal library and users don't
@@ -100,6 +100,10 @@ LOCAL_CFLAGS += $(COMMON_CFLAGS)
 
 # Source files
 LOCAL_SRC_FILES := \
+	$(BDB_TOP)/src/blob/blob_fileops.c \
+	$(BDB_TOP)/src/blob/blob_page.c \
+	$(BDB_TOP)/src/blob/blob_stream.c \
+	$(BDB_TOP)/src/blob/blob_util.c \
 	$(BDB_TOP)/src/btree/bt_compact.c \
 	$(BDB_TOP)/src/btree/bt_compare.c \
 	$(BDB_TOP)/src/btree/bt_compress.c \

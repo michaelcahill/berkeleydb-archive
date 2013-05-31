@@ -14,6 +14,10 @@
 # Each non-blank, non-comment line is of the form
 #   filename		module [ module ...]
 
+src/blob/blob_fileops.c						android vx vxsmall
+src/blob/blob_page.c						android vx vxsmall
+src/blob/blob_stream.c						android vx vxsmall
+src/blob/blob_util.c						android vx vxsmall
 src/btree/bt_compact.c						android vx vxsmall 
 src/btree/bt_compare.c						android vx vxsmall 
 src/btree/bt_compress.c						android vx vxsmall 
@@ -96,6 +100,7 @@ src/crypto/rijndael/rijndael-api-fst.c				vx
 lang/cxx/cxx_channel.cpp					vx6
 lang/cxx/cxx_db.cpp						vx6
 lang/cxx/cxx_dbc.cpp						vx6
+lang/cxx/cxx_dbstream.cpp					vx6
 lang/cxx/cxx_dbt.cpp						vx6
 lang/cxx/cxx_env.cpp						vx6
 lang/cxx/cxx_except.cpp						vx6

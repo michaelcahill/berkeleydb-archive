@@ -309,6 +309,11 @@ public class RepQuoteExampleGSG implements EventHandler
             dbenv.close();
     }
 
+    public void handleRepAutoTakeoverFailedEvent()
+    {
+        // Ignored for now.
+    }
+
     public void handleRepClientEvent()
     {
         dbenv.setIsMaster(false);

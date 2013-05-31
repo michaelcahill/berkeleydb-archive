@@ -67,6 +67,10 @@ namespace BerkeleyDB {
         /// </summary>
         public uint MinKey { get { return st.bt_minkey; } }
         /// <summary>
+        /// Number of blob records.
+        /// </summary>
+        public uint nBlobRecords { get { return st.bt_nblobs; } }
+        /// <summary>
         /// Number of data items. 
         /// </summary>
         public uint nData { get { return st.bt_ndata; } }

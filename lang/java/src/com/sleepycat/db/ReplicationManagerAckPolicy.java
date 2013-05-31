@@ -11,8 +11,8 @@ package com.sleepycat.db;
 import com.sleepycat.db.internal.DbConstants;
 
 /**
-A class that provides definitions for the types of network ack policyto use
-when transmitting messages between replication sites using theReplication
+A class that provides definitions for the types of network ack policy to use
+when transmitting messages between replication sites using the Replication
 Manager.
 <p>
 Set using the {@link com.sleepycat.db.EnvironmentConfig#setReplicationManagerAckPolicy EnvironmentConfig.setReplicationManagerAckPolicy} API.

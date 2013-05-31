@@ -978,7 +978,6 @@ public class SecondaryIndex<SK, PK, E> extends BasicIndex<SK, E> {
     }
 
     /**
-     * @hidden
      * For internal use only.
      *
      * Used for obtaining the auto-commit txn config from the store, which

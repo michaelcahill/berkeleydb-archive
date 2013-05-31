@@ -116,10 +116,24 @@ namespace BerkeleyDB {
             }
         }
 
-	/// <summary>
-	/// Set this DatabaseEntry as read only - that is Berkeley DB will not
-	/// alter the entry.
-	/// </summary>
+        /// <summary>
+        /// Whether the record data will be stored as a blob,
+        /// regardless of size.
+        /// </summary>
+        public bool Blob {
+            get { return (dbt.flags & DbConstants.DB_DBT_BLOB) != 0; }
+            set {
+                if (value == true)
+                    dbt.flags |= DbConstants.DB_DBT_BLOB;
+                else
+                    dbt.flags &= ~DbConstants.DB_DBT_BLOB;
+                }
+        }
+
+    /// <summary>
+    /// Set this DatabaseEntry as read only - that is Berkeley DB will not
+    /// alter the entry.
+    /// </summary>
         public bool ReadOnly {
             get { return (flags & DbConstants.DB_DBT_READONLY) != 0; }
             set {

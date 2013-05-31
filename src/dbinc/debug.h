@@ -55,10 +55,11 @@ extern "C" {
  * of structure fields whose only purpose is padding, as well as when heap
  * memory that was never initialized is written to disk.
  */
+#define	UMRW_SET(var)			UMRW_SET_VALUE((var), 0)
 #ifdef	UMRW
-#define	UMRW_SET(v)	(v) = 0
+#define	UMRW_SET_VALUE(var, value)	(var) = (value)
 #else
-#define	UMRW_SET(v)	NOP_STATEMENT
+#define	UMRW_SET_VALUE(var, value)	NOP_STATEMENT
 #endif
 
 /*

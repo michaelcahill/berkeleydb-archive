@@ -66,7 +66,7 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
 #include <unistd.h>
 #endif
 
-int	compare_int(DB *, const DBT *, const DBT *);
+int	compare_int(DB *, const DBT *, const DBT *, size_t *);
 int	delete_recs __P((DB *, DB_ENV *, int));
 int	file_size __P((DB *, DBTYPE, int *));
 int	generate_data __P((char [], int, int));
@@ -622,13 +622,15 @@ err:
 }
 
 int
-compare_int(dbp, a, b)
+compare_int(dbp, a, b, locp)
 	DB *dbp;
 	const DBT *a, *b;
+	size_t *locp;
 {
 	int ai, bi;
 
 	dbp = NULL;
+	locp = NULL;
 
 	/*
 	 * Returns:

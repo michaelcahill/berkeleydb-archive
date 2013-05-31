@@ -564,7 +564,6 @@ public class PrimaryIndex<PK, E> extends BasicIndex<PK, E> {
     }
 
     /**
-     * @hidden
      * For internal use only.
      *
      * Used for obtaining the auto-commit txn config from the store, which

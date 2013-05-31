@@ -7,12 +7,13 @@
 
 package com.sleepycat.util.test;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
+import static org.junit.Assert.fail;
+
+import org.junit.Test;
 
 import com.sleepycat.util.PackedInteger;
 
-public class PackedIntegerTest extends TestCase {
+public class PackedIntegerTest extends TestBase {
     static final long V119 = 119L;
     static final long MAX_1 = 0xFFL;
     static final long MAX_2 = 0xFFFFL;
@@ -22,28 +23,7 @@ public class PackedIntegerTest extends TestCase {
     static final long MAX_6 = 0xFFFFFFFFFFFFL;
     static final long MAX_7 = 0xFFFFFFFFFFFFFFL;
 
-    public static void main(String[] args) {
-        junit.framework.TestResult tr =
-            junit.textui.TestRunner.run(suite());
-        if (tr.errorCount() > 0 ||
-            tr.failureCount() > 0) {
-            System.exit(1);
-        } else {
-            System.exit(0);
-        }
-    }
-
-    public static Test suite() {
-
-        return new PackedIntegerTest();
-    }
-
-    public PackedIntegerTest() {
-
-        super("PackedIntegerTest");
-    }
-
-    @Override
+    @Test
     public void runTest() {
 
         /* Packed int tests. */

@@ -46,6 +46,13 @@ namespace BerkeleyDB {
         BTreeDecompressDelegate(DatabaseEntry prevKey,
         DatabaseEntry prevData, byte[] compressed, out uint bytesRead);
     /// <summary>
+    /// An application-specified partitioning function.
+    /// </summary>
+    /// <param name="key">
+    /// The value used to determine which partition number should be returned.
+    /// </param>
+    public delegate uint PartitionDelegate(DatabaseEntry key);
+    /// <summary>
     /// The application-specified feedback function called to report Berkeley DB
     /// operation progress.
     /// </summary>
@@ -150,6 +157,23 @@ namespace BerkeleyDB {
     /// </param>
     public delegate void MessageDispatchDelegate(DbChannel channel,
         ref DatabaseEntry[] requests, out uint size, bool need_response);
+    /// <summary>
+    /// Application-specific function used by a replication view to determine
+    /// whether a database file is replicated to the local site.
+    /// </summary>
+    /// <param name="name">
+    /// The name of the database file.
+    /// </param>
+    /// <param name="result">
+    /// Indicates whether or not the database file should be replicated.
+    /// If non-zero, the database file is replicated; otherwise the database
+    /// file is not replicated. 
+    /// </param>
+    /// <param name="flags">
+    /// Currently unused.
+    /// </param>
+    public delegate int ReplicationViewDelegate(string name,
+        ref int result, uint flags);
     /// <summary>
     /// The function used to transmit data using the replication application's
     /// communication infrastructure.

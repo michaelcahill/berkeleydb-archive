@@ -56,7 +56,7 @@ typedef struct hash_t {
 	u_int32_t h_nelem;	/* Number of elements. */
 				/* Hash and compare functions. */
 	u_int32_t (*h_hash) __P((DB *, const void *, u_int32_t));
-	int (*h_compare) __P((DB *, const DBT *, const DBT *));
+	int (*h_compare) __P((DB *, const DBT *, const DBT *, size_t *));
 } HASH;
 
 /* Cursor structure definitions. */

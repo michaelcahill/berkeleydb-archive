@@ -66,6 +66,14 @@ public class HashStats extends DatabaseStats {
         return hash_ndata;
     }
 
+    private int hash_nblobs;
+    /**
+    The number of blob records.
+    */
+    public int getNumBlobs() {
+        return hash_nblobs;
+    }
+
     private int hash_pagecnt;
     /**
     The number of pages in the database.
@@ -199,6 +207,7 @@ was not configured by the {@link com.sleepycat.db.StatsConfig#setFast StatsConfi
             + "\n  hash_metaflags=" + hash_metaflags
             + "\n  hash_nkeys=" + hash_nkeys
             + "\n  hash_ndata=" + hash_ndata
+            + "\n  hash_nblobs=" + hash_nblobs
             + "\n  hash_pagecnt=" + hash_pagecnt
             + "\n  hash_pagesize=" + hash_pagesize
             + "\n  hash_ffactor=" + hash_ffactor

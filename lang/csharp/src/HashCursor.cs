@@ -20,6 +20,34 @@ namespace BerkeleyDB {
             : base(dbc, DatabaseType.HASH, pagesize, p) { }
 
         /// <summary>
+        /// Create a database stream pointing to a key/value pair where the
+        /// data item is a blob.
+        /// </summary>
+        /// <returns>A newly created database stream</returns>
+        /// <exception cref="DatabaseException">
+        /// Thrown if the data item is not a blob.
+        /// </exception>
+        public DatabaseStream DbStream() {
+            return DbStream(new DatabaseStreamConfig());
+        }
+
+        /// <summary>
+        /// Create a database stream pointing to a key/value pair where the
+        /// data item is a blob with the given configuration.
+        /// </summary>
+        /// <param name="cfg">
+        /// The configuration properties for the database stream.
+        /// </param>
+        /// <returns>A newly created database stream</returns>
+        /// <exception cref="DatabaseException">
+        /// Thrown if the data of the key/value pair it is pointing to is not
+        /// a blob.
+        /// </exception>
+        public DatabaseStream DbStream(DatabaseStreamConfig cfg) {
+            return new DatabaseStream(dbc.db_stream(cfg.flags), cfg);
+        }
+
+        /// <summary>
         /// Create a new cursor that uses the same transaction and locker ID as
         /// the original cursor.
         /// </summary>

@@ -325,6 +325,25 @@ namespace BerkeleyDB {
             }
         }
 
+        private ReplicationViewDelegate replicationView;
+        internal bool repViewIsSet;
+        /// <summary>
+        /// Create a replication view and specify the function to determine
+        /// whether a database file is replicated to the local site.
+        /// </summary>
+        /// <remarks>
+        /// If it is null, the replication view is a full view and all database
+        /// files are replicated to the local site. Otherwise it is a partial
+        /// view and only some database files are replicated to the local site.
+        /// </remarks>
+        public ReplicationViewDelegate ReplicationView {
+            get { return replicationView; }
+            set {
+                repViewIsSet = true;
+                replicationView = value;
+            }
+        }
+
         private uint _retransmissionRequestMin;
         private uint _retransmissionRequestMax;
         internal bool retransmissionRequestIsSet;

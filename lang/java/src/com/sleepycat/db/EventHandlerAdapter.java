@@ -28,6 +28,11 @@ public abstract class EventHandlerAdapter implements EventHandler {
     */
     public void handlePanicEvent() {}
     /**
+    See {@link com.sleepycat.db.EventHandler#handleRepAutoTakeoverFailedEvent EventHandler.handleRepAutoTakeoverFailedEvent} for details of this
+    callback.
+    */
+    public void handleRepAutoTakeoverFailedEvent() {}
+    /**
     See {@link com.sleepycat.db.EventHandler#handleRepClientEvent EventHandler.handleRepClientEvent} for details of this
     callback.
     */

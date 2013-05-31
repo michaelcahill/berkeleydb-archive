@@ -40,7 +40,7 @@ __os_id(dbenv, pidp, tidp)
 			*pidp = dbenv->env->pid_cache;
 	}
 
-/* 
+/*
  * When building on MinGW, we define both HAVE_PTHREAD_SELF and DB_WIN32,
  * and we are using pthreads instead of Windows threads implementation.
  * So here, we need to check the thread implementations before checking

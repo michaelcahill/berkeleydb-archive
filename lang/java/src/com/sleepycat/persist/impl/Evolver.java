@@ -355,8 +355,8 @@ class Evolver {
                     return false;
                 }
                 if (oldLatestFormat == oldLatestFormat.getLatestVersion()) {
-                    assert !newFormats.containsValue(newFormat) : newFormat;
-                    /* newFormat equals oldLatestFormat and was discarded. */
+                    /* newFormat is no longer relevant [#21869]. */
+                    newFormats.remove(newFormat.getClassName());
                     newFormat = oldLatestFormat;
                 }
             }

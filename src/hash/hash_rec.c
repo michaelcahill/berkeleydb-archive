@@ -232,6 +232,7 @@ __ham_insdel_42_recover(env, dbtp, lsnp, op, info)
 		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
 		ktype = DB_UNDO(op) || PAIR_ISKEYBIG(argp->opcode) ?
 		    H_OFFPAGE : H_KEYDATA;
+		/* TODO: May need a PAIR_ISDATABLOB here. */
 		if (PAIR_ISDATADUP(argp->opcode))
 			dtype = H_DUPLICATE;
 		else if (DB_UNDO(op) || PAIR_ISDATABIG(argp->opcode))

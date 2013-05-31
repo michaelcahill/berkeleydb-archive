@@ -425,7 +425,6 @@ tcl_TxnStat(interp, objc, objv, dbenv)
 	/*
 	 * MAKE_STAT_LIST assumes 'res' and 'error' label.
 	 */
-#ifdef HAVE_STATISTICS
 	MAKE_STAT_LIST("Region size", sp->st_regsize);
 	MAKE_STAT_LSN("LSN of last checkpoint", &sp->st_last_ckp);
 	MAKE_STAT_LIST("Time of last checkpoint", sp->st_time_ckp);
@@ -457,7 +456,7 @@ tcl_TxnStat(interp, objc, objv, dbenv)
 				break;
 			}
 		}
-#endif
+
 	Tcl_SetObjResult(interp, res);
 error:
 	__os_ufree(dbenv->env, sp);

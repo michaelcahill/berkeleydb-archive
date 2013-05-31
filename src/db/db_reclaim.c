@@ -181,6 +181,7 @@ __db_truncate_callback(dbc, p, cookie, putp)
 			switch (*H_PAIRDATA(dbp, p, indx)) {
 			case H_OFFDUP:
 				break;
+			case H_BLOB:
 			case H_OFFPAGE:
 			case H_KEYDATA:
 				++*countp;

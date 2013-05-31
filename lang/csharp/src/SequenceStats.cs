@@ -21,7 +21,7 @@ namespace BerkeleyDB {
         /// <summary>
         /// Cache size. 
         /// </summary>
-        public int CacheSize { get { return st.st_cache_size; } }
+        public uint CacheSize { get { return st.st_cache_size; } }
         /// <summary>
         /// Current cached value. 
         /// </summary>

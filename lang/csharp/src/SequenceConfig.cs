@@ -113,12 +113,12 @@ namespace BerkeleyDB {
             }
         }
 
-        private int cacheSz;
+        private uint cacheSz;
         internal bool cacheSzIsSet;
         /// <summary>
         /// The number of elements cached by a sequence handle.
         /// </summary>
-        public int CacheSize {
+        public uint CacheSize {
             get { return cacheSz; }
             set {
                 cacheSz = value;

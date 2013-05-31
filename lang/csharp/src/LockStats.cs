@@ -103,6 +103,14 @@ namespace BerkeleyDB {
         /// </summary>
         public uint Lockers { get { return st.st_nlockers; } }
         /// <summary>
+        /// Number of hits in the thread locker cache. 
+        /// </summary>
+        public ulong LockersHit { get { return st.st_nlockers_hit; } }
+        /// <summary>
+        /// Total number of lockers reused. 
+        /// </summary>
+        public ulong LockersReused { get { return st.st_nlockers_reused; } }
+        /// <summary>
         /// Current number of locks. 
         /// </summary>
         public uint Locks { get { return st.st_nlocks; } }
@@ -217,3 +225,4 @@ namespace BerkeleyDB {
         
     }
 }
+

@@ -55,6 +55,10 @@ namespace BerkeleyDB {
         /// </summary>
         public uint MagicNumber { get { return st.hash_magic; } }
         /// <summary>
+        /// Number of blob records.
+        /// </summary>
+        public uint nBlobRecords { get { return st.hash_nblobs; } }
+        /// <summary>
         /// Number of data items. 
         /// </summary>
         public uint nData { get { return st.hash_ndata; } }

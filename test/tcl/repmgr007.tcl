@@ -142,12 +142,17 @@ proc repmgr007_sub { method niter tnum largs } {
 	set garbage "abcdefghijklmnopqrstuvwxyz"
 	puts $msock $garbage
 	close $msock
-	set maserrfile [open $testdir/rm7mas.err r]
-	set maserr [read $maserrfile]
-	close $maserrfile
-	error_check_good errchk [is_substr $maserr "unexpected msg type"] 1
 
 	error_check_good client2_close [$clientenv2 close] 0
 	error_check_good client_close [$clientenv close] 0
 	error_check_good masterenv_close [$masterenv close] 0
+
+	#
+	# We check the errfile after closing the env because the close
+	# guarantees all messages are flushed to disk.
+	#	
+	set maserrfile [open $testdir/rm7mas.err r]
+	set maserr [read $maserrfile]
+	close $maserrfile
+	error_check_good errchk [is_substr $maserr "unexpected msg type"] 1
 }

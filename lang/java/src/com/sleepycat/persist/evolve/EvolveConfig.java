@@ -83,7 +83,6 @@ public class EvolveConfig implements Cloneable {
     }
     
     /**
-     * @hidden
      * The void return setter for use by Bean editors.
      */
     public void setEvolveListenerVoid(EvolveListener listener) {

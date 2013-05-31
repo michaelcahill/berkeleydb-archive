@@ -6,9 +6,7 @@
 
 #include "db_cxx.h"
 #include <stdlib.h>
-#ifdef HAVE_STRING_H
 #include <string.h>
-#endif
 using namespace std;
 
 void test1()

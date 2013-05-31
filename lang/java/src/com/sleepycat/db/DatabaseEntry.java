@@ -212,6 +212,29 @@ public class DatabaseEntry {
      */
 
     /**
+    Configure this DatabaseEntry to be stored as a blob.
+    <p>
+    @param blob
+    Whether this DatabaseEntry is configured to be stored as a blob.
+    */
+    public void setBlob(final boolean blob) {
+        if (blob)
+            flags |= DbConstants.DB_DBT_BLOB;
+        else
+            flags &= ~DbConstants.DB_DBT_BLOB;
+    }
+
+    /**
+    Return whether this DatabaseEntry is configured to be stored as a blob.
+    <p>
+    @return
+    Whether this DatabaseEntry is configured to be stored as a blob.
+    */
+    public boolean getBlob() {
+        return (flags & DbConstants.DB_DBT_BLOB) != 0;
+    }
+
+    /**
     Return the byte array.
     <p>
     For a DatabaseEntry that is used as an output parameter, the byte

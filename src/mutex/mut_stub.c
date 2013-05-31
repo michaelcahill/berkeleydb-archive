@@ -157,6 +157,16 @@ __mutex_print_debug_stats(env, mbp, mutex, flags)
 }
 
 int
+__mutex_refresh(env, mutex)
+        ENV *env;
+        db_mutex_t mutex;
+{
+	COMPQUIET(env, NULL);
+	COMPQUIET(mutex, MUTEX_INVALID);
+	return (0);
+}
+
+int
 __mutex_set_align(dbenv, align)
 	DB_ENV *dbenv;
 	u_int32_t align;

@@ -49,15 +49,11 @@ __heap_db_close(dbp)
 	DB *dbp;
 {
 	HEAP *h;
-	int ret;
 
-	ret = 0;
-	if ((h = dbp->heap_internal) == NULL)
-		return (0);
-
-	__os_free(dbp->env, h);
-	dbp->heap_internal = NULL;
-
+	if ((h = dbp->heap_internal) != NULL) {
+		__os_free(dbp->env, h);
+		dbp->heap_internal = NULL;
+	}
 	return (0);
 }
 

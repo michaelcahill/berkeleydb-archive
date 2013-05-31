@@ -1,6 +1,6 @@
 # DO NOT EDIT: automatically built by dist/s_android.
 # Makefile for building a drop-in replacement of SQLite using
-# Berkeley DB 11g Release 2, library version 11.2.5.3.28: (September  9, 2013)
+# Berkeley DB 12c Release 1, library version 12.1.6.0.19: (May 31, 2013)
 ###################################################################
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
@@ -10,7 +10,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := libsqlite
 
 # BDB_TOP will change with release numbers
-BDB_TOP := db-5.3.28
+BDB_TOP := db-6.0.19
 BDB_PATH := $(LOCAL_PATH)/$(BDB_TOP)/src
 
 # This directive results in arm (vs thumb) code.  It's necessary to
@@ -26,6 +26,10 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(BDB_TOP)/build_android/sql
 
 # Source files
 LOCAL_SRC_FILES := \
+	$(BDB_TOP)/src/blob/blob_fileops.c \
+	$(BDB_TOP)/src/blob/blob_page.c \
+	$(BDB_TOP)/src/blob/blob_stream.c \
+	$(BDB_TOP)/src/blob/blob_util.c \
 	$(BDB_TOP)/src/btree/bt_compact.c \
 	$(BDB_TOP)/src/btree/bt_compare.c \
 	$(BDB_TOP)/src/btree/bt_compress.c \

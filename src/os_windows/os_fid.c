@@ -118,12 +118,12 @@ __os_fileid(env, fname, unique_okay, fidp)
 			DB_GLOBAL(fid_serial) = (u_int32_t)pid;
 		} else
 			DB_GLOBAL(fid_serial) += 100000;
-
+		tmp = (u_int32_t)DB_GLOBAL(fid_serial);
 	} else {
 		tmp = (u_int32_t)fi.dwVolumeSerialNumber;
-		for (p = (u_int8_t *)&tmp, i = sizeof(u_int32_t); i > 0; --i)
-			*fidp++ = *p++;
 	}
+	for (p = (u_int8_t *)&tmp, i = sizeof(u_int32_t); i > 0; --i)
+		*fidp++ = *p++;
 
 	return (0);
 }

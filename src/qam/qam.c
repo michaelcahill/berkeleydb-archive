@@ -1031,7 +1031,7 @@ release_retry:	/* Release locks and retry, if possible. */
 		 */
 		tmp.data = qp->data;
 		tmp.size = t->re_len;
-		if ((ret = __bam_defcmp(dbp, data, &tmp)) != 0) {
+		if ((ret = __bam_defcmp(dbp, data, &tmp, NULL)) != 0) {
 			if (flags == DB_GET_BOTH_RANGE)
 				goto release_retry;
 			ret = DB_NOTFOUND;

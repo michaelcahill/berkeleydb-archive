@@ -285,10 +285,11 @@ __db_rename_int(dbp, ip, txn, name, subdb, newname, flags)
 	 * taken care of in the fop layer.
 	 */
 	if (IS_REAL_TXN(txn)) {
-		if ((ret = __fop_dummy(dbp, txn, old, newname)) != 0)
+		if ((ret = 
+		    __fop_dummy(dbp, txn, old, newname, DB_APP_DATA)) != 0)
 			goto err;
 	} else {
-		if ((ret = __fop_dbrename(dbp, old, newname)) != 0)
+		if ((ret = __fop_dbrename(dbp, old, newname, DB_APP_DATA)) != 0)
 			goto err;
 	}
 

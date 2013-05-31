@@ -18,7 +18,7 @@ static const char copyright[] =
 #include "db185_int.h"
 
 static int	db185_close __P((DB185 *));
-static int	db185_compare __P((DB *, const DBT *, const DBT *));
+static int	db185_compare __P((DB *, const DBT *, const DBT *, size_t *));
 static int	db185_del __P((const DB185 *, const DBT185 *, u_int));
 static int	db185_fd __P((const DB185 *));
 static int	db185_get __P((const DB185 *, const DBT185 *, DBT185 *, u_int));
@@ -539,12 +539,14 @@ einval:		ret = EINVAL;
  *	Cutout routine to call the user's Btree comparison function.
  */
 static int
-db185_compare(dbp, a, b)
+db185_compare(dbp, a, b, locp)
 	DB *dbp;
 	const DBT *a, *b;
+	size_t *locp;
 {
 	DBT185 a185, b185;
 
+	locp = NULL;
 	a185.data = a->data;
 	a185.size = a->size;
 	b185.data = b->data;
