@@ -76,6 +76,13 @@ dir=`basename $ODBC_PACKAGE .tar.gz`
 gzip -c -d $ODBC_PACKAGE | tar xf -
 mv $dir/* $ODBC_DIR || exit $?
 
+# Apply patches
+PATCH='odbc/odbc.patch'
+( cd $ODBC_DIR && patch -p1 -i $START_DIR/$PATCH )
+if [ $? -ne 0 ]; then
+	die "Can not apply patch $PATCH"
+fi
+
 # Remove unnecessary files from packages.
 
 # There is a symbolic link in the ODBC package: that can't go into a 

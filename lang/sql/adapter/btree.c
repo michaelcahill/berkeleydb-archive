@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 /*
@@ -1794,7 +1794,8 @@ int btreeOpenEnvironment(Btree *p, int needLock)
 	}
 	pBt->repStartMaster = 0;
 
-	if (!IS_ENV_READONLY(pBt) && p->vfsFlags & SQLITE_OPEN_CREATE)
+	if ((!IS_ENV_READONLY(pBt) && p->vfsFlags & SQLITE_OPEN_CREATE) ||
+	    pBt->dbStorage == DB_STORE_INMEM)
 		pBt->db_oflags |= DB_CREATE;
 
 	creating = 1;

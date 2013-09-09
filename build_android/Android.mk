@@ -1,6 +1,6 @@
 # DO NOT EDIT: automatically built by dist/s_android.
 # Makefile for building a drop-in replacement of SQLite using
-# Berkeley DB 11g Release 2, library version 11.2.5.3.21: (May 11, 2012)
+# Berkeley DB 11g Release 2, library version 11.2.5.3.28: (September  9, 2013)
 ###################################################################
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
@@ -10,7 +10,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := libsqlite
 
 # BDB_TOP will change with release numbers
-BDB_TOP := db-5.3.21
+BDB_TOP := db-5.3.28
 BDB_PATH := $(LOCAL_PATH)/$(BDB_TOP)/src
 
 # This directive results in arm (vs thumb) code.  It's necessary to
@@ -48,7 +48,6 @@ LOCAL_SRC_FILES := \
 	$(BDB_TOP)/src/clib/rand.c \
 	$(BDB_TOP)/src/clib/snprintf.c \
 	$(BDB_TOP)/src/common/clock.c \
-	$(BDB_TOP)/src/common/crypto_stub.c \
 	$(BDB_TOP)/src/common/db_byteorder.c \
 	$(BDB_TOP)/src/common/db_compint.c \
 	$(BDB_TOP)/src/common/db_err.c \
@@ -210,6 +209,7 @@ LOCAL_SRC_FILES := \
 	$(BDB_TOP)/src/txn/txn_region.c \
 	$(BDB_TOP)/src/txn/txn_stat.c \
 	$(BDB_TOP)/src/txn/txn_util.c \
+	$(BDB_TOP)/src/common/crypto_stub.c \
 	$(BDB_TOP)/lang/sql/generated/sqlite3.c
 
 ifneq ($(TARGET_ARCH),arm)

@@ -2,7 +2,7 @@
 /*
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2013 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  *
@@ -46,9 +46,9 @@ extern "C" {
 #define	DB_VERSION_RELEASE	2
 #define	DB_VERSION_MAJOR	5
 #define	DB_VERSION_MINOR	3
-#define	DB_VERSION_PATCH	21
-#define	DB_VERSION_STRING	"Berkeley DB 5.3.21: (May 11, 2012)"
-#define	DB_VERSION_FULL_STRING	"Berkeley DB 11g Release 2, library version 11.2.5.3.21: (May 11, 2012)"
+#define	DB_VERSION_PATCH	28
+#define	DB_VERSION_STRING	"Berkeley DB 5.3.28: (September  9, 2013)"
+#define	DB_VERSION_FULL_STRING	"Berkeley DB 11g Release 2, library version 11.2.5.3.28: (September  9, 2013)"
 
 /*
  * !!!
@@ -2167,7 +2167,7 @@ struct __db_compact {
 	u_int32_t	compact_deadlock;	/* Number of deadlocks. */
 	db_pgno_t	compact_pages_truncated; /* Pages truncated to OS. */
 	/* Internal. */
-	db_pgno_t	compact_truncate;	/* Page number for truncation */
+	db_pgno_t	compact_truncate;	/* Exchange pages above here. */
 };
 
 /* Hash statistics structure. */

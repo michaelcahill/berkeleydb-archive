@@ -543,6 +543,51 @@ execsql { create table reptab (a); } db
 
 catch {db close}
 
+## Cases 3.8.* test that repeating replication=on in a later dbsql session
+## is ignored.
+setup_rep_sites
+
+db eval "
+  pragma replication_local_site='$site1addr';
+  "
+do_test replication-3.8.0 {
+  execsql {
+    pragma replication_initial_master=on;
+    pragma replication=on;
+  } db
+} {1 {Replication started}}
+
+# Insert initial data on master.
+do_test replication-3.8.1 {
+  execsql {
+    create table reptab (a);
+    insert into reptab values (1);
+    select * from reptab;
+  } db
+} {1}
+
+# Stop the initial master.
+do_test replication-3.8.2 {
+  catch {db close}
+} {0}
+
+# Restart site and try repeating replication pragma.
+sqlite3 db $site1dir/rep.db
+do_test replication-3.8.3 {
+  execsql {
+    pragma replication=on;
+  } db
+} {{Replication started}}
+
+# Query data on master again.
+do_test replication-3.8.4 {
+  execsql {
+    select * from reptab;
+  } db
+} {1}
+
+catch {db close}
+
 ##
 ## Test cases replication-4.*
 ## Verify replication startup, shutdown and election scenarios.

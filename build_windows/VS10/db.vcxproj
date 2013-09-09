@@ -424,7 +424,7 @@
     <None Include="../libdb.def"/>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="../libdb.rc">
+    <ResourceCompile Include="..\..\build_windows\libdb.rc">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_DEBUG;$(NoInherit));%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Static Debug|Win32'">NDEBUG;$(NoInherit));%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NDEBUG;$(NoInherit));%(PreprocessorDefinitions)</PreprocessorDefinitions>

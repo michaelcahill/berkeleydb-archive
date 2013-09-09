@@ -99,7 +99,7 @@
     <ClCompile Include="..\..\lang\sql\odbc\sqlite3odbc.c"/>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="../sql/odbc/sqlite3odbc.rc">
+    <ResourceCompile Include="..\..\lang\sql\odbc\sqlite3odbc.rc">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_DEBUG;$(NoInherit));%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NDEBUG;$(NoInherit));%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_DEBUG;$(NoInherit));%(PreprocessorDefinitions)</PreprocessorDefinitions>

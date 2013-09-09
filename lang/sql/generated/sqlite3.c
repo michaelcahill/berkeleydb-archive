@@ -8293,7 +8293,7 @@ SQLITE_PRIVATE   void sqlite3VdbeNoopComment(Vdbe*, const char*, ...);
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2012, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2012, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 #include <db.h>
@@ -8372,7 +8372,7 @@ SQLITE_PRIVATE int *sqlite3PagerStats(Pager*);
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2012, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2012, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 typedef struct PgHdr PgHdr;
@@ -34008,7 +34008,7 @@ bitvec_end:
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 
@@ -34452,7 +34452,7 @@ SQLITE_PRIVATE int sqlite3RowSetTest(RowSet *pRowSet, u8 iBatch, sqlite3_int64 i
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 /************** Include btreeInt.h in the middle of pager.c ******************/
@@ -34460,7 +34460,7 @@ SQLITE_PRIVATE int sqlite3RowSetTest(RowSet *pRowSet, u8 iBatch, sqlite3_int64 i
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2012, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2012, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 
@@ -35140,7 +35140,7 @@ SQLITE_API void sqlite3_get_pager_stats(sqlite3_int64 *totalBytesOut,
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 #if defined(SQLITE_DEBUG) && !defined(SQLITE_OMIT_WAL)
@@ -35152,7 +35152,7 @@ SQLITE_PRIVATE int sqlite3WalTrace = 0;
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 /*
@@ -35238,7 +35238,7 @@ SQLITE_PRIVATE int sqlite3BtreeSharable(Btree *p)
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 /*
@@ -37024,7 +37024,8 @@ int btreeOpenEnvironment(Btree *p, int needLock)
 	}
 	pBt->repStartMaster = 0;
 
-	if (!IS_ENV_READONLY(pBt) && p->vfsFlags & SQLITE_OPEN_CREATE)
+	if ((!IS_ENV_READONLY(pBt) && p->vfsFlags & SQLITE_OPEN_CREATE) ||
+	    pBt->dbStorage == DB_STORE_INMEM)
 		pBt->db_oflags |= DB_CREATE;
 
 	creating = 1;
@@ -43147,7 +43148,7 @@ int isCurrentThread(void *tid)
 /*-
 * See the file LICENSE for redistribution information.
 *
-* Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+* Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
 */
 /*
 ** This file contains the implementation of the sqlite3_backup_XXX()
@@ -43466,7 +43467,7 @@ int btreeDeleteEnvironment(Btree *p, const char *home, int rename)
 	int rc, ret, iDb, storage;
 	sqlite3 *db;
 	DB_ENV *tmp_env;
-	char path[512];
+	char path[BT_MAX_PATH];
 #ifdef BDBSQL_FILE_PER_TABLE
 	int numFiles;
 	char **files;
@@ -43498,6 +43499,7 @@ int btreeDeleteEnvironment(Btree *p, const char *home, int rename)
 	if (home == NULL)
 		goto done;
 
+	sqlite3_snprintf(sizeof(path), path, "%s-journal", home);
 	ret = btreeCleanupEnv(path);
 	/* EFAULT can be returned on Windows when the file does not exist.*/
 	if (ret == ENOENT || ret == EFAULT)
@@ -43629,6 +43631,7 @@ static int backupCleanup(sqlite3_backup *p)
 		 */
 		sqlite3_snprintf(sizeof(path), path,
 		    "%s%s", p->fullName, BACKUP_SUFFIX);
+		p->pDest->schema = NULL;
 		if (p->rc == SQLITE_DONE) {
 			rc2 = btreeDeleteEnvironment(p->pDest, path, 0);
 		} else {
@@ -43647,25 +43650,18 @@ static int backupCleanup(sqlite3_backup *p)
 			    SQLITE_DEFAULT_CACHE_SIZE | SQLITE_OPEN_MAIN_DB,
 			    p->pDestDb->openFlags);
 			p->pDestDb->aDb[p->iDb].pBt = p->pDest;
-			if (rc == SQLITE_OK) {
-				p->pDestDb->aDb[p->iDb].pSchema =
-				    sqlite3SchemaGet(p->pDestDb, p->pDest);
-				if (!p->pDestDb->aDb[p->iDb].pSchema)
-					p->rc = SQLITE_NOMEM;
-			} else
-				p->pDestDb->aDb[p->iDb].pSchema = NULL;
-			if (rc == SQLITE_OK)
-				p->pDest->pBt->db_oflags |= DB_CREATE;
-			/*
-			 * Have to delete the schema here on error to avoid
-			 * assert failure.
-			 */
-			if (p->pDest == NULL &&
-			    p->pDestDb->aDb[p->iDb].pSchema != NULL) {
+			if (p->pDest)
+				p->pDest->schema = 
+				    p->pDestDb->aDb[p->iDb].pSchema;
+			else {
 				sqlite3SchemaClear(
 				    p->pDestDb->aDb[p->iDb].pSchema);
+				sqlite3_free(p->pDestDb->aDb[p->iDb].pSchema);
 				p->pDestDb->aDb[p->iDb].pSchema = NULL;
 			}
+			if (rc == SQLITE_OK)
+				p->pDest->pBt->db_oflags |= DB_CREATE;
+
 #ifdef SQLITE_HAS_CODEC
 			if (rc == SQLITE_OK) {
 				if (p->iDb == 0)
@@ -43755,6 +43751,8 @@ SQLITE_API int sqlite3_backup_step(sqlite3_backup *p, int nPage) {
 		storage = p->pDest->pBt->dbStorage;
 		if (storage == DB_STORE_NAMED)
 			p->openDest = 1;
+		if (p->pDest)
+			p->pDest->schema = NULL;
 		p->rc = btreeDeleteEnvironment(p->pDest, p->fullName, 1);
 		if (storage == DB_STORE_INMEM && strcmp(p->destName, "temp")
 		    != 0)
@@ -43780,13 +43778,15 @@ SQLITE_API int sqlite3_backup_step(sqlite3_backup *p, int nPage) {
 			    &p->pDest, SQLITE_DEFAULT_CACHE_SIZE |
 			    SQLITE_OPEN_MAIN_DB, p->pDestDb->openFlags);
 			p->pDestDb->aDb[p->iDb].pBt = p->pDest;
-			if (p->rc == SQLITE_OK) {
-				p->pDestDb->aDb[p->iDb].pSchema =
-				    sqlite3SchemaGet(p->pDestDb, p->pDest);
-				if (!p->pDestDb->aDb[p->iDb].pSchema)
-					p->rc = SQLITE_NOMEM;
-			} else
+			if (p->pDest)
+				p->pDest->schema =
+				    p->pDestDb->aDb[p->iDb].pSchema;
+			else {
+				sqlite3SchemaClear(
+				    p->pDestDb->aDb[p->iDb].pSchema);
+				sqlite3_free(p->pDestDb->aDb[p->iDb].pSchema);
 				p->pDestDb->aDb[p->iDb].pSchema = NULL;
+			}
 		}
 
 		if (p->pDest)
@@ -44173,7 +44173,7 @@ done:	return MAP_ERR(rc, ret, NULL);
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 /*
@@ -44275,7 +44275,7 @@ SQLITE_PRIVATE void sqlite3CodecGetKey(sqlite3 *db, int backend, void **keyp, in
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 /*
@@ -44522,6 +44522,19 @@ static int bdbsqlPragmaStartReplication(Parse *pParse, Db *pDb)
 	}
 
 	if (dbExists) {
+		if (!pBt->pBt->env_opened) {
+			if ((rc = btreeOpenEnvironment(pBt, 1)) != SQLITE_OK)
+				sqlite3ErrorMsg(pParse, "Could not start "
+				    "replication on an existing database");
+			goto done;
+		}
+
+		/*
+		 * Opening the environment started repmgr if it was
+		 * configured for it, so we are done here.
+		 */
+		if (supportsReplication(pBt))
+			goto done;
 		/*
 		 * Turning on replication requires recovery on the underlying
 		 * BDB environment, which requires single-threaded access.
@@ -45886,7 +45899,7 @@ int cleanPragmaCache(Btree *p)
 /*
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -46805,7 +46818,7 @@ static int btreeSeqStartTransaction(
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 /*
@@ -87436,7 +87449,7 @@ static void updateVirtualTable(
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 /*

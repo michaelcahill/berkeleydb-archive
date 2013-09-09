@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2012 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2013 Oracle and/or its affiliates.  All rights reserved.
  */
 
 /*
@@ -250,6 +250,19 @@ static int bdbsqlPragmaStartReplication(Parse *pParse, Db *pDb)
 	}
 
 	if (dbExists) {
+		if (!pBt->pBt->env_opened) {
+			if ((rc = btreeOpenEnvironment(pBt, 1)) != SQLITE_OK)
+				sqlite3ErrorMsg(pParse, "Could not start "
+				    "replication on an existing database");
+			goto done;
+		}
+
+		/*
+		 * Opening the environment started repmgr if it was
+		 * configured for it, so we are done here.
+		 */
+		if (supportsReplication(pBt))
+			goto done;
 		/*
 		 * Turning on replication requires recovery on the underlying
 		 * BDB environment, which requires single-threaded access.
