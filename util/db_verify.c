@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -12,7 +12,7 @@
 
 #ifndef lint
 static const char copyright[] =
-    "Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.\n";
+    "Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.\n";
 #endif
 
 int main __P((int, char *[]));
@@ -100,14 +100,6 @@ main(argc, argv)
 	if (argc <= 0)
 		return (usage());
 
-	if (mflag) {
-		dname = argv[0];
-		fname = NULL;
-	} else {
-		fname = argv[0];
-		dname = NULL;
-	}
-
 	/* Handle possible interruptions. */
 	__db_util_siginit();
 
@@ -178,6 +170,14 @@ retry:	if ((ret = db_env_create(&dbenv, 0)) != 0) {
 	 * enabled.
 	 */
 	for (; !__db_util_interrupted() && argv[0] != NULL; ++argv) {
+		if (mflag) {
+			dname = argv[0];
+			fname = NULL;
+		} else {
+			fname = argv[0];
+			dname = NULL;
+		}
+
 		if ((ret = db_create(&dbp, dbenv, 0)) != 0) {
 			dbenv->err(dbenv, ret, "%s: db_create", progname);
 			goto err;
@@ -276,7 +276,7 @@ int
 usage()
 {
 	fprintf(stderr, "usage: %s %s\n", progname,
-	    "[-NoqV] [-h home] [-P password] db_file ...");
+	    "[-mNoqV] [-b blob_dir] [-h home] [-P password] db_file ...");
 	return (EXIT_FAILURE);
 }
 

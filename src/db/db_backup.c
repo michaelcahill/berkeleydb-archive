@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2011, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2011, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -286,7 +286,7 @@ backup_data_copy(dbenv, file, from_dir, to_dir, log)
 				    from_dir, PATH_SEPARATOR[0], file);
 			goto done;
 		}
-		__db_err(env, ret, "%s", buf);
+		__db_err(env, ret, "%s", from);
 		goto err;
 	}
 

@@ -1,7 +1,7 @@
 /*
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -54,8 +54,10 @@
 #define	DB_SEQ_NEXT		0x0000
 #define	DB_SEQ_CURRENT		0x0001
 
-#define	MSG_CREATE_FAIL	"Sequence create failed: "
-#define	MSG_MALLOC_FAIL	"Malloc failed during sequence operation."
+#define	MSG_CREATE_FAIL		"Sequence create failed: "
+#define	MSG_MALLOC_FAIL		"Malloc failed during sequence operation."
+#define	MSG_INTMPDB_FAIL	"Sequences do not support in-memory or"	\
+                                " temporary databases."
 
 #define CACHE_ENTRY_VALID(_e)						\
 	(_e != NULL &&							\
@@ -78,6 +80,7 @@ static int btreeSeqPutCookie(
     sqlite3_context *context, Btree *p, SEQ_COOKIE *cookie, u_int32_t flags);
 static int btreeSeqRemoveHandle(
     sqlite3_context *context, Btree *p, CACHED_DB *cache_entry);
+static void btreeSeqSetSeqName(SEQ_COOKIE *cookie, const char *name);
 static int btreeSeqStartTransaction(
     sqlite3_context *context, Btree *p, int is_write);
 
@@ -127,10 +130,8 @@ static void db_seq_create_func(
 	memset(&cookie, 0, sizeof(SEQ_COOKIE));
 	cookie.incr = 1;
 
-	sqlite3_snprintf(BT_MAX_SEQ_NAME, cookie.name, "seq_%s",
-	    sqlite3_value_text(argv[0]));
+	btreeSeqSetSeqName(&cookie, sqlite3_value_text(argv[0]));
 	log_msg(LOG_NORMAL, "db_seq_drop_func(%s)", cookie.name);
-	cookie.name_len = (int)strlen(cookie.name);
 	if (pBt->dbStorage == DB_STORE_NAMED && btreeSeqExists(context, p,
 	    cookie.name) == 1) {
 		btreeSeqError(context, SQLITE_ERROR,
@@ -257,7 +258,7 @@ static void db_seq_create_func(
 
 	if ((rc = btreeSeqGetHandle(context, p, SEQ_HANDLE_CREATE, &cookie)) !=
 	    SQLITE_OK) {
-		if (rc != SQLITE_ERROR)
+		if (rc != DB_NOINTMP)
 			btreeSeqError(context, dberr2sqlite(rc, NULL),
 			    "Failed to create sequence %s. Error: %s",
 			    (const char *)sqlite3_value_text(argv[0]),
@@ -292,10 +293,8 @@ static void db_seq_drop_func(
 		return;
 	}
 
-	sqlite3_snprintf(BT_MAX_SEQ_NAME, cookie.name, "seq_%s",
-	    sqlite3_value_text(argv[0]));
+	btreeSeqSetSeqName(&cookie, sqlite3_value_text(argv[0]));
 	log_msg(LOG_NORMAL, "db_seq_drop_func(%s)", cookie.name);
-	cookie.name_len = (int)strlen(cookie.name);
 	rc = btreeSeqGetHandle(context, p, SEQ_HANDLE_OPEN, &cookie);
 	
 	if (rc != SQLITE_OK) {
@@ -303,7 +302,7 @@ static void db_seq_drop_func(
 		if (rc == DB_NOTFOUND) 
 			btreeSeqError(context, dberr2sqlite(rc, NULL),
 			    "no such sequence: %s", cookie.name + 4);
-		else if (rc != SQLITE_ERROR)
+		else if (rc != DB_NOINTMP)
 			btreeSeqError(context, dberr2sqlite(rc, NULL),
 			"Fail to drop sequence %s. Error: %s",
 			cookie.name + 4, db_strerror(rc));
@@ -384,15 +383,14 @@ static void btreeSeqGetVal(
 		return;
 	}
 
-	sqlite3_snprintf(BT_MAX_SEQ_NAME, cookie.name, "seq_%s", name);
-	cookie.name_len = (int)strlen(cookie.name);
+	btreeSeqSetSeqName(&cookie, name);
 	rc = btreeSeqGetHandle(context, p, SEQ_HANDLE_OPEN, &cookie);
 
 	if (rc != SQLITE_OK) {
 		if (rc == DB_NOTFOUND) 
 			btreeSeqError(context, dberr2sqlite(rc, NULL),
 			    "no such sequence: %s", name);
-		else if (rc != SQLITE_ERROR)
+		else if (rc != DB_NOINTMP)
 			btreeSeqError(context, dberr2sqlite(rc, NULL),
 			    "Fail to get next value from seq %s. Error: %s",
 			    name, db_strerror(rc));
@@ -515,10 +513,8 @@ static int btreeSeqGetHandle(sqlite3_context *context, Btree *p,
 
 	/* Does not support in-memory db and temp db for now */
 	if (pBt->dbStorage != DB_STORE_NAMED) {
-		btreeSeqError(context, SQLITE_ERROR,
-		    "Sequences do not support in-memory or "
-		    "temporary databases.");
-		return (SQLITE_ERROR);
+		btreeSeqError(context, SQLITE_ERROR, MSG_INTMPDB_FAIL);
+		return (DB_NOINTMP);
 	}
 
 	/* Tell sqlite3VdbeHalt() that this step has a transaction to end. */
@@ -878,6 +874,41 @@ static int btreeSeqPutCookie(
 	    &cookie_key, &cookie_data, flags)) != 0)
 		return ret;
 	return (0);
+}
+
+/*
+ * According to the documentation the sequence name should be converted
+ * to lowercase unless it is surrounded by quotation marks.
+ * This function assumes that the sequence name fits in the buffer to which
+ * cookie.name points.
+ */
+static void btreeSeqSetSeqName(SEQ_COOKIE *cookie, const char *name)
+{
+	char lowercase[BT_MAX_SEQ_NAME];
+	int i;
+	size_t len;
+
+	if (name == NULL) {
+		strcpy(cookie->name, "seq_");
+		cookie->name_len = 4;
+		return;
+	}
+
+	len = strlen(name);
+	if (name[0] == '"' && name[len-1] == '"')
+		sqlite3_snprintf(
+		    BT_MAX_SEQ_NAME, cookie->name, "seq_%s", name);
+	else {
+		memset(lowercase, 0, BT_MAX_SEQ_NAME);
+		for (i = 0; i < len; i++) {
+			lowercase[i] = sqlite3UpperToLower[*(name + i)];
+		}
+		sqlite3_snprintf(
+		    BT_MAX_SEQ_NAME, cookie->name, "seq_%s", lowercase);
+	}
+	cookie->name_len = (int)strlen(cookie->name);
+
+	return;
 }
 
 /*

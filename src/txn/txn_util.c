@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2001, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2001, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -564,9 +564,8 @@ __txn_reset_fe_watermarks(txn)
 {
 	DB *db;
 
-	if (txn->parent) {
+	if (txn->parent)
 		DB_ASSERT(txn->mgrp->env, TAILQ_FIRST(&txn->femfs) == NULL);
-	}
 
 	while ((db = TAILQ_FIRST(&txn->femfs)))
 		__clear_fe_watermark(txn, db);

@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2001, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2001, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -601,8 +601,9 @@ __rep_process_message_int(env, control, rec, eid, ret_lsnp)
 		CLIENT_REREQ;
 		break;
 	case REP_BLOB_ALL_REQ:
+		/* Blobs do not support peer-to-peer. */
 		RECOVERING_SKIP;
-		CLIENT_MASTERCHK;
+		MASTER_ONLY(rep, rp);
 		ret = __rep_blob_allreq(env, eid, rec);
 		CLIENT_REREQ;
 		break;
@@ -614,8 +615,9 @@ __rep_process_message_int(env, control, rec, eid, ret_lsnp)
 			ret = 0;
 		break;
 	case REP_BLOB_CHUNK_REQ:
+		/* Blobs do not support peer-to-peer. */
 		RECOVERING_SKIP;
-		CLIENT_MASTERCHK;
+		MASTER_ONLY(rep, rp);
 		ret = __rep_blob_chunk_req(env, eid, rec);
 		CLIENT_REREQ;
 		break;

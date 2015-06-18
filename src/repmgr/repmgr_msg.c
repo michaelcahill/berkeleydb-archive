@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2005, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2005, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -1363,7 +1363,13 @@ resolve_limbo_int(env, ip)
 	if (orig_status == SITE_PRESENT || orig_status == 0)
 		goto out;
 
-	if (IS_ZERO_LSN(db_rep->limbo_failure))
+	/*
+	 * It is possible after an autotakeover on a master to have no
+	 * limbo_failure LSN but to have a limbo_victim that was found
+	 * in the gmdb that still needs to be resolved.
+	 */
+	if (IS_ZERO_LSN(db_rep->limbo_failure) &&
+	    !db_rep->limbo_resolution_needed)
 		goto out;
 
 	/*

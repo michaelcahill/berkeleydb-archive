@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -1122,12 +1122,15 @@ flush:	MUTEX_LOCK(env, lp->mtx_flush);
 		LOG_SYSTEM_UNLOCK(env);
 
 	/* Sync all writes to disk. */
-	if (!lp->nosync && (ret = __os_fsync(env, dblp->lfhp)) != 0) {
-		MUTEX_UNLOCK(env, lp->mtx_flush);
-		if (release)
-			LOG_SYSTEM_LOCK(env);
-		lp->in_flush--;
-		goto done;
+	if (!lp->nosync) {
+		if ((ret = __os_fsync(env, dblp->lfhp)) != 0) {
+			MUTEX_UNLOCK(env, lp->mtx_flush);
+			if (release)
+				LOG_SYSTEM_LOCK(env);
+			lp->in_flush--;
+			goto done;
+		}
+		STAT(++lp->stat.st_scount);
 	}
 
 	/*
@@ -1147,7 +1150,6 @@ flush:	MUTEX_LOCK(env, lp->mtx_flush);
 		LOG_SYSTEM_LOCK(env);
 
 	lp->in_flush--;
-	STAT(++lp->stat.st_scount);
 
 	/*
 	 * How many flush calls (usually commits) did this call actually sync?

@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -368,8 +368,6 @@ creation:
 	nregions = __memp_max_regions(env) + 5;
 	size = nregions * sizeof(REGION);
 	size += dbenv->passwd_len;
-	size += (dbenv->thr_max + dbenv->thr_max / 4) *
-	    __env_alloc_size(sizeof(DB_THREAD_INFO));
 	/* Space for replication buffer. */
 	if (init_flagsp != NULL && FLD_ISSET(*init_flagsp, DB_INITENV_REP))
 		size += MEGABYTE;
@@ -382,7 +380,11 @@ creation:
 	tregion.segid = INVALID_REGION_SEGID;
 
 	if ((tregion.max = dbenv->memory_max) == 0) {
-		/* Add some slop. */
+		/*
+		 * No maximum memory limit was given. Calculate how large the
+		 * main region could become if all of the explicit configuration
+		 * limits for lock, txn, log, thread are hit, plus some spare.
+		 */
 		size += 16 * 1024;
 		tregion.max = (roff_t)size;
 

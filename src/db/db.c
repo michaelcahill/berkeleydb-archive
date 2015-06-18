@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  */
 /*
  * Copyright (c) 1990, 1993, 1994, 1995, 1996
@@ -1272,8 +1272,11 @@ __db_disassociate(sdbp)
 	sdbp->s_refcnt = 0;
 
 	while ((dbc = TAILQ_FIRST(&sdbp->free_queue)) != NULL)
-		if ((t_ret = __dbc_destroy(dbc)) != 0 && ret == 0)
-			ret = t_ret;
+		if ((t_ret = __dbc_destroy(dbc)) != 0) {
+			if (ret == 0)
+				ret = t_ret;
+			break;
+		}
 
 	F_CLR(sdbp, DB_AM_SECONDARY);
 	return (ret);

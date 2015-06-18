@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2009, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2009, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  */
 using System;
@@ -198,7 +198,7 @@ namespace CsharpAPITest
 			Assert.AreNotEqual(0, stats.MBytesSinceCheckpoint);
 			Assert.AreNotEqual(0, stats.MinCommitsPerFlush);
 			Assert.AreNotEqual(0, stats.OverflowWrites);
-			Assert.AreNotEqual(0, stats.Syncs);
+			Assert.AreEqual(0, stats.Syncs);
 			Assert.AreNotEqual(0, stats.Writes);
 			Assert.AreEqual(0, stats.Reads);
 			Assert.AreEqual(0, stats.RegionLockWait);

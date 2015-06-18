@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -526,7 +526,7 @@ __partition_chk_meta(dbp, ip, txn, flags)
 	}
 
 	if (part->nparts == 0) {
-		if (LF_ISSET(DB_CREATE) && meta->nparts == 0) {
+		if (meta->nparts == 0) {
 			__db_errx(env, DB_STR("0655",
 			    "Zero paritions specified."));
 			ret = EINVAL;

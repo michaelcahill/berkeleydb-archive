@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1999, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1999, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -926,7 +926,7 @@ next_page:
 	pg = NULL;
 	if ((ret = __bam_stkrel(dbc, STK_PGONLY)) != 0)
 		goto err;
-	if (npgno != PGNO_INVALID &&
+	if (npgno != PGNO_INVALID && !do_commit &&
 	    (ret = __db_lget(dbc, 0, npgno, DB_LOCK_READ, 0, &next_lock)) != 0)
 		goto err;
 	if ((ret = __bam_stkrel(dbc, pgs_done == 0 ? STK_NOLOCK : 0)) != 0)
@@ -1004,9 +1004,6 @@ err:	/*
 	if ((t_ret = __bam_stkrel(dbc, sflag)) != 0 && ret == 0)
 		ret = t_ret;
 
-	if ((t_ret = __TLPUT(dbc, metalock)) != 0 && ret == 0)
-		ret = t_ret;
-
 	if (pg != NULL && (t_ret =
 	     __memp_fput(dbmp,
 		  dbc->thread_info, pg, dbc->priority) != 0) && ret == 0)
@@ -1016,7 +1013,11 @@ err:	/*
 		  dbc->thread_info, npg, dbc->priority) != 0) && ret == 0)
 		ret = t_ret;
 
-out:	*isdonep = isdone;
+out:
+	if ((t_ret = __TLPUT(dbc, metalock)) != 0 && ret == 0)
+		ret = t_ret;
+
+	*isdonep = isdone;
 
 	/* For OPD trees return if we did anything in the span variable. */
 	if (F_ISSET(dbc, DBC_OPD))

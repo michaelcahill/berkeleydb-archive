@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -488,7 +488,7 @@ magic_retry:
 	default:
 		if (needs_swap)
 			/* It's already been swapped, so it isn't a BDB file. */
-			return (EINVAL);
+			return (USR_ERR(env, EINVAL));
 		M_32_SWAP(magic);
 		needs_swap = 1;
 		goto magic_retry;
@@ -520,7 +520,7 @@ magic_retry:
 			if ((ret =
 			    __db_check_chksum(env, NULL, env->crypto_handle,
 			    chksum, meta, DBMETASIZE, is_hmac)) != 0)
-				return (DB_CHKSUM_FAIL);
+				return (USR_ERR(env, DB_CHKSUM_FAIL));
 		}
 	} else if (dbp != NULL)
 		F_CLR(dbp, DB_AM_CHKSUM);
@@ -528,7 +528,7 @@ magic_retry:
 #ifdef HAVE_CRYPTO
 	if (__crypto_decrypt_meta(env,
 	     dbp, (u_int8_t *)meta, LF_ISSET(DB_CHK_META)) != 0)
-		ret = DB_CHKSUM_FAIL;
+		ret = USR_ERR(env, DB_CHKSUM_FAIL);
 #endif
 	return (ret);
 }

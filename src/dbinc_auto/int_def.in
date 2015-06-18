@@ -963,27 +963,38 @@
 #define	__repmgr_init_recover __repmgr_init_recover@DB_VERSION_UNIQUE_NAME@
 #endif
 #define	__fop_create_42_desc __fop_create_42_desc@DB_VERSION_UNIQUE_NAME@
+#define	__fop_create_60_desc __fop_create_60_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_create_desc __fop_create_desc@DB_VERSION_UNIQUE_NAME@
+#define	__fop_remove_60_desc __fop_remove_60_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_remove_desc __fop_remove_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_42_desc __fop_write_42_desc@DB_VERSION_UNIQUE_NAME@
+#define	__fop_write_60_desc __fop_write_60_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_desc __fop_write_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_file_60_desc __fop_write_file_60_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_file_desc __fop_write_file_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename_42_desc __fop_rename_42_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename_noundo_46_desc __fop_rename_noundo_46_desc@DB_VERSION_UNIQUE_NAME@
+#define	__fop_rename_60_desc __fop_rename_60_desc@DB_VERSION_UNIQUE_NAME@
+#define	__fop_rename_noundo_60_desc __fop_rename_noundo_60_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename_desc __fop_rename_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename_noundo_desc __fop_rename_noundo_desc@DB_VERSION_UNIQUE_NAME@
+#define	__fop_file_remove_60_desc __fop_file_remove_60_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_file_remove_desc __fop_file_remove_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_init_recover __fop_init_recover@DB_VERSION_UNIQUE_NAME@
 #define	__fop_create_42_print __fop_create_42_print@DB_VERSION_UNIQUE_NAME@
+#define	__fop_create_60_print __fop_create_60_print@DB_VERSION_UNIQUE_NAME@
 #define	__fop_create_print __fop_create_print@DB_VERSION_UNIQUE_NAME@
+#define	__fop_remove_60_print __fop_remove_60_print@DB_VERSION_UNIQUE_NAME@
 #define	__fop_remove_print __fop_remove_print@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_42_print __fop_write_42_print@DB_VERSION_UNIQUE_NAME@
+#define	__fop_write_60_print __fop_write_60_print@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_print __fop_write_print@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_file_60_print __fop_write_file_60_print@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_file_print __fop_write_file_print@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename_42_print __fop_rename_42_print@DB_VERSION_UNIQUE_NAME@
+#define	__fop_rename_60_print __fop_rename_60_print@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename_print __fop_rename_print@DB_VERSION_UNIQUE_NAME@
+#define	__fop_file_remove_60_print __fop_file_remove_60_print@DB_VERSION_UNIQUE_NAME@
 #define	__fop_file_remove_print __fop_file_remove_print@DB_VERSION_UNIQUE_NAME@
 #define	__fop_init_print __fop_init_print@DB_VERSION_UNIQUE_NAME@
 #define	__fop_create __fop_create@DB_VERSION_UNIQUE_NAME@
@@ -992,18 +1003,23 @@
 #define	__fop_write_file __fop_write_file@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename __fop_rename@DB_VERSION_UNIQUE_NAME@
 #define	__fop_create_recover __fop_create_recover@DB_VERSION_UNIQUE_NAME@
+#define	__fop_create_60_recover __fop_create_60_recover@DB_VERSION_UNIQUE_NAME@
 #define	__fop_create_42_recover __fop_create_42_recover@DB_VERSION_UNIQUE_NAME@
 #define	__fop_remove_recover __fop_remove_recover@DB_VERSION_UNIQUE_NAME@
+#define	__fop_remove_60_recover __fop_remove_60_recover@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_recover __fop_write_recover@DB_VERSION_UNIQUE_NAME@
-#define	__fop_write_file_recover __fop_write_file_recover@DB_VERSION_UNIQUE_NAME@
-#define	__fop_write_file_60_recover __fop_write_file_60_recover@DB_VERSION_UNIQUE_NAME@
+#define	__fop_write_60_recover __fop_write_60_recover@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_42_recover __fop_write_42_recover@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_file_recover __fop_write_file_recover@DB_VERSION_UNIQUE_NAME@
+#define	__fop_write_file_60_recover __fop_write_file_60_recover@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename_recover __fop_rename_recover@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename_noundo_recover __fop_rename_noundo_recover@DB_VERSION_UNIQUE_NAME@
+#define	__fop_rename_60_recover __fop_rename_60_recover@DB_VERSION_UNIQUE_NAME@
+#define	__fop_rename_noundo_60_recover __fop_rename_noundo_60_recover@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename_42_recover __fop_rename_42_recover@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename_noundo_46_recover __fop_rename_noundo_46_recover@DB_VERSION_UNIQUE_NAME@
 #define	__fop_file_remove_recover __fop_file_remove_recover@DB_VERSION_UNIQUE_NAME@
+#define	__fop_file_remove_60_recover __fop_file_remove_60_recover@DB_VERSION_UNIQUE_NAME@
 #define	__fop_lock_handle __fop_lock_handle@DB_VERSION_UNIQUE_NAME@
 #define	__fop_file_setup __fop_file_setup@DB_VERSION_UNIQUE_NAME@
 #define	__fop_subdb_setup __fop_subdb_setup@DB_VERSION_UNIQUE_NAME@
@@ -1402,14 +1418,19 @@
 #define	__bam_relink_43_verify __bam_relink_43_verify@DB_VERSION_UNIQUE_NAME@
 #define	__bam_merge_44_verify __bam_merge_44_verify@DB_VERSION_UNIQUE_NAME@
 #define	__fop_create_42_verify __fop_create_42_verify@DB_VERSION_UNIQUE_NAME@
+#define	__fop_create_60_verify __fop_create_60_verify@DB_VERSION_UNIQUE_NAME@
 #define	__fop_create_verify __fop_create_verify@DB_VERSION_UNIQUE_NAME@
+#define	__fop_remove_60_verify __fop_remove_60_verify@DB_VERSION_UNIQUE_NAME@
 #define	__fop_remove_verify __fop_remove_verify@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_42_verify __fop_write_42_verify@DB_VERSION_UNIQUE_NAME@
+#define	__fop_write_60_verify __fop_write_60_verify@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_verify __fop_write_verify@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_file_60_verify __fop_write_file_60_verify@DB_VERSION_UNIQUE_NAME@
 #define	__fop_write_file_verify __fop_write_file_verify@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename_42_verify __fop_rename_42_verify@DB_VERSION_UNIQUE_NAME@
+#define	__fop_rename_60_verify __fop_rename_60_verify@DB_VERSION_UNIQUE_NAME@
 #define	__fop_rename_verify __fop_rename_verify@DB_VERSION_UNIQUE_NAME@
+#define	__fop_file_remove_60_verify __fop_file_remove_60_verify@DB_VERSION_UNIQUE_NAME@
 #define	__fop_file_remove_verify __fop_file_remove_verify@DB_VERSION_UNIQUE_NAME@
 #define	__ham_insdel_verify __ham_insdel_verify@DB_VERSION_UNIQUE_NAME@
 #define	__ham_newpage_verify __ham_newpage_verify@DB_VERSION_UNIQUE_NAME@
@@ -1619,6 +1640,9 @@
 #if defined(HAVE_SHARED_LATCHES)
 #define	__db_pthread_mutex_readlock __db_pthread_mutex_readlock@DB_VERSION_UNIQUE_NAME@
 #endif
+#if defined(HAVE_SHARED_LATCHES)
+#define	__db_pthread_mutex_tryreadlock __db_pthread_mutex_tryreadlock@DB_VERSION_UNIQUE_NAME@
+#endif
 #ifdef HAVE_MUTEX_HYBRID
 #define	__db_hybrid_mutex_suspend __db_hybrid_mutex_suspend@DB_VERSION_UNIQUE_NAME@
 #endif
@@ -1724,6 +1748,8 @@
 #define	__os_tmpdir __os_tmpdir@DB_VERSION_UNIQUE_NAME@
 #define	__os_truncate __os_truncate@DB_VERSION_UNIQUE_NAME@
 #define	__os_unique_id __os_unique_id@DB_VERSION_UNIQUE_NAME@
+#define	__os_srandom __os_srandom@DB_VERSION_UNIQUE_NAME@
+#define	__os_random __os_random@DB_VERSION_UNIQUE_NAME@
 #define	__os_unlink __os_unlink@DB_VERSION_UNIQUE_NAME@
 #define	__os_yield __os_yield@DB_VERSION_UNIQUE_NAME@
 #ifdef HAVE_QNX

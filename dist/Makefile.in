@@ -324,6 +324,7 @@ JAVA_DBSRCS=\
 	$(JAVA_SLEEPYCAT)/asm/ClassReader.java \
 	$(JAVA_SLEEPYCAT)/asm/ClassVisitor.java \
 	$(JAVA_SLEEPYCAT)/asm/ClassWriter.java \
+	$(JAVA_SLEEPYCAT)/asm/Context.java \
 	$(JAVA_SLEEPYCAT)/asm/Edge.java \
 	$(JAVA_SLEEPYCAT)/asm/FieldVisitor.java \
 	$(JAVA_SLEEPYCAT)/asm/FieldWriter.java \
@@ -336,6 +337,7 @@ JAVA_DBSRCS=\
 	$(JAVA_SLEEPYCAT)/asm/MethodWriter.java \
 	$(JAVA_SLEEPYCAT)/asm/Opcodes.java \
 	$(JAVA_SLEEPYCAT)/asm/Type.java \
+	$(JAVA_SLEEPYCAT)/asm/TypePath.java \
 	$(JAVA_SLEEPYCAT)/bind/ByteArrayBinding.java \
 	$(JAVA_SLEEPYCAT)/bind/EntityBinding.java \
 	$(JAVA_SLEEPYCAT)/bind/EntryBinding.java \

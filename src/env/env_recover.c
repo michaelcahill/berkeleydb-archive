@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -630,6 +630,12 @@ err:	if (logc != NULL && (t_ret = __logc_close(logc)) != 0 && ret == 0)
 
 	dbenv->tx_timestamp = 0;
 
+	/*
+	 * Failure means that the env has panicked. Disable locking so that the
+	 * env can close without its mutexes calls causing additional panics.
+	 */
+	if (ret != 0)
+		F_SET(env->dbenv, DB_ENV_NOLOCKING);
 	F_CLR(env->lg_handle, DBLOG_RECOVER);
 	F_CLR(region, TXN_IN_RECOVERY);
 
@@ -1144,6 +1150,30 @@ __env_init_rec_60(env)
 	ENV *env;
 {
 	int ret;
+
+	if ((ret = __db_add_recovery_int(env, &env->recover_dtab,
+	    __fop_create_60_recover, DB___fop_create_60)) != 0)
+		goto err;
+
+	if ((ret = __db_add_recovery_int(env, &env->recover_dtab,
+	    __fop_remove_60_recover, DB___fop_remove_60)) != 0)
+		goto err;
+
+	if ((ret = __db_add_recovery_int(env, &env->recover_dtab,
+	    __fop_rename_60_recover, DB___fop_rename_60)) != 0)
+		goto err;
+
+	if ((ret = __db_add_recovery_int(env, &env->recover_dtab,
+	    __fop_rename_noundo_60_recover, DB___fop_rename_noundo_60)) != 0)
+		goto err;
+
+	if ((ret = __db_add_recovery_int(env, &env->recover_dtab,
+	    __fop_file_remove_60_recover, DB___fop_file_remove_60)) != 0)
+		goto err;
+
+	if ((ret = __db_add_recovery_int(env, &env->recover_dtab,
+	    __fop_write_60_recover, DB___fop_write_60)) != 0)
+		goto err;
 
 	if ((ret = __db_add_recovery_int(env, &env->recover_dtab,
 	    __fop_write_file_60_recover, DB___fop_write_file_60)) != 0)

@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -316,6 +316,7 @@ __lock_getlocker_int(lt, locker, create, ip, retp)
 
 	env = lt->env;
 	region = lt->reginfo.primary;
+	MUTEX_REQUIRED(env, region->mtx_lockers);
 
 	LOCKER_HASH(lt, region, locker, indx);
 
@@ -558,6 +559,7 @@ __lock_freelocker_int(lt, region, sh_locker, reallyfree)
 		SH_LIST_REMOVE(sh_locker, child_link, __db_locker);
 		sh_locker->master_locker = INVALID_ROFF;
 	}
+	sh_locker->parent_locker = INVALID_ROFF;
 
 	if (reallyfree) {
 		LOCKER_HASH(lt, region, sh_locker->id, indx);

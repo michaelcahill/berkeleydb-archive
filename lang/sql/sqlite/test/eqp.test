@@ -522,13 +522,17 @@ det 5.13 "SELECT a FROM t1 EXCEPT SELECT d FROM t2 ORDER BY 1" {
 # and wrapped in Tcl command [print_explain_query_plan] 
 #
 db close
+set cryptokey ""
+if {[sqlite3 -has-codec]} {
+  set cryptokey "-key xyzzy"
+}
 set boilerplate {
   proc explain_query_plan {db sql} {
     set stmt [sqlite3_prepare_v2 db $sql -1 DUMMY]
     print_explain_query_plan $stmt
     sqlite3_finalize $stmt
   }
-  sqlite3 db test.db
+  sqlite3 db test.db %KEY%
   explain_query_plan db {%SQL%}
   db close
   exit
@@ -537,7 +541,7 @@ set boilerplate {
 # Do a "Print Explain Query Plan" test.
 proc do_peqp_test {tn sql res} {
   set fd [open script.tcl w]
-  puts $fd [string map [list %SQL% $sql] $::boilerplate]
+  puts $fd [string map [list %SQL% $sql %KEY% $::cryptokey] $::boilerplate]
   close $fd
 
   uplevel do_test $tn [list {

@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -1066,11 +1066,11 @@ __log_region_mutex_max(env)
 
 /*
  * __log_region_size --
- *	Return the amount of space needed for the log region.
- *	Make the region large enough to hold txn_max transaction
- *	detail structures  plus some space to hold thread handles
- *	and the beginning of the alloc region and anything we
- *	need for mutex system resource recording.
+ *	Return the initial amount of space needed for the log region.
+ *	This includes:
+ *	    the log buffer
+ *	    DB_ENV->set_memory_init(DB_MEM_LOGID) log fileid structs
+ *
  * PUBLIC: size_t	__log_region_size __P((ENV *));
  */
 size_t
@@ -1088,14 +1088,19 @@ __log_region_size(env)
 		    LG_BSIZE_INMEM : LG_BSIZE_DEFAULT;
 
 	s = dbenv->lg_bsize;
-	/* Allocate the initial fileid allocation, plus some path name space. */
-	s += dbenv->lg_fileid_init * __env_alloc_size((sizeof(FNAME)) + 16);
+	s += dbenv->lg_fileid_init * __env_alloc_size(sizeof(FNAME) + 16);
 
 	return (s);
 }
 /*
  * __log_region_max --
- *	Return the amount of extra memory to allocate for logging informaition.
+ *	Return how much additional memory to allow for in the environment region
+ *	so that all log-specific data structures can be allocated. The result is
+ *	the maximum of:
+ *	- the initial __log_region_size()
+ *	- the log region size set by DB_ENV->set_lg_regionmax(), or,
+ *	  if that is zero, LG_BASE_REGION_SIZE (about 128K)
+ *
  * PUBLIC: size_t	__log_region_max __P((ENV *));
  */
 size_t
@@ -1104,18 +1109,17 @@ __log_region_max(env)
 {
 
 	DB_ENV *dbenv;
-	size_t s;
+	size_t init_size, s;
 
 	dbenv = env->dbenv;
-	if (dbenv->lg_fileid_init == 0) {
-		if ((s = dbenv->lg_regionmax) == 0)
-			s = LG_BASE_REGION_SIZE;
-	} else if ((s = dbenv->lg_regionmax) != 0 &&
-	     s < dbenv->lg_fileid_init * (__env_alloc_size(sizeof(FNAME)) + 16))
+	if ((s = dbenv->lg_regionmax) == 0)
+		s = LG_BASE_REGION_SIZE;
+	init_size = dbenv->lg_bsize + dbenv->lg_fileid_init *
+		    __env_alloc_size(sizeof(FNAME) + 16);
+	if (s > init_size)
+		s -= init_size;
+	else 
 		s = 0;
-	else if (s != 0)
-		s -= dbenv->lg_fileid_init *
-		     (__env_alloc_size(sizeof(FNAME)) + 16);
 
 	return (s);
 }

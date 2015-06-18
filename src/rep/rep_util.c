@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2001, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2001, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -443,6 +443,14 @@ __rep_send_message(env, eid, rtype, lsnp, dbt, ctlflags, repflags)
 		cntrl.msg_nsec = (u_int32_t)msg_time.tv_nsec;
 	}
 
+	/*
+	 * Inform clients that this master is encrypted so that a new client
+	 * will only try to synchronize with this master if it is also using
+	 * encryption.
+	 */
+	if (IS_REP_MASTER(env) && rtype == REP_NEWMASTER && CRYPTO_ON(env))
+		F_SET(&cntrl, REPCTL_ENCRYPTED);
+
 	REP_PRINT_MESSAGE(env, eid, &cntrl, "rep_send_message", myflags);
 #ifdef REP_DIAGNOSTIC
 	if (FLD_ISSET(
@@ -610,6 +618,21 @@ __rep_new_master(env, cntrl, eid)
 	 */
 	FLD_CLR(rep->elect_flags, REP_E_PHASE0);
 	if (change) {
+
+		/*
+		 * Check that the client and master are either both encrypted
+		 * or both unencrypted.
+		 */
+		if ((F_ISSET(cntrl, REPCTL_ENCRYPTED) && !CRYPTO_ON(env)) ||
+		    (!F_ISSET(cntrl, REPCTL_ENCRYPTED) && CRYPTO_ON(env))) {
+			__db_errx(env, DB_STR_A("3713",
+    "%sncrypted client cannot join %sencrypted replication group", "%s %s"),
+			    CRYPTO_ON(env) ? "E" : "Une",
+			    CRYPTO_ON(env) ? "un" : "");
+			ret = DB_REP_JOIN_FAILURE;
+			goto lckout;
+		}
+
 		/*
 		 * If we are already locking out others, we're either
 		 * in the middle of sync-up recovery or internal init

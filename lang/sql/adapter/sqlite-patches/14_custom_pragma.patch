@@ -30,6 +30,15 @@
  
 --- src/pragma.c
 +++ src/pragma.c
+@@ -109,7 +109,7 @@
+ #if !defined(SQLITE_OMIT_PAGER_PRAGMAS)
+   { /* zName:     */ "cache_size",
+     /* ePragTyp:  */ PragTyp_CACHE_SIZE,
+-    /* ePragFlag: */ PragFlag_NeedSchema,
++    /* ePragFlag: */ 0,
+     /* iArg:      */ 0 },
+ #endif
+ #if !defined(SQLITE_OMIT_FLAG_PRAGMAS
 @@ -601,7 +601,7 @@
  /*
  ** Generate code to return a single integer value.

@@ -1,6 +1,6 @@
 # See the file LICENSE for redistribution information.
 #
-# Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+# Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
 #
 # $Id: test.tcl,v fa50617a1e4c 2012/08/17 09:59:58 carol $
 
@@ -175,6 +175,7 @@ if { $stat != 0 } {
 	# Make sure it's the right error for a non-crypto release.
 	error_check_good non_crypto_release \
 	    [expr [is_substr $result "operation not supported"] || \
+	    [is_substr $result "did not include support for cryptography"] || \
 	    [is_substr $result "invalid argument"]] 1
 	set has_crypto 0
 } else {

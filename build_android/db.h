@@ -2,7 +2,7 @@
 /*
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  *
@@ -46,9 +46,9 @@ extern "C" {
 #define	DB_VERSION_RELEASE	1
 #define	DB_VERSION_MAJOR	6
 #define	DB_VERSION_MINOR	1
-#define	DB_VERSION_PATCH	19
-#define	DB_VERSION_STRING	"Berkeley DB 6.1.19: (June 10, 2014)"
-#define	DB_VERSION_FULL_STRING	"Berkeley DB 12c Release 1, library version 12.1.6.1.19: (June 10, 2014)"
+#define	DB_VERSION_PATCH	26
+#define	DB_VERSION_STRING	"Berkeley DB 6.1.26: (June 16, 2015)"
+#define	DB_VERSION_FULL_STRING	"Berkeley DB 12c Release 1, library version 12.1.6.1.26: (June 16, 2015)"
 
 /*
  * !!!
@@ -1440,6 +1440,8 @@ typedef enum {
 #define	DB_DELETED		(-30897)/* Recovery file marked deleted. */
 #define	DB_EVENT_NOT_HANDLED	(-30896)/* Forward event to application. */
 #define	DB_NEEDSPLIT		(-30895)/* Page needs to be split. */
+#define	DB_NOINTMP		(-30886)/* Sequences not supported in temporary
+					   or in-memory databases. */
 #define	DB_REP_BULKOVF		(-30894)/* Rep bulk buffer overflow. */
 #define	DB_REP_LOGREADY		(-30893)/* Rep log ready for recovery. */
 #define	DB_REP_NEWMASTER	(-30892)/* We have learned of a new master. */

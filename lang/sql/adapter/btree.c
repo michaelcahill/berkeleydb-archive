@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2015 Oracle and/or its affiliates.  All rights reserved.
  */
 
 /*
@@ -90,7 +90,7 @@ typedef struct {
 
 /* Forward declarations for internal functions. */
 static int btreeCloseCursor(BtCursor *pCur, int removeList);
-static int btreeConfigureDbHandle(Btree *p, int iTable, DB **dbpp);
+static int btreeConfigureDbHandle(Btree *p, int iTable, DB **dbpp, int);
 static int btreeCreateDataTable(Btree *, int, CACHED_DB **);
 static int btreeCreateSharedBtree(
     Btree *, const char *, u_int8_t *, sqlite3 *, int, storage_mode_t);
@@ -562,6 +562,36 @@ static int btreeCompareIntKey(DB *dbp,
 	if (v1 < v2)
 		return -1;
 	return v1 > v2;
+}
+
+static int btreeCompareDup(DB *dbp,
+    const DBT *dbt1, const DBT *dbt2, size_t *locp)
+{
+	Mem mem1, mem2;
+	const unsigned char *data1, *data2;
+	u32 serial_type1, serial_type2;
+
+	/* This path can happen when loading an in memory index onto disk. */
+	if (dbt1->size == 0) {
+		assert(dbt2->size == 0);
+		return 0;
+	}
+
+	memset(&mem1, 0, sizeof(Mem));
+	memset(&mem2, 0, sizeof(Mem));
+
+	data1 = (const unsigned char *) dbt1->data;
+	data2 = (const unsigned char *) dbt2->data;
+
+	/* Get the value types. */
+	getVarint32(data1, serial_type1);
+	getVarint32(data2, serial_type2);
+
+	/* Set the values in the Mems. */
+	sqlite3VdbeSerialGet(&data1[1], serial_type1, &mem1);
+	sqlite3VdbeSerialGet(&data2[1], serial_type2, &mem2);
+
+	return sqlite3MemCompare(&mem1, &mem2, NULL);
 }
 
 #ifdef BDBSQL_CONVERT_SQLITE
@@ -3458,7 +3488,7 @@ static int btreeCompareShared(DB *dbp,
 /*
  * Configures a Berkeley DB database handle prior to calling open.
  */
-static int btreeConfigureDbHandle(Btree *p, int iTable, DB **dbpp)
+static int btreeConfigureDbHandle(Btree *p, int iTable, DB **dbpp, int skipdup)
 {
 	BtShared *pBt;
 	DB *dbp;
@@ -3478,6 +3508,8 @@ static int btreeConfigureDbHandle(Btree *p, int iTable, DB **dbpp)
 	if ((ret = db_create(&dbp, pDbEnv, 0)) != 0)
 		goto err;
 	if ((flags & BTREE_INTKEY) == 0) {
+		if (pBt->dbStorage == DB_STORE_NAMED && !skipdup)
+			dbp->set_dup_compare(dbp, btreeCompareDup);
 #ifdef BDBSQL_SINGLE_THREAD
 		dbp->set_bt_compare(dbp, btreeCompareKeyInfo);
 #else
@@ -3650,11 +3682,13 @@ static int btreeCreateDataTable(
 	DBT d, k;
 #endif
 	char *fileName, *tableName, tableNameBuf[DBNAME_SIZE];
-	int ret, t_ret;
+	int ret, skipdup, t_ret;
+	u_int32_t flags;
 
 	log_msg(LOG_VERBOSE, "sqlite3BtreeCreateDataTable(%p, %u, %p)",
 	    p, iTable, ppCachedDb);
 
+	skipdup = 0;
 	pBt = p->pBt;
 	assert(!pBt->resultsBuffer);
 
@@ -3682,16 +3716,17 @@ static int btreeCreateDataTable(
 	 * creating the table, we should be holding the schema lock,
 	 * which will protect the handle in cache until we are done.
 	 */
-	if ((ret = btreeConfigureDbHandle(p, iTable, &dbp)) != 0)
+	if ((ret = btreeConfigureDbHandle(p, iTable, &dbp, 0)) != 0)
 		goto err;
 	ret = ENOENT;
-	if (pBt->dbStorage == DB_STORE_NAMED &&
+redo:	if (pBt->dbStorage == DB_STORE_NAMED &&
 	    (pBt->db_oflags & DB_CREATE) != 0) {
 		ret = dbp->open(dbp, pFamilyTxn, fileName, tableName, DB_BTREE,
 		    (pBt->db_oflags & ~DB_CREATE) | GET_ENV_READONLY(pBt) |
 		    GET_AUTO_COMMIT(pBt, pFamilyTxn), 0);
 		/* Close and re-configure handle. */
-		if (ret == ENOENT) {
+		if (ret == ENOENT ||
+		    (ret == EINVAL && skipdup == 0 && !(iTable & 1))) {
 #ifndef BDBSQL_SINGLE_THREAD
 			if (dbp->app_private != NULL)
 				sqlite3_free(dbp->app_private);
@@ -3700,11 +3735,16 @@ static int btreeCreateDataTable(
 				ret = t_ret;
 				goto err;
 			}
-			if ((t_ret =
-			    btreeConfigureDbHandle(p, iTable, &dbp)) != 0) {
+			if (ret == EINVAL)
+				skipdup = 1;
+			if ((t_ret = btreeConfigureDbHandle(
+			    p, iTable, &dbp, skipdup)) != 0) {
 				ret = t_ret;
 				goto err;
 			}
+
+			if (skipdup == 1)
+				goto redo;
 		}
 	}
 	if (ret == ENOENT) {
@@ -3724,9 +3764,11 @@ static int btreeCreateDataTable(
 			    dbp, pBt->blob_threshold, 0)) != 0)
 				goto err;
 		}
-		ret = dbp->open(dbp, pSavepointTxn, fileName, tableName,
-		    DB_BTREE, pBt->db_oflags | GET_ENV_READONLY(pBt) |
-		    GET_AUTO_COMMIT(pBt, pSavepointTxn), 0);
+		flags = pBt->db_oflags | GET_ENV_READONLY(pBt) |
+		    GET_AUTO_COMMIT(pBt, pSavepointTxn);
+		flags |= (GET_ENV_READONLY(pBt) ? 0 : DB_CREATE);
+		ret = dbp->open(dbp, pSavepointTxn,
+		    fileName, tableName, DB_BTREE, flags, 0);
 #ifdef BDBSQL_FILE_PER_TABLE
 		if (ret == 0 && pBt->dbStorage == DB_STORE_NAMED) {
 			memset(&k, 0, sizeof(k));
@@ -4081,9 +4123,13 @@ static int btreeCloseCursor(BtCursor *pCur, int listRemove)
 		pCur->index.data = NULL;
 	}
 
-	/* Incrblob write cursors have their own dedicated transactions. */
-	if (pCur->isIncrblobHandle && pCur->txn && pCur->wrFlag &&
-	    pSavepointTxn != NULL && pCur->txn != pSavepointTxn) {
+	/*
+	 * Incrblob write cursors have their own dedicated transactions
+	 * if txn_bulk is not enabled. 
+	 */
+	if (pCur->isIncrblobHandle && pCur->txn &&
+	    pCur->wrFlag && pSavepointTxn != NULL &&
+	    pCur->txn != pSavepointTxn && !p->txn_bulk) {
 		ret = pCur->txn->commit(pCur->txn, DB_TXN_NOSYNC);
 		pCur->txn = 0;
 	}
@@ -4475,7 +4521,9 @@ static int btreeRestoreCursorPosition(BtCursor *pCur, int skipMoveto)
 		assert(!pBt->transactional || !pCur->wrFlag ||
 		    pSavepointTxn != NULL);
 #endif
-		pCur->txn = pCur->wrFlag ? pSavepointTxn : pReadTxn;
+		/** A write blob cursor has its own dedicated transaction **/
+		if(!(pCur->isIncrblobHandle && pCur->wrFlag))
+			pCur->txn = pCur->wrFlag ? pSavepointTxn : pReadTxn;
 
 		if ((ret = pBDb->cursor(pBDb, pCur->txn, &pDbc,
 		    GET_BTREE_ISOLATION(p) & ~DB_READ_COMMITTED)) != 0)
@@ -6145,9 +6193,12 @@ void sqlite3BtreeCacheOverflow(BtCursor *pCur)
 
 	/*
 	 * Give the transaction to the incrblob cursor, since it has to live
-	 * the lifetime of the cursor.
+	 * the lifetime of the cursor.  Create a new transaction for any
+	 * future operations.  When txn_bulk is enabled the cursor and all
+	 * other operations must share a single transaction for writing.
 	 */
-	if (p && p->connected && p->pBt->transactional && pCur->wrFlag) {
+	if (p && p->connected &&
+	    p->pBt->transactional && pCur->wrFlag && !p->txn_bulk) {
 		/* XXX error handling */
 		p->pBt->dbenv->txn_begin(p->pBt->dbenv, pSavepointTxn->parent,
 		    &pSavepointTxn, 0);
@@ -6879,7 +6930,7 @@ int sqlite3_enable_shared_cache(int enable)
 int btreeGetUserTable(Btree *p, DB_TXN *pTxn, DB **pDb, int iTable)
 {
 	char *fileName, *tableName, tableNameBuf[DBNAME_SIZE];
-	int ret, rc;
+	int ret, rc, skipdup;
 	BtShared *pBt;
 	DB *dbp;
 	KeyInfo *keyInfo;
@@ -6889,6 +6940,7 @@ int btreeGetUserTable(Btree *p, DB_TXN *pTxn, DB **pDb, int iTable)
 	pBt = p->pBt;
 	dbp = *pDb;
 	keyInfo = NULL;
+	skipdup = 0;
 	/* Is the metadata table. */
 	if (iTable < 1) {
 		*pDb = NULL;
@@ -6901,7 +6953,7 @@ int btreeGetUserTable(Btree *p, DB_TXN *pTxn, DB **pDb, int iTable)
 	FIX_TABLENAME(pBt, fileName, tableName);
 
 	/* Open a DB handle on that table. */
-	if ((ret = db_create(&dbp, pDbEnv, 0)) != 0)
+redo:	if ((ret = db_create(&dbp, pDbEnv, 0)) != 0)
 		return dberr2sqlite(ret, p);
 
 	if (!GET_DURABLE(pBt) &&
@@ -6912,13 +6964,16 @@ int btreeGetUserTable(Btree *p, DB_TXN *pTxn, DB **pDb, int iTable)
 
 	if (!(iTable & 1)) {
 		/* Get the KeyInfo for the index */
-		if ((rc = btreeGetKeyInfo(p, iTable, &keyInfo)) != SQLITE_OK)
+		if (keyInfo == NULL &&
+		    (rc = btreeGetKeyInfo(p, iTable, &keyInfo)) != SQLITE_OK)
 			goto err;
 
 		if (keyInfo) {
 			dbp->app_private = keyInfo;
 			dbp->set_bt_compare(dbp, btreeCompareKeyInfo);
 		}
+		if (pBt->dbStorage == DB_STORE_NAMED && !skipdup)
+			dbp->set_dup_compare(dbp, btreeCompareDup);
 	} else
 		dbp->set_bt_compare(dbp, btreeCompareIntKey);
 
@@ -6926,8 +6981,21 @@ int btreeGetUserTable(Btree *p, DB_TXN *pTxn, DB **pDb, int iTable)
 	FIX_TABLENAME(pBt, fileName, tableName);
 	if ((ret = dbp->open(dbp, pTxn, fileName, tableName, DB_BTREE,
 	    (pBt->db_oflags & ~DB_CREATE) | GET_ENV_READONLY(pBt), 0) |
-	    GET_AUTO_COMMIT(pBt, pTxn)) != 0)
-		goto err;
+	    GET_AUTO_COMMIT(pBt, pTxn)) != 0) {
+		    /*
+		     * Indexes created in BDB 5.0 do not support duplicates, so
+		     * attempt to open the index again without btreeCompareDup
+		     * set.
+		     */
+		    if (ret == EINVAL && skipdup == 0 &&
+			!(iTable & 1) && pBt->dbStorage == DB_STORE_NAMED) {
+			    skipdup = 1;
+			    dbp->close(dbp, DB_NOSYNC);
+			    dbp = NULL;
+			    goto redo;
+		    }
+		    goto err;
+	}
 
 	*pDb = dbp;
 	return rc;

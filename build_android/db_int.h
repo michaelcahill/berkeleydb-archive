@@ -2,7 +2,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -612,6 +612,10 @@ typedef enum {
 	if (F_ISSET((env), ENV_OPEN_CALLED))				\
 		ENV_REQUIRES_CONFIG(env, handle, i, flags)
 
+/*
+ * The ENV_ENTER and ENV_LEAVE macros announce to other threads that
+ * the current thread is entering or leaving the BDB api.
+ */
 #define	ENV_ENTER_RET(env, ip, ret) do {				\
 	ret = 0;							\
 	DISCARD_HISTORY(env);						\
@@ -641,7 +645,12 @@ typedef enum {
 		(ip)->dbth_state = THREAD_FAILCHK;			\
 } while (0)
 
-#define	ENV_GET_THREAD_INFO(env, ip) ENV_ENTER(env, ip)
+#define	ENV_GET_THREAD_INFO(env, ip) 	do {				\
+	if ((env)->thr_hashtab == NULL)					\
+		ip = NULL;						\
+	else 								\
+		(void)__env_set_state(env, &(ip), THREAD_VERIFY);	\
+} while (0)
 
 #define	ENV_LEAVE(env, ip) do {						\
 	if ((ip) != NULL) {	\
@@ -706,9 +715,10 @@ typedef struct __mutex_state {	/* SHARED */
 
 
 struct __db_thread_info { /* SHARED */
+	DB_THREAD_STATE	dbth_state;
 	pid_t		dbth_pid;
 	db_threadid_t	dbth_tid;
-	DB_THREAD_STATE	dbth_state;
+	/* This contains the overflow chain in env->thr_hashtab[indx]. */
 	SH_TAILQ_ENTRY	dbth_links;
 	/*
 	 * The next field contains the (process local) reference to the XA
@@ -834,7 +844,17 @@ struct __env {
 #define ENV_DEF_DATA_LEN		100
 	u_int32_t data_len;		/* Data length in __db_prbytes. */
 
-	/* Thread tracking */
+	/* Registered processes */
+	size_t	num_active_pids;	/* number of entries in active_pids */
+	size_t	size_active_pids;	/* allocated size of active_pids */
+	pid_t	*active_pids;		/* array active pids */
+
+	/*
+	 * Thread tracking: a kind of configurable thread local storage that is
+	 * located in the environment region. Allocating a new entry requires
+	 * locking mtx_regenv. Entries are neither deleted nor moved between
+	 * buckets, which permits safe lookups without requiring any mutexes.
+	 */
 	u_int32_t	 thr_nbucket;	/* Number of hash buckets */
 	DB_HASHTAB	*thr_hashtab;	/* Hash table of DB_THREAD_INFO */
 

@@ -4,6 +4,10 @@ TOP=`dirname $0`
 TOP=`cd $TOP && /bin/pwd`
 SQLITE=$TOP/../../lang/sql/sqlite
 
+# Excluded Tests
+#
+# thread1.test - Race condition can lead to hangs.
+#
 BDB_TESTS_PASSING="\
 aggerror.test
 alter.test
@@ -230,7 +234,6 @@ thread001.test
 thread003.test
 thread004.test
 thread005.test
-thread1.test
 thread2.test
 tkt-2a5629202f.test
 tkt-38cb5df375.test
@@ -488,7 +491,6 @@ temptrigger.test
 thread001.test
 thread004.test
 thread005.test
-thread1.test
 thread2.test
 tkt-2a5629202f.test
 tkt-38cb5df375.test

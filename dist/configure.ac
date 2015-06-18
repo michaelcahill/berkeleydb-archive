@@ -254,9 +254,7 @@ if test "$GCC" = "yes"; then
 else
 	case "$host_os" in
 	hpux11.0*)	;;
-	hpux11*)	CPPFLAGS="$CPPFLAGS -mt"
-			test "$host_cpu" = "ia64" &&
-			    CFLAGS="$CFLAGS +u1";;
+	hpux11*)	CPPFLAGS="$CPPFLAGS -mt";;
 	solaris*)	CFLAGS="$CFLAGS "
 			CFLAGS=`echo "$CFLAGS" | sed 's/-O /-xO2 /g'`;;
 	esac
@@ -712,6 +710,15 @@ AC_CHECK_FUNCS(\
 	getrusage getuid hstrerror mprotect pstat_getdynamic\
 	pthread_self pthread_yield random sched_yield select setgid setuid\
 	sigaction snprintf stat sysconf vsnprintf yield)
+
+# The random_r/initstate_r/srandom_r functions in AIX and OSF/1 (Tru64) have
+# atypical function signatures. Disable BerkeleyDB's use of those functions.
+case "$host_os" in
+aix*|osf*)
+	AC_MSG_WARN([random_r is ignored on $host_os.]);;
+*)
+	AC_CHECK_FUNCS(initstate_r random_r srandom_r);;
+esac
 
 if test "$db_cv_error_history" = "yes"; then
 	# Check for pthread thread local storage support

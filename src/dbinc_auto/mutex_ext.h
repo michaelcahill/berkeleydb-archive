@@ -50,6 +50,9 @@ int __db_pthread_mutex_lock __P((ENV *, db_mutex_t, db_timeout_t));
 #if defined(HAVE_SHARED_LATCHES)
 int __db_pthread_mutex_readlock __P((ENV *, db_mutex_t));
 #endif
+#if defined(HAVE_SHARED_LATCHES)
+int __db_pthread_mutex_tryreadlock __P((ENV *, db_mutex_t));
+#endif
 #ifdef HAVE_MUTEX_HYBRID
 int __db_hybrid_mutex_suspend __P((ENV *, db_mutex_t, db_timespec *, int));
 #endif

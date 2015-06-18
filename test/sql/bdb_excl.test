@@ -49,7 +49,6 @@ set IGNORE_CASES {
   pagesize-1.[14]	{# different page size defaults }
   nan-*			{# Output is system dependent ("inf"/"Infinity") }
   savepoint7-2.2	{# Different messages when aborting a txn. }
-  select5-5.5		{# Duplicate index sorting bug #23469. }
   tempdb-2.[23]		{# Uses open file counts, #17964 }
   thread003.1.2		{# BDB db file size not accurate until close, #17965 }
   thread1-2.[3467]	{# BDB expects different results for threaded case. }
@@ -64,7 +63,6 @@ set IGNORE_CASES {
   vacuum2-4.1		{# In DBSQL, metadata settings cannot be changed by vacuum. #18545 }
   vacuum2-4.[47]	{# vacuum setting is not persistent }
   vacuum2-5.[234]	{# Concurrent vacuum works in Berkeley DB }
-  where8-3.10		{# Duplicate index sorting bug #23469. }
   zeroblob-1.1.1	{# Makes assumptions about memory usage }
 }
 

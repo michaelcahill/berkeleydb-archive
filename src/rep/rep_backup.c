@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2004, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2004, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -559,7 +559,8 @@ __rep_blob_find_files(
 		if ((ret = __db_create_internal(&bmd, env, 0)) != 0)
 			goto err;
 
-		if ((ret = __txn_begin(env, ip, NULL, &txn, 0)) != 0)
+		if ((ret = __txn_begin(
+		    env, ip, NULL, &txn, DB_IGNORE_LEASE)) != 0)
 			goto err;
 
 		bmd->blob_file_id = blob_fid;
@@ -632,8 +633,17 @@ __rep_blob_find_files(
 			rbf.blob_id = (u_int64_t)*blob_id;
 			/* Open the file and get its size. */
 			if ((ret = __os_open(
-			    env, path, 0, DB_OSO_RDONLY, 0, &fhp)) != 0)
+			    env, path, 0, DB_OSO_RDONLY, 0, &fhp)) != 0) {
+			        if (ret == ENOENT) {
+					ret = 0;
+					RPRINT(env, (env, DB_VERB_REP_SYNC,
+			"blob_update blob file: %llu deleted, skipping.",
+					    (long long)rbf.blob_id));
+					cur++;
+					continue;
+				}
 				goto err;
+			}
 			if ((ret = __os_ioinfo(
 			    env, path, fhp, &mbytes, &bytes, NULL)) != 0)
 				goto err;
@@ -1927,6 +1937,13 @@ __rep_blob_update(env, eid, ip, rec)
 		(void)__dbc_close(dbc);
 		dbc = NULL;
 		rep->blob_more_files = 0;
+		rep->gap_bl_hi_id = rep->gap_bl_hi_sid = 0;
+		rep->last_blob_id = rep->last_blob_sid = 0;
+		rep->prev_blob_id = rep->prev_blob_sid = 0;
+		rep->gap_bl_hi_off = 0;
+		rep->blob_sync = 0;
+		rep->highest_id = 0;
+		rep->blob_rereq = 0;
 		ret = __rep_blobdone(env, eid, ip, rep, blob_fid, 0);
 		goto unlock;
 	}
@@ -1987,12 +2004,12 @@ __rep_blob_update(env, eid, ip, rec)
 
 	/*
 	 * Send the same message payload in a REP_BLOB_ALL_REQ message to get
-	 * the blob data.  Building the list of blob files is expensive, which
-	 * is why it is sent to whatever site is tasked with returning the
-	 * data.
+	 * the blob data.  Peer-to-peer initialization is not supported for
+	 * blobs, so we can only send this back to the master despite the fact
+	 * that building the list of blob files is expensive. 
 	 */
 	(void)__rep_send_message(
-	    env, eid, REP_BLOB_ALL_REQ, NULL, rec, 0, DB_REP_ANYWHERE);
+	    env, rep->master_id, REP_BLOB_ALL_REQ, NULL, rec, 0, 0);
 
 unlock:	REP_SYSTEM_UNLOCK(env);
 	MUTEX_UNLOCK(env, rep->mtx_clientdb);
@@ -2106,6 +2123,8 @@ __rep_blob_allreq(env, eid, rec)
 				msg.size = __REP_BLOB_CHUNK_SIZE;
 				(void)__rep_send_message(env,
 				    eid, REP_BLOB_CHUNK, NULL, &msg, 0, 0);
+				ret = 0;
+				fhp = NULL;
 				continue;
 			}
 			goto err;
@@ -2142,7 +2161,7 @@ __rep_blob_allreq(env, eid, rec)
 			offset += MEGABYTE;
 		} while ((u_int64_t)offset < rbf.blob_size && !done);
 
-		if ((ret = __os_closehandle(env, fhp)) != 0)
+		if (fhp != NULL && (ret = __os_closehandle(env, fhp)) != 0)
 			goto err;
 		fhp = NULL;
 	}
@@ -3866,6 +3885,9 @@ __rep_blob_chunk_gap(env, eid, ip, rep, done, blob_fid, force)
 	dbc = NULL;
 	*done = 0;
 
+	 /* eid will be used when peer-to-peer is re-enabled for blobs. */
+	COMPQUIET(eid, 0);
+
 	/*
 	 * Make sure we're still talking about the same file.
 	 * If not, we're done here.
@@ -3938,9 +3960,13 @@ __rep_blob_chunk_gap(env, eid, ip, rep, done, blob_fid, force)
 			    (long long)rbcr.blob_fid, (long long)rbcr.blob_sid,
 			    (long long)rbcr.blob_id, (long long)rbcr.offset));
 			__rep_blob_chunk_req_marshal(env, &rbcr, msg.data);
+			/*
+			 * Note that peer-to-peer initialization is not
+			 * supported for blobs.
+			 */
 			(void)__rep_send_message(
-			    env, eid, REP_BLOB_CHUNK_REQ,
-			    NULL, &msg, 0, DB_REP_ANYWHERE);
+			    env, rep->master_id,
+			    REP_BLOB_CHUNK_REQ, NULL, &msg, 0, 0);
 			/*
 			 * Break after requesting the chunk after the highest
 			 * one.

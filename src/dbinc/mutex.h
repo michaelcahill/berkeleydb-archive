@@ -1,7 +1,7 @@
 /*
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -135,26 +135,6 @@ static inline int __db_pthread_mutex_trylock(ENV *env, db_mutex_t mutex)
 #ifdef HAVE_SHARED_LATCHES
 #define	__mutex_rdlock(a, b)		__db_pthread_mutex_readlock(a, b)
 #define	__mutex_tryrdlock(a, b)		__db_pthread_mutex_tryreadlock(a, b)
-static inline int __db_pthread_mutex_tryreadlock(ENV *env, db_mutex_t mutex)
-{
-	int ret;
-	DB_MUTEX *mutexp;
-	if (!MUTEX_ON(env) || F_ISSET(env->dbenv, DB_ENV_NOLOCKING))
-		return (0);
-	mutexp = MUTEXP_SET(env, mutex);
-	if (F_ISSET(mutexp, DB_MUTEX_SHARED))
-		ret = pthread_rwlock_tryrdlock(&mutexp->u.rwlock);
-	else
-		return (EINVAL);
-	if (ret == EBUSY)
-		ret = DB_LOCK_NOTGRANTED;
-#ifdef HAVE_STATISTICS
-	if (ret == 0)
-		STAT_INC(env,
-		    mutex, set_rd_nowait, mutexp->mutex_set_nowait, mutex);
-#endif
-	return (ret);
-}
 #endif
 #elif defined(HAVE_MUTEX_WIN32) || defined(HAVE_MUTEX_WIN32_GCC)
 #define	__mutex_init(a, b, c)		__db_win32_mutex_init(a, b, c)

@@ -684,5 +684,60 @@ if {[sqlite3 -has-codec]} {
   } {1 {access permission denied}}
 }
 
+reset_db
+
+# Test that calling the pragma cache_size
+# alone does not create an environment.
+do_test bdb_pragma-11.1 {
+    execsql {
+    PRAGMA page_size=1024;
+    PRAGMA cache_size=100;
+  }
+  file exists test.db
+} {0}
+
+# The cache is always backed in region file __db.003
+# (and above if multiple caches) when TDS enabled.
+set ::cachefile test.db-journal/__db.003
+
+# Test that the cache is the correct size.
+# The cache file is not always the exact size set
+# due to OS issues, but it should be around the
+# set size.
+do_test bdb_pragma-11.2 {
+  execsql {
+    create table t1(a);
+  }
+  set filesize [file size $::cachefile]
+  set predicted_size [expr 100 * 1024 * 2]
+  # The cache file should be less than two
+  # times the set size.
+  if { $predicted_size > $filesize } {
+    set ret 1
+  } else {
+    set ret 0
+  }
+}  {1}
+
+reset_db
+
+# Test that txn_bulk and incrblobs play nicely
+# together.
+do_test bdb_pragma-12.1 {
+  execsql {
+    PRAGMA txn_bulk=1;
+    create table t1(a PRIMARY KEY, b BLOB);
+    BEGIN;
+    insert into t1 values(1, zeroblob(3));
+  }
+  # Open a connection to the blob.
+  set ::blob [db incrblob t1 b 1]
+  puts -nonewline $::blob "abc"
+  close $::blob
+  execsql {
+    COMMIT;
+    select b from t1;
+  }
+} {abc}
 
 finish_test

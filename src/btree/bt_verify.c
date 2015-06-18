@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1999, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1999, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -44,7 +44,6 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	ENV *env;
 	VRFY_PAGEINFO *pip;
 	int isbad, t_ret, ret;
-	db_indx_t ovflsize;
 	db_seq_t blob_id;
 
 	env = dbp->env;
@@ -65,14 +64,8 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 			goto err;
 	}
 
-	/* bt_minkey:  must be >= 2; must produce sensible ovflsize */
-
-	/* avoid division by zero */
-	ovflsize = meta->minkey > 0 ?
-	    B_MINKEY_TO_OVFLSIZE(dbp, meta->minkey, dbp->pgsize) : 0;
-
-	if (meta->minkey < 2 ||
-	    ovflsize > B_MINKEY_TO_OVFLSIZE(dbp, DEFMINKEYPAGE, dbp->pgsize)) {
+	/* bt_minkey:  must be 2 <= bt_minkey <= B_MINKEY_UPPER_LIMIT(dbp) */
+	if (meta->minkey < 2 || meta->minkey > B_MINKEY_UPPER_LIMIT(dbp)) {
 		pip->bt_minkey = 0;
 		isbad = 1;
 		EPRINT((env, DB_STR_A("1034",
@@ -922,8 +915,8 @@ __bam_vrfy_inp(dbp, vdp, h, pgno, nentriesp, flags)
 				    "Page %lu: gap between items at offset %lu",
 				    "%lu %lu"), (u_long)pgno, (u_long)i));
 				/* Find the end of the gap */
-				for (; pagelayout[i + 1] == VRFY_ITEM_NOTSET &&
-				    (size_t)(i + 1) < dbp->pgsize; i++)
+				for (; (size_t)(i + 1) < dbp->pgsize &&
+				    pagelayout[i + 1] == VRFY_ITEM_NOTSET; i++)
 					;
 				break;
 			case VRFY_ITEM_BEGIN:

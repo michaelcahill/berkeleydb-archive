@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  */
 /*
  * Copyright (c) 1990, 1993, 1994, 1995, 1996
@@ -365,6 +365,14 @@ struct __cursor {
 #define	C_COMPRESS_MODIFIED	0x0010	/* Compressed record was modified. */
 	u_int32_t	 flags;
 };
+
+/*
+ * The maximum number of key/value pairs on a Btree leaf page, as a function
+ * of page size.
+ */
+#define B_MINKEY_UPPER_LIMIT(dbp)	\
+	((u_int16_t)(((dbp)->pgsize - P_OVERHEAD(dbp)) / \
+	    ((BKEYDATA_PSIZE(0) + DB_ALIGN(1, sizeof(int32_t))) * P_INDX)))
 
 /*
  * Threshhold value, as a function of bt_minkey, of the number of

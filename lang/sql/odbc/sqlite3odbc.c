@@ -13917,7 +13917,7 @@ getrowdata(STMT *s, SQLUSMALLINT col, SQLSMALLINT otype,
 		dlen -= 2;
 		dp += 2;
 		dlen = dlen / 2;
-		s->bincache = bin = xmalloc(dlen);
+		s->bincache = bin = xmalloc(dlen + 1);
 		if (!bin) {
 		    return nomem(s);
 		}

@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -2009,7 +2009,7 @@ __bam_getboth_finddatum(dbc, data, flags)
 	 */
 	if (dbp->dup_compare == NULL) {
 		for (;; cp->indx += P_INDX) {
-			if (!IS_CUR_DELETED(dbc)) {
+			if (!IS_DELETED(dbp, cp->page, cp->indx)) {
 				if ((ret = __bam_cmp(
 				    dbc, data, cp->page, cp->indx + O_INDX,
 				    __bam_defcmp, &cmp, NULL)) != 0)
@@ -2060,6 +2060,11 @@ __bam_getboth_finddatum(dbc, data, flags)
 			 */
 			if (!IS_CUR_DELETED(dbc))
 				return (0);
+			/* 
+			 * Advance base so that by the end of the loop, base is always
+			 * the smallest index greater than the data item.
+			 */
+			base = cp->indx + P_INDX;
 			break;
 		}
 		if (cmp > 0) {

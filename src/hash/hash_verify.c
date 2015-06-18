@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1999, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1999, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -297,6 +297,15 @@ __ham_vrfy(dbp, vdp, h, pgno, flags)
 				goto err;
 		}
 
+	/* The high free byte offset should equal the offset of the last item. */
+	if (HOFFSET(h) != (u_int16_t)himark) {
+		EPRINT((env, DB_STR_A("1210",
+		    "Page %lu: items do not begin immediately after the free area",
+		    "%lu"), (u_long)pgno));
+		isbad = 1;
+		goto err;
+	}
+
 	if ((ret = __db_cursor_int(dbp, vdp->thread_info, NULL, DB_HASH,
 	    PGNO_INVALID, 0, DB_LOCK_INVALIDID, &dbc)) != 0)
 		return (ret);
@@ -328,7 +337,7 @@ __ham_vrfy_item(dbp, vdp, pgno, h, i, flags)
 	HOFFPAGE hop;
 	VRFY_CHILDINFO child;
 	VRFY_PAGEINFO *pip;
-	db_indx_t offset, len, dlen, elen;
+	db_indx_t offset, len, dlen, elen, item_offset;
 	int ret, t_ret;
 	off_t blob_size;
 	db_seq_t blob_id, file_id, sdb_id;
@@ -337,6 +346,7 @@ __ham_vrfy_item(dbp, vdp, pgno, h, i, flags)
 	if ((ret = __db_vrfy_getpageinfo(vdp, pgno, &pip)) != 0)
 		return (ret);
 
+	item_offset = P_INP(dbp, h)[i];
 	switch (HPAGE_TYPE(dbp, h, i)) {
 	case H_KEYDATA:
 		/* Nothing to do here--everything but the type field is data */
@@ -346,6 +356,13 @@ __ham_vrfy_item(dbp, vdp, pgno, h, i, flags)
 		 * Blob item.  Check that the blob file exists and is the same
 		 * file size as is stored in the database record.
 		 */
+		if ((dbp->pgsize - HBLOB_SIZE) < item_offset) {
+			EPRINT((dbp->env, DB_STR_A("1211",
+			    "Page %lu: offset (%u) at blob item %u has overflowed",
+			    "%lu %lu %lu"), (u_long)pip->pgno, item_offset, i));
+			ret = DB_VERIFY_BAD;
+			goto err;
+		}
 		memcpy(&hblob, P_ENTRY(dbp, h, i), HBLOB_SIZE);
 		blob_id = (db_seq_t)hblob.id;
 		GET_BLOB_SIZE(dbp->env, hblob, blob_size, ret);
@@ -425,6 +442,13 @@ __ham_vrfy_item(dbp, vdp, pgno, h, i, flags)
 			F_SET(pip, VRFY_DUPS_UNSORTED);
 		break;
 	case H_OFFPAGE:
+		if ((dbp->pgsize - HOFFPAGE_SIZE) < item_offset) {
+			EPRINT((dbp->env, DB_STR_A("1212",
+			    "Page %lu: offset (%u) at offpage item %u has overflowed",
+			    "%lu %lu %lu"), (u_long)pip->pgno, item_offset, i));
+			ret = DB_VERIFY_BAD;
+			goto err;
+		}
 		/* Offpage item.  Make sure pgno is sane, save off. */
 		memcpy(&hop, P_ENTRY(dbp, h, i), HOFFPAGE_SIZE);
 		if (!IS_VALID_PGNO(hop.pgno) || hop.pgno == pip->pgno ||
@@ -444,6 +468,13 @@ __ham_vrfy_item(dbp, vdp, pgno, h, i, flags)
 			goto err;
 		break;
 	case H_OFFDUP:
+		if ((dbp->pgsize - HOFFDUP_SIZE) < item_offset) {
+			EPRINT((dbp->env, DB_STR_A("1213",
+			    "Page %lu: offset (%u) at offpage duplicate item %u has overflowed",
+			    "%lu %lu %lu"), (u_long)pip->pgno, item_offset, i));
+			ret = DB_VERIFY_BAD;
+			goto err;
+		}
 		/* Offpage duplicate item.  Same drill. */
 		memcpy(&hod, P_ENTRY(dbp, h, i), HOFFDUP_SIZE);
 		if (!IS_VALID_PGNO(hod.pgno) || hod.pgno == pip->pgno ||

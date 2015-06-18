@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2013, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2013, 2015 Oracle and/or its affiliates.  All rights reserved.
  */
 
 #include "db_config.h"
@@ -12,6 +12,7 @@
 #include "dbinc/db_am.h"
 #include "dbinc/blob.h"
 #include "dbinc/fop.h"
+#include "dbinc/txn.h"
 #include "dbinc_auto/sequence_ext.h"
 
 static int __blob_open_meta_db __P((
@@ -261,8 +262,8 @@ __blob_open_meta_db(dbp, txn, meta_db, seq, file, create)
 		if (use_txn)
 			local_txn = txn;
 		else {
-			if ((ret =
-			    __db_txn_auto_init(env, ip, &local_txn)) != 0)
+			if ((ret = __txn_begin(
+			    env, ip, NULL, &local_txn, DB_IGNORE_LEASE)) != 0)
 				goto err;
 		}
 	}
@@ -281,7 +282,7 @@ __blob_open_meta_db(dbp, txn, meta_db, seq, file, create)
 		goto err;
 
 	if (local_txn != NULL && use_txn == 0 &&
-	    (ret = __db_txn_auto_resolve(env, local_txn, 0, ret)) != 0) {
+	    (ret = __txn_commit(local_txn, 0)) != 0) {
 		local_txn = NULL;
 		goto err;
 	}
@@ -298,7 +299,7 @@ err:
 	if (fname != NULL && free_paths)
 		__os_free(env, fname);
 	if (local_txn != NULL && use_txn == 0)
-		(void)__db_txn_auto_resolve(env, local_txn, 0, ret);
+		(void)__txn_abort(local_txn);
 	if (blob_seq != NULL)
 		(void)__seq_close(blob_seq, 0);
 	if (blob_meta_db != NULL)
@@ -383,7 +384,7 @@ __blob_generate_id(dbp, txn, blob_id)
 	DB_TXN *ltxn;
 	int ret;
 	u_int32_t flags;
-	flags = 0;
+	flags = DB_IGNORE_LEASE;
 	ltxn = NULL;
 
 	if (dbp->blob_seq == NULL) {

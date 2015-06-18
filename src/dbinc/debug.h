@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1998, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1998, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -229,7 +229,7 @@ typedef enum {
 #define	LOG_OP(C, T, O, K, A, F) {					\
 	DB_LSN __lsn;							\
 	DBT __op;							\
-	if (DBC_LOGGING((C))) {						\
+	if ((C)->dbp->log_filename != NULL && DBC_LOGGING((C))) {	\
 		memset(&__op, 0, sizeof(__op));				\
 		__op.data = O;						\
 		__op.size = (u_int32_t)strlen(O) + 1;			\

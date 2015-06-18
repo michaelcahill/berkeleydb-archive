@@ -1,9 +1,9 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1999, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1999, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id: env_method.c,v dabaaeb7d839 2010/08/03 17:28:53 mike $
+ * $Id$
  */
 
 #include "db_config.h"
@@ -388,7 +388,6 @@ __db_env_init(dbenv)
 	env = dbenv->env;
 	__os_id(NULL, &env->pid_cache, NULL);
 
-	env->db_ref = 0;
 	env->log_verify_wrap = __log_verify_wrap;
 	env->data_len = ENV_DEF_DATA_LEN;
 	TAILQ_INIT(&env->fdlist);

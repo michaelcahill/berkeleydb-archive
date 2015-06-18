@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1999, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1999, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -556,7 +556,9 @@ __db_pthread_mutex_readlock(env, mutex)
 	DB_ENV *dbenv;
 	DB_MUTEX *mutexp;
 	MUTEX_STATE *state;
+#ifdef HAVE_FAILCHK_BROADCAST
 	db_timespec timespec;
+#endif
 	int ret;
 
 	dbenv = env->dbenv;
@@ -598,6 +600,7 @@ __db_pthread_mutex_readlock(env, mutex)
 			    &timespec, dbenv->mutex_failchk_timeout);
 			RET_SET(pthread_rwlock_timedrdlock(&mutexp->u.rwlock,
 			    (struct timespec *)&timespec), ret);
+			ret = ETIME_TO_ETIMEDOUT(ret);
 			if (F_ISSET(mutexp, DB_MUTEX_OWNER_DEAD) &&
 			    !F_ISSET(dbenv, DB_ENV_FAILCHK)) {
 				if (ret == 0)
@@ -606,15 +609,19 @@ __db_pthread_mutex_readlock(env, mutex)
 				ret = USR_ERR(env, __mutex_died(env, mutex));
 				goto err;
 			}
-		} while (ret == DB_TIMEOUT);
+		} while (ret == ETIMEDOUT);
+		if (ret != 0)
+			ret = USR_ERR(env, ret);
 	} else
 #endif
 		RET_SET(pthread_rwlock_rdlock(&mutexp->u.rwlock), ret);
 
 	PERFMON4(env, mutex, resume, mutex, FALSE, mutexp->alloc_id, mutexp);
-	DB_ASSERT(env, !F_ISSET(mutexp, DB_MUTEX_LOCKED));
 	if (ret != 0)
 		goto err;
+
+	if (state != NULL)
+		state->action = MUTEX_ACTION_SHARED;
 
 #ifdef HAVE_FAILCHK_BROADCAST
 	if (F_ISSET(mutexp, DB_MUTEX_OWNER_DEAD) &&
@@ -636,6 +643,7 @@ __db_pthread_mutex_readlock(env, mutex)
 	if (F_ISSET(dbenv, DB_ENV_YIELDCPU))
 		__os_yield(env, 0, 0);
 #endif
+	DB_ASSERT(env, !F_ISSET(mutexp, DB_MUTEX_LOCKED));
 	return (0);
 
 err:
@@ -643,6 +651,52 @@ err:
 		state->action = MUTEX_ACTION_UNLOCKED;
 	__db_err(env, ret, DB_STR("2024", "pthread readlock failed"));
 	return (__env_panic(env, ret));
+}
+
+/*
+ * __db_pthread_mutex_tryreadlock
+ *	Take a shared lock on a mutex, blocking if necessary.
+ *
+ * PUBLIC: #if defined(HAVE_SHARED_LATCHES)
+ * PUBLIC: int __db_pthread_mutex_tryreadlock __P((ENV *, db_mutex_t));
+ * PUBLIC: #endif
+ */
+int
+__db_pthread_mutex_tryreadlock(env, mutex)
+	ENV *env;
+	db_mutex_t mutex;
+{
+	DB_MUTEX *mutexp;
+	MUTEX_STATE *state;
+	int ret;
+
+	if (!MUTEX_ON(env) || F_ISSET(env->dbenv, DB_ENV_NOLOCKING))
+		return (0);
+	mutexp = MUTEXP_SET(env, mutex);
+	if (!F_ISSET(mutexp, DB_MUTEX_SHARED))
+		return (USR_ERR(env, EINVAL));
+	/*
+	 * Failchk support: note that this thread is attempting to get this
+	 * lock. Afterwards, either reset the state to unlocked, or promote
+	 * it to say that the read-lock was acquired.
+	 */
+	state = NULL;
+	if (env->thr_hashtab != NULL && (ret = __mutex_record_lock(env,
+	    mutex, MUTEX_ACTION_INTEND_SHARE, &state)) != 0)
+	    	return (ret);
+	if ((ret = pthread_rwlock_tryrdlock(&mutexp->u.rwlock)) != 0) {
+		if (ret == EBUSY)
+			ret = DB_LOCK_NOTGRANTED;
+		ret = USR_ERR(env, ret);
+		if (state != NULL)
+			state->action = MUTEX_ACTION_UNLOCKED;
+	} else {
+		STAT_INC(env,
+		    mutex, set_rd_nowait, mutexp->mutex_set_nowait, mutex);
+		if (state != NULL)
+			state->action = MUTEX_ACTION_SHARED;
+	}
+	return (ret);
 }
 #endif
 
@@ -790,7 +844,12 @@ __db_pthread_mutex_unlock(env, mutex)
 			goto err;
 	} else {
 #ifndef HAVE_MUTEX_HYBRID
-		F_CLR(mutexp, DB_MUTEX_LOCKED);
+
+		if (F_ISSET(mutexp, DB_MUTEX_LOCKED))
+			F_CLR(mutexp, DB_MUTEX_LOCKED);
+		else if (env->thr_hashtab != NULL &&
+		    (ret = __mutex_record_unlock(env, mutex)) != 0)
+		    	goto err;
 #endif
 	}
 

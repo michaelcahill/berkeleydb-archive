@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -57,11 +57,13 @@ __memp_walk_files(env, mp, func, arg, countp, flags)
 			if ((t_ret = func(env,
 			    mfp, arg, countp, flags)) != 0 && ret == 0)
 				ret = t_ret;
-			if (ret != 0 && !LF_ISSET(DB_STAT_MEMP_NOERROR))
+			if (ret != 0 &&
+			    (!LF_ISSET(DB_STAT_MEMP_NOERROR) || ret == DB_BUFFER_SMALL))
 				break;
 		}
 		MUTEX_UNLOCK(env, hp->mtx_hash);
-		if (ret != 0 && !LF_ISSET(DB_STAT_MEMP_NOERROR))
+		if (ret != 0 &&
+		    (!LF_ISSET(DB_STAT_MEMP_NOERROR) || ret == DB_BUFFER_SMALL))
 			break;
 	}
 	return (ret);
@@ -95,9 +97,11 @@ __memp_discard_all_mpfs (env, mp)
 		while ((mfp = SH_TAILQ_FIRST(
 		    &hp->hash_bucket, __mpoolfile)) != NULL) {
 			MUTEX_LOCK(env, mfp->mutex);
-			if ((t_ret = __memp_mf_discard(dbmp, mfp, 1)) != 0 &&
-			    ret == 0)
-				ret = t_ret;
+			if ((t_ret = __memp_mf_discard(dbmp, mfp, 1)) != 0) {
+				if (ret == 0)
+					ret = t_ret;
+				break;
+			}
 		}
 		MUTEX_UNLOCK(env, hp->mtx_hash);
 	}

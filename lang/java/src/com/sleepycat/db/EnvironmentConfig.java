@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2002, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2002, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -187,7 +187,6 @@ public class EnvironmentConfig implements Cloneable {
     private boolean replicationInMemory = false;
     private boolean txnNoSync = false;
     private boolean txnNoWait = false;
-    private boolean txnNotDurable = false;
     private boolean txnSnapshot = false;
     private boolean txnWriteNoSync = false;
     private boolean yieldCPU = false;
@@ -3822,47 +3821,6 @@ True if the transactions have been configured to not wait for locks by default.
     }
 
     /**
-    Configure the system to not write log records.
-    <p>
-    This means that transactions exhibit the ACI (atomicity, consistency,
-    and isolation) properties, but not D (durability); that is, database
-    integrity will be maintained, but if the application or system
-    fails, integrity will not persist.  All database files must be
-    verified and/or restored from backup after a failure.  In order to
-    ensure integrity after application shut down, all database handles
-    must be closed without specifying noSync, or all database changes
-    must be flushed from the database environment cache using the
-    {@link com.sleepycat.db.Environment#checkpoint Environment.checkpoint}.
-    <p>
-    This method only affects the specified {@link com.sleepycat.db.Environment Environment} handle (and
-any other library handles opened within the scope of that handle).
-For consistent behavior across the environment, all {@link com.sleepycat.db.Environment Environment}
-handles opened in the database environment must either call this method
-or the configuration should be specified in the database environment's
-DB_CONFIG configuration file.
-    <p>
-    This method may be called at any time during the life of the application.
-    <p>
-    @param txnNotDurable
-    If true, configure the system to not write log records.
-    */
-    public void setTxnNotDurable(final boolean txnNotDurable) {
-        this.txnNotDurable = txnNotDurable;
-    }
-
-    /**
-Return true if the system has been configured to not write log records.
-<p>
-This method may be called at any time during the life of the application.
-<p>
-@return
-True if the system has been configured to not write log records.
-    */
-    public boolean getTxnNotDurable() {
-        return txnNotDurable;
-    }
-
-    /**
     Configure the database environment to run transactions at snapshot
     isolation by default.  See {@link TransactionConfig#setSnapshot} for more
     information.
@@ -4606,11 +4564,6 @@ True if the system has been configured to yield the processor
         if (!txnNoWait && oldConfig.txnNoWait)
             offFlags |= DbConstants.DB_TXN_NOWAIT;
 
-        if (txnNotDurable && !oldConfig.txnNotDurable)
-            onFlags |= DbConstants.DB_TXN_NOT_DURABLE;
-        if (!txnNotDurable && oldConfig.txnNotDurable)
-            offFlags |= DbConstants.DB_TXN_NOT_DURABLE;
-
         if (txnSnapshot && !oldConfig.txnSnapshot)
             onFlags |= DbConstants.DB_TXN_SNAPSHOT;
         if (!txnSnapshot && oldConfig.txnSnapshot)
@@ -4950,7 +4903,6 @@ True if the system has been configured to yield the processor
         overwrite = ((envFlags & DbConstants.DB_OVERWRITE) != 0);
         txnNoSync = ((envFlags & DbConstants.DB_TXN_NOSYNC) != 0);
         txnNoWait = ((envFlags & DbConstants.DB_TXN_NOWAIT) != 0);
-        txnNotDurable = ((envFlags & DbConstants.DB_TXN_NOT_DURABLE) != 0);
         txnSnapshot = ((envFlags & DbConstants.DB_TXN_SNAPSHOT) != 0);
         txnWriteNoSync = ((envFlags & DbConstants.DB_TXN_WRITE_NOSYNC) != 0);
         yieldCPU = ((envFlags & DbConstants.DB_YIELDCPU) != 0);

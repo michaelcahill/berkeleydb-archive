@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -14,7 +14,7 @@
 
 #ifndef lint
 static const char copyright[] =
-    "Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.\n";
+    "Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.\n";
 #endif
 
 int	 db_init __P((DB_ENV *, char *, int, u_int32_t, int *));
@@ -34,7 +34,7 @@ main(argc, argv)
 	extern char *optarg;
 	extern int optind;
 	DB_ENV	*dbenv;
-	DB *dbp;
+	DB *dbp, *dbvp;
 	db_pgno_t first, last;
 	u_int32_t cache;
 	int ch;
@@ -51,7 +51,7 @@ main(argc, argv)
 		return (ret);
 
 	dbenv = NULL;
-	dbp = NULL;
+	dbp = dbvp = NULL;
 	exitval = lflag = mflag = nflag = pflag = rflag = Rflag = sflag = 0;
 	first = last = PGNO_INVALID;
 	keyflag = 0;
@@ -275,6 +275,10 @@ retry:	if ((ret = db_env_create(&dbenv, 0)) != 0) {
 			goto err;
 		goto done;
 	}
+
+	if (db_create(&dbvp, dbenv, 0) != 0 ||
+		dbvp->verify(dbvp, filename, dbname, stdout, DB_NOORDERCHK) != 0)
+		goto err;
 
 	if ((ret = dbp->open(dbp, NULL,
 	    filename, dbname, DB_UNKNOWN, DB_RDWRMASTER|DB_RDONLY, 0)) != 0) {

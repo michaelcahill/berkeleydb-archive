@@ -1017,6 +1017,11 @@ rep025
 	processing of messages, the client should get JOIN_FAILURE.
 	Recover with a hot failover.
 
+	Test error handling when a client without encryption tries to
+	join an encrypted repgroup, or vice versa.  Make sure the client
+	gets the expected JOIN_FAILURE error and that the master
+	continues to operate after the error.
+
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 rep026
 	Replication elections - simulate a crash after sending

@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -21,7 +21,7 @@
 
 #ifndef lint
 static const char copyright[] =
-    "Copyright (c) 1996, 2014 Oracle and/or its affiliates.  All rights reserved.\n";
+    "Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.\n";
 #endif
 
 int db_printlog_print_app_record __P((DB_ENV *, DBT *, DB_LSN *, db_recops));
@@ -622,10 +622,35 @@ db_printlog_env_init_print_60(env, dtabp)
 {
 	int ret;
 
-	ret = __db_add_recovery_int(env,
-	     dtabp,__fop_write_file_60_print, DB___fop_write_file_60);
+	if ((ret = __db_add_recovery_int(env, &env->recover_dtab,
+	    __fop_create_60_print, DB___fop_create_60)) != 0)
+		goto err;
 
-	return (ret);
+	if ((ret = __db_add_recovery_int(env, dtabp,
+	    __fop_remove_60_print, DB___fop_remove_60)) != 0)
+		goto err;
+
+	if ((ret = __db_add_recovery_int(env, dtabp,
+	    __fop_rename_60_print, DB___fop_rename_60)) != 0)
+		goto err;
+
+	if ((ret = __db_add_recovery_int(env, dtabp,
+	    __fop_rename_60_print, DB___fop_rename_noundo_60)) != 0)
+		goto err;
+
+	if ((ret = __db_add_recovery_int(env, dtabp,
+	    __fop_file_remove_60_print, DB___fop_file_remove_60)) != 0)
+		goto err;
+
+	if ((ret = __db_add_recovery_int(env, dtabp,
+	    __fop_write_60_print, DB___fop_write_60)) != 0)
+		goto err;
+
+	if ((ret = __db_add_recovery_int(env, dtabp,
+	    __fop_write_file_60_print, DB___fop_write_file_60)) != 0)
+		goto err;
+
+err:	return (ret);
 }
 
 int
@@ -740,8 +765,10 @@ db_printlog_open_rep_db(dbenv, dbpp, dbcp)
 
 	return (0);
 
-err:	if (*dbpp != NULL)
+err:	if (*dbpp != NULL) {
 		(void)(*dbpp)->close(*dbpp, 0);
+		*dbpp = NULL;
+	}
 	return (ret);
 }
 
