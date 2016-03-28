@@ -682,7 +682,7 @@ ARM/gcc-assembly)	ADDITIONAL_OBJS="mut_tas${o} $ADDITIONAL_OBJS"
 ARM64/gcc-assembly)	ADDITIONAL_OBJS="mut_tas${o} $ADDITIONAL_OBJS"
 			AC_DEFINE(HAVE_MUTEX_ARM64_GCC_ASSEMBLY)
 			AH_TEMPLATE(HAVE_MUTEX_ARM64_GCC_ASSEMBLY,
-			    [Define to 1 to use the GCC compiler and ARM assembly language mutexes.]);;
+			    [Define to 1 to use the GCC compiler and ARM64 assembly language mutexes.]);;
 HP/msem_init)		ADDITIONAL_OBJS="mut_tas${o} $ADDITIONAL_OBJS"
 			AC_DEFINE(HAVE_MUTEX_HPPA_MSEM_INIT)
 			AH_TEMPLATE(HAVE_MUTEX_HPPA_MSEM_INIT,
@@ -905,6 +905,8 @@ AC_DEFUN(AM_DEFINE_ATOMIC, [
 
 AH_TEMPLATE(HAVE_ATOMIC_SUPPORT,
     [Define to 1 to use native atomic operations.])
+AH_TEMPLATE(HAVE_ATOMIC_GCC_BUILTIN,
+    [Define to 1 to use GCC's built-in atomic operations.])
 AH_TEMPLATE(HAVE_ATOMIC_X86_GCC_ASSEMBLY,
     [Define to 1 to use GCC and x86 or x86_64 assemlby language atomic operations.])
 AH_TEMPLATE(HAVE_ATOMIC_SOLARIS,
@@ -920,6 +922,25 @@ fi
 # The MinGW build uses the Windows API for atomic operations
 if test "$db_cv_mingw" = yes; then
 	db_cv_atomic=mingw
+fi
+
+if test "$db_cv_atomic" = no; then
+	AC_RUN_IFELSE([AC_LANG_PROGRAM([], [
+		int val;
+		val = -1;
+		return __atomic_add_fetch(&val, 1, __ATOMIC_SEQ_CST);
+	])], [db_cv_atomic="gcc-builtin"], [db_cv_atomic="no"])
+
+	if test "$db_cv_atomic" = "gcc-builtin"; then
+		# Check if the C++ compiler supports built-in atomic functions
+		AC_LANG_PUSH(C++)
+		AC_RUN_IFELSE([AC_LANG_PROGRAM([], [
+			int val;
+			val = -1;
+			return __atomic_add_fetch(&val, 1, __ATOMIC_SEQ_CST);
+		])], [db_cv_atomic="gcc-builtin"], [db_cv_atomic="no"])
+		AC_LANG_POP
+	fi
 fi
 
 if test "$db_cv_atomic" = no; then
@@ -946,11 +967,14 @@ fi
 ])
 
 case "$db_cv_atomic" in
+	gcc-builtin)
+		AC_DEFINE(HAVE_ATOMIC_SUPPORT)
+		AC_DEFINE(HAVE_ATOMIC_GCC_BUILTIN)
+		;;
 	x86/gcc-assembly)
 		AC_DEFINE(HAVE_ATOMIC_SUPPORT)
 		AC_DEFINE(HAVE_ATOMIC_X86_GCC_ASSEMBLY)
 		;;
-
 	solaris/atomic)
 		AC_DEFINE(HAVE_ATOMIC_SUPPORT)
 		AC_DEFINE(HAVE_ATOMIC_SOLARIS)

@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2016 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -285,7 +285,7 @@ __lock_vec(env, sh_locker, flags, list, nlist, elistp)
 			if ((ret = __lock_getobj(lt, list[i].obj,
 			    ndx, 0, &sh_obj)) != 0 || sh_obj == NULL) {
 				if (ret == 0)
-					ret = EINVAL;
+					ret = USR_ERR(env, EINVAL);
 				OBJECT_UNLOCK(lt, region, ndx);
 				break;
 			}
@@ -352,9 +352,9 @@ __lock_vec(env, sh_locker, flags, list, nlist, elistp)
 			break;
 #endif
 		default:
+			ret = USR_ERR(env, EINVAL);
 			__db_errx(env, DB_STR_A("2035",
 			    "Invalid lock operation: %d", "%d"), list[i].op);
-			ret = EINVAL;
 			break;
 		}
 
@@ -578,7 +578,7 @@ again:	if (obj == NULL) {
 			goto err;
 #ifdef DIAGNOSTIC
 		if (sh_obj == NULL) {
-			ret = ENOENT;
+			ret = USR_ERR(env, ENOENT);
 			goto err;
 		}
 		if (LF_ISSET(DB_LOCK_UPGRADE)) {
@@ -1240,8 +1240,8 @@ __lock_downgrade(env, lock, new_mode, flags)
 
 	lockp = R_ADDR(&lt->reginfo, lock->off);
 	if (lock->gen != lockp->gen) {
+		ret = USR_ERR(env, EINVAL);
 		__db_errx(env, LOCK_INVALID_ERR, "lock_downgrade");
-		ret = EINVAL;
 		goto out;
 	}
 
@@ -1960,7 +1960,7 @@ __lock_trade(env, lock, new_locker)
 		return (EINVAL);
 	}
 
-	/* 
+	/*
 	 * Since the old locker is about to be deallocated, make sure that the
 	 * new_locker->parent_locker does not point to it. A side effect of
 	 * invalidating parent_locker is that the old locker must not get any

@@ -11557,15 +11557,15 @@ fi
 
 if test -n "$JAVA_HOME" ; then
   if test "x$JAVA_RUN" = "x"; then
-    JAVA_RUN=$JAVA_HOME/bin/java
+    JAVA_RUN=$JAVA_BIN/java
   else
     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Overriding JAVA command with: $JAVA_RUN" >&5
 $as_echo "$as_me: WARNING: Overriding JAVA command with: $JAVA_RUN" >&2;}
   fi
-  JAVAC=$JAVA_HOME/bin/javac
-  JAVAH="$JAVA_HOME/bin/javah -jni"
-  JAR=$JAVA_HOME/bin/jar
-  JAVADOC=$JAVA_HOME/bin/javadoc
+  JAVAC=$JAVA_BIN/javac
+  JAVAH="$JAVA_BIN/javah -jni"
+  JAR=$JAVA_BIN/jar
+  JAVADOC=$JAVA_BIN/javadoc
 else
   if test "x$JAVA_RUN" = "x"; then
     JAVA_RUN=`which java`

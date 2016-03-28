@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1999, 2015 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1999, 2016 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -48,6 +48,14 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 
 	env = dbp->env;
 	isbad = 0;
+
+	if (dbp->type != DB_BTREE && dbp->type != DB_RECNO) {
+		EPRINT((env, DB_STR_A("1215",
+		    "Page %lu: invalid page type %u for %s database",
+		    "%lu %u %s"), (u_long)pgno, TYPE(meta),
+		    __db_dbtype_to_string(dbp->type)));
+		return DB_VERIFY_FATAL;
+	}
 
 	if ((ret = __db_vrfy_getpageinfo(vdp, pgno, &pip)) != 0)
 		return (ret);
@@ -150,7 +158,7 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 		 */
 		if (F_ISSET(pip, VRFY_HAS_DUPSORT)) {
 			if (dbp->dup_compare == NULL)
-				dbp->dup_compare = __bam_defcmp;
+				dbp->dup_compare = __dbt_defcmp;
 			if (((BTREE *)dbp->bt_internal)->compress_dup_compare
 				== NULL) {
 				((BTREE *)dbp->bt_internal)->
@@ -206,7 +214,8 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	if (t_ret != 0) {
 		isbad = 1;
 		EPRINT((env, DB_STR_A("1187",
-		    "Page %lu: blob file id overflow.", "%lu"), (u_long)pgno));
+		    "Page %lu: external file id overflow.", "%lu"),
+		    (u_long)pgno));
 		if (ret == 0)
 			ret = t_ret;
 	}
@@ -215,7 +224,7 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	if (t_ret != 0) {
 		isbad = 1;
 		EPRINT((env, DB_STR_A("1188",
-		    "Page %lu: blob subdatabase id overflow.",
+		    "Page %lu: external file subdatabase id overflow.",
 		    "%lu"), (u_long)pgno));
 		if (ret == 0)
 			ret = t_ret;
@@ -229,7 +238,7 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	if (t_ret != 0 || blob_id != 0) {
 		isbad = 1;
 		EPRINT((env, DB_STR_A("1200",
-		    "Page %lu: blobs require 64 integer compiler support.",
+	    "Page %lu: external files require 64 integer compiler support.",
 		    "%lu"), (u_long)pgno));
 		if (ret == 0)
 			ret = t_ret;
@@ -239,7 +248,7 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	if (t_ret != 0 || blob_id != 0) {
 		isbad = 1;
 		EPRINT((env, DB_STR_A("1201",
-		    "Page %lu: blobs require 64 integer compiler support.",
+	    "Page %lu: external files require 64 integer compiler support.",
 		    "%lu"), (u_long)pgno));
 		if (ret == 0)
 			ret = t_ret;
@@ -283,6 +292,15 @@ __ram_vrfy_leaf(dbp, vdp, h, pgno, flags)
 
 	env = dbp->env;
 	isbad = 0;
+
+	if (dbp->type != DB_BTREE && dbp->type != DB_RECNO &&
+	    dbp->type != DB_HASH) {
+		EPRINT((env, DB_STR_A("1215",
+		    "Page %lu: invalid page type %u for %s database",
+		    "%lu %u %s"), (u_long)pgno, TYPE(h),
+		    __db_dbtype_to_string(dbp->type)));
+		return DB_VERIFY_BAD;
+	}
 
 	if ((ret = __db_vrfy_getpageinfo(vdp, pgno, &pip)) != 0)
 		return (ret);
@@ -385,6 +403,15 @@ __bam_vrfy(dbp, vdp, h, pgno, flags)
 
 	env = dbp->env;
 	isbad = 0;
+
+	if (dbp->type != DB_BTREE && dbp->type != DB_RECNO &&
+	    dbp->type != DB_HASH) {
+		EPRINT((env, DB_STR_A("1215",
+		    "Page %lu: invalid page type %u for %s database",
+		    "%lu %u %s"), (u_long)pgno, TYPE(h),
+		    __db_dbtype_to_string(dbp->type)));
+		return DB_VERIFY_BAD;
+	}
 
 	if ((ret = __db_vrfy_getpageinfo(vdp, pgno, &pip)) != 0)
 		return (ret);
@@ -786,13 +813,13 @@ __bam_vrfy_inp(dbp, vdp, h, pgno, nentriesp, flags)
 			if (TYPE(h) == P_IBTREE) {
 				isbad = 1;
 				EPRINT((env, DB_STR_A("1189",
-		"Page %lu: blob item in internal btree page at item %lu",
+	    "Page %lu: external file item in internal btree page at item %lu",
 				    "%lu %lu"), (u_long)pgno, (u_long)i));
 				break;
 			} else if (TYPE(h) == P_LRECNO) {
 				isbad = 1;
 				EPRINT((env, DB_STR_A("1190",
-		"Page %lu: blob item referenced by recno page at item %lu",
+	    "Page %lu: external file item referenced by recno page at item %lu",
 				    "%lu %lu"), (u_long)pgno, (u_long)i));
 				break;
 			}
@@ -807,7 +834,7 @@ __bam_vrfy_inp(dbp, vdp, h, pgno, nentriesp, flags)
 			if (ret != 0 || blob_size < 0) {
 				isbad = 1;
 				EPRINT((env, DB_STR_A("1192",
-		"Page %lu: blob file size value has overflowed at item %lu",
+		"Page %lu: external file size value has overflowed at item %lu",
 				    "%lu %lu"), (u_long)pgno, (u_long)i));
 				break;
 			}
@@ -816,10 +843,10 @@ __bam_vrfy_inp(dbp, vdp, h, pgno, nentriesp, flags)
 			if (file_id == 0 && sdb_id == 0) {
 				isbad = 1;
 				EPRINT((dbp->env, DB_STR_A("1195",
-			"Page %lu: invalid blob dir ids %llu %llu at item %lu",
-				    "%lu %ll %ll %lu"), (u_long)pip->pgno,
-				    (long long)file_id,
-				    (long long)sdb_id, (u_long)i));
+		    "Page %lu: invalid external dir ids %llu %llu at item %lu",
+				    "%lu %llu %llu %lu"), (u_long)pip->pgno,
+				    (unsigned long long)file_id,
+				    (unsigned long long)sdb_id, (u_long)i));
 				break;
 			}
 			if ((ret = __blob_vrfy(env, blob_id,
@@ -1054,15 +1081,15 @@ __bam_vrfy_itemorder(dbp, vdp, ip, h, pgno, nentries, ovflok, hasdups, flags)
 
 	DB_ASSERT(env, !LF_ISSET(DB_NOORDERCHK));
 
-	dupfunc = (dbp->dup_compare == NULL) ? __bam_defcmp : dbp->dup_compare;
+	dupfunc = (dbp->dup_compare == NULL) ? __dbt_defcmp : dbp->dup_compare;
 	if (TYPE(h) == P_LDUP)
 		func = dupfunc;
 	else {
-		func = __bam_defcmp;
+		func = __dbt_defcmp;
 		if (dbp->bt_internal != NULL) {
 			bt = (BTREE *)dbp->bt_internal;
 			if (TYPE(h) == P_IBTREE && (bt->bt_compare != NULL ||
-			    dupfunc != __bam_defcmp)) {
+			    dupfunc != __dbt_defcmp)) {
 				/*
 				 * The problem here is that we cannot
 				 * tell the difference between an off
@@ -1152,7 +1179,7 @@ retry:	p1 = &dbta;
 			 * len 0, since it's just a placeholder and
 			 * automatically sorts less than all keys.
 			 *
-			 * XXX
+			 * !!!
 			 * This criterion does not currently hold!
 			 * See todo list item #1686.  Meanwhile, it's harmless
 			 * to just not check for it.
@@ -1175,7 +1202,7 @@ retry:	p1 = &dbta;
 			} else if (B_TYPE(bk->type) == B_BLOB) {
 				isbad = 1;
 				EPRINT((env, DB_STR_A("1197",
-				    "Page %lu: Blob found in key item %lu",
+			    "Page %lu: External file found in key item %lu",
 				    "%lu %lu"), (u_long)pgno, (u_long)i));
 			} else {
 				p2->data = bk->data;
@@ -1993,7 +2020,7 @@ leaf:		level = LEAFLEVEL;
 		if (LF_ISSET(DB_ST_RECNUM))
 			nrecs = pip->rec_cnt;
 
-		/* XXX
+		/* Note:
 		 * We should verify that the record count on a leaf page
 		 * is the sum of the number of keys and the number of
 		 * records in its off-page dups.  This requires looking
@@ -2064,7 +2091,7 @@ done:	if (F_ISSET(pip, VRFY_INCOMPLETE) && isbad == 0 && ret == 0) {
 		func = LF_ISSET(DB_ST_DUPSET) ? dbp->dup_compare :
 		    ((BTREE *)dbp->bt_internal)->bt_compare;
 		if (func == NULL)
-			func = __bam_defcmp;
+			func = __dbt_defcmp;
 
 		if ((ret = __bam_vrfy_treeorder(dbp,
 		    vdp->thread_info, h, l, r, func, flags)) != 0) {

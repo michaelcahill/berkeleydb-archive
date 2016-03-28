@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2016 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -436,7 +436,6 @@ __memp_region_size(env, reg_sizep, htab_bucketsp)
 	 * chains a lot, they must be kept short.  We use 2.5 as this maintains
 	 * compatibility with previous releases.
 	 *
-	 * XXX
 	 * Cache sizes larger than 10TB would cause 32-bit wrapping in the
 	 * calculation of the number of hash buckets.  This probably isn't
 	 * something we need to worry about right now, but is checked when the
@@ -679,7 +678,7 @@ __memp_region_bhfree(infop)
 				    R_ADDR(dbmp->reginfo, bhp->mf_offset),
 				    hp, bhp, BH_FREE_FREEMEM |
 				    BH_FREE_UNLOCKED)) != 0) {
-				    	if (ret == 0)
+					if (ret == 0)
 						ret = t_ret;
 					break;
 				}

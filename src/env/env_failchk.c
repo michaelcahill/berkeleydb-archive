@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2005, 2015 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2005, 2016 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -37,7 +37,7 @@ static void __env_clear_state __P((ENV *));
  * Set the default number of buckets to be 1/8th the number of
  * thread control blocks.  This is rather arbitrary.
  */
-#define DB_THREAD_INFOS_PER_BUCKET	8
+#define	DB_THREAD_INFOS_PER_BUCKET	8
 
 /*
  * __env_failchk_pp --
@@ -203,7 +203,7 @@ __env_thread_max(env)
 
 	dbenv = env->dbenv;
 
-	/* 
+	/*
 	 * Allow for the worst case number of configured thread control blocks,
 	 * plus 25%; then subtract the number of threads already allowed for.
 	 */
@@ -373,26 +373,30 @@ __env_in_api(env)
 				continue;
 			}
 			/*
-			 * The above tests are not atomic, so it is possible that
-			 * the process pointed by ip has changed during the tests.
-			 * In particular, if the process pointed by ip when is_alive
-			 * was executed terminated normally, a new process may reuse
-			 * the same ip structure and change its dbth_state before the
-			 * next two tests were performed. Therefore, we need to test
-			 * here that all four tests above are done on the same process.
-			 * If the process pointed by ip changed, all tests are invalid
-			 * and can be ignored.
-			 * Similarly, it's also possible for two processes racing to
-			 * change the dbth_state of the same ip structure. For example,
-			 * both process A and B reach the above test for the same
-			 * terminated process C where C's dbth_state is THREAD_OUT.
-			 * If A goes into the 'if' block and changes C's dbth_state to
-			 * THREAD_SLOT_NOT_IN_USE before B checks the condition, B
-			 * would incorrectly fail the test and run into this line.
-			 * Therefore, we need to check C's dbth_state again and fail
-			 * the db only if C's dbth_state is indeed THREAD_ACTIVE.
+			 * The above tests are not atomic, so it is possible
+			 * that the process pointed by ip has changed during
+			 * the tests.  In particular, if the process pointed
+			 * by ip when is_alive was executed terminated
+			 * normally, a new process may reuse the same ip
+			 * structure and change its dbth_state before the next
+			 * two tests were performed. Therefore, we need to test
+			 * here that all four tests above are done on the same
+			 * process.  If the process pointed by ip changed, all
+			 * tests are invalid and can be ignored.
+			 * Similarly, it's also possible for two processes
+			 * racing to change the dbth_state of the same ip
+			 * structure. For example, both process A and B reach
+			 * the above test for the same terminated process C
+			 * where C's dbth_state is THREAD_OUT.  If A goes into
+			 * the 'if' block and changes C's dbth_state to
+			 * THREAD_SLOT_NOT_IN_USE before B checks the
+			 * condition, B would incorrectly fail the test and
+			 * run into this line.  Therefore, we need to check
+			 * C's dbth_state again and fail the db only if C's
+			 * dbth_state is indeed THREAD_ACTIVE.
 			 */
-			if (ip->dbth_state != THREAD_ACTIVE || ip->dbth_pid != pid)
+			if (ip->dbth_state != THREAD_ACTIVE ||
+			    ip->dbth_pid != pid)
 				continue;
 			__os_gettime(env, &ip->dbth_failtime, 0);
 			t_ret = __db_failed(env, DB_STR("1507",

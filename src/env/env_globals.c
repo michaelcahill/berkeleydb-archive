@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1999, 2015 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1999, 2016 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -33,7 +33,7 @@ DB_GLOBALS __db_global_values = {
 	{ 0 },				/* error_buf */
 	0,				/* random_seeded */
 #if defined(HAVE_RANDOM_R)
-	{ 0 },				/* random_r random_data */
+	{ 0, 0, 0, 0, 0, 0, 0 },	/* random_r random_data */
 	{ 0 },				/* random_r state */
 #elif !defined(HAVE_RAND) && !defined(HAVE_RANDOM)
 	0,				/* rand/srand value */

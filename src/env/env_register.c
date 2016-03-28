@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2004, 2015 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2004, 2016 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -724,7 +724,8 @@ __envreg_create_active_pid(env, my_pid)
 
 /*
  * __envreg_add_active_pid --
- *	Add an active pid into array, if need more room in array then double size.
+ *	Add an active pid into array, if need more room in array
+ *	then double size.
  */
 static int
 __envreg_add_active_pid(env, pid)

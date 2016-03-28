@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2002, 2015 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2002, 2016 Oracle and/or its affiliates.  All rights reserved.
  *
  */
 
@@ -68,7 +68,6 @@ import com.sleepycat.persist.model.PrimaryKey;
  *
  * {@code PrimaryIndex<Long, Employee>} primaryIndex =
  *     store.getPrimaryIndex(Long.class, Employee.class);</pre>
- * </pre>
  *
  * <p>Note that {@code Long.class} is passed as the primary key class, but the
  * primary key field has the primitive type {@code long}.  When a primitive
@@ -106,7 +105,7 @@ import com.sleepycat.persist.model.PrimaryKey;
  * <p>The {@link #putNoOverwrite} method can be used to ensure that an existing
  * entity is not overwritten.  {@link #putNoOverwrite} returns true if the
  * entity was inserted, or false if an existing entity exists and no action was
- * taken.  For example:<p>
+ * taken.  For example:</p>
  *
  * <pre class="code">
  * boolean inserted;

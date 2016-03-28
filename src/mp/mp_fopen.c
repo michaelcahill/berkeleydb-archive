@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2016 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -332,7 +332,7 @@ mvcc_err:				__db_errx(env, DB_STR("3041",
 			oflags |= DB_OSO_RDONLY;
 
 		/*
-		 * XXX
+		 * Note:
 		 * A grievous layering violation, the DB_DSYNC_DB flag
 		 * was left in the ENV structure and not driven through
 		 * the cache API.  This needs to be fixed when the general
@@ -532,7 +532,7 @@ check:	MUTEX_LOCK(env, hp->mtx_hash);
 		 */
 		if (FLD_ISSET(dbmfp->config_flags, DB_MPOOL_NOFILE) &&
 		    !LF_ISSET(DB_CREATE)) {
-			ret = ENOENT;
+			ret = USR_ERR(env, ENOENT);
 			goto err;
 		}
 

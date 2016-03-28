@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2016 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -1688,27 +1688,10 @@ __log_encrypt_record(env, dbt, hdr, orig)
  * PUBLIC:     u_int32_t, u_int32_t, u_int32_t, u_int32_t,
  * PUBLIC:     DB_LOG_RECSPEC *, ...));
  */
-#ifdef STDC_HEADERS
 int
 __log_put_record_pp(DB_ENV *dbenv, DB *dbp, DB_TXN *txnp, DB_LSN *ret_lsnp,
     u_int32_t flags, u_int32_t rectype, u_int32_t has_data, u_int32_t size,
     DB_LOG_RECSPEC *spec, ...)
-#else
-int
-__log_put_record_pp(dbenv, dbp, txnp, ret_lsnp,
-    flags, rectype, has_data, size,
-    spec, va_alist)
-	DB_ENV *dbenv;
-	DB *dbp;
-	DB_TXN *txnp;
-	DB_LSN *ret_lsnp;
-	u_int32_t flags;
-	u_int32_t rectype;
-	u_int32_t has_data;
-	u_int32_t size;
-	DB_LOG_RECSPEC *spec;
-	va_dcl
-#endif
 {
 	DB_THREAD_INFO *ip;
 	ENV *env;
@@ -1752,26 +1735,10 @@ __log_put_record_pp(dbenv, dbp, txnp, ret_lsnp,
  * PUBLIC:     u_int32_t, u_int32_t, u_int32_t, u_int32_t,
  * PUBLIC:     DB_LOG_RECSPEC *, ...));
  */
-#ifdef STDC_HEADERS
 int
 __log_put_record(ENV *env, DB *dbp, DB_TXN *txnp, DB_LSN *ret_lsnp,
     u_int32_t flags, u_int32_t rectype, u_int32_t has_data, u_int32_t size,
     DB_LOG_RECSPEC *spec, ...)
-#else
-int
-__log_put_record(env, dbp, txnp, ret_lsnp,
-    flags, rectype, has_data, size, spec, va_alist);
-	ENV *env;
-	DB *dbp;
-	DB_TXN *txnp;
-	DB_LSN *ret_lsnp;
-	u_int32_t flags;
-	u_int32_t rectype;
-	u_int32_t has_data;
-	u_int32_t size;
-	DB_LOG_RECSPEC *spec;
-	va_dcl
-#endif
 {
 	va_list argp;
 	int ret;
@@ -1783,26 +1750,10 @@ __log_put_record(env, dbp, txnp, ret_lsnp,
 	return (ret);
 }
 
-#ifdef STDC_HEADERS
 static int
 __log_put_record_int(ENV *env, DB *dbp, DB_TXN *txnp, DB_LSN *ret_lsnp,
     u_int32_t flags, u_int32_t rectype, u_int32_t has_data, u_int32_t size,
     DB_LOG_RECSPEC *spec, va_list argp)
-#else
-int
-__log_put_record_int(env, dbp, txnp, ret_lsnp,
-    flags, rectype, has_data, size, spec, argp);
-	ENV *env;
-	DB *dbp;
-	DB_TXN *txnp;
-	DB_LSN *ret_lsnp;
-	u_int32_t flags;
-	u_int32_t has_data;
-	u_int32_t size;
-	u_int32_t rectype;
-	DB_LOG_RECSPEC *spec;
-	va_list argp;
-#endif
 {
 	DBT *data, *dbt, *header, logrec;
 	DB_LOG_RECSPEC *sp;

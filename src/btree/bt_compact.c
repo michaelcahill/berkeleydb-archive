@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1999, 2015 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1999, 2016 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -442,9 +442,12 @@ retry:	pg = NULL;
 					if (ret != 0)
 						goto err;
 				}
+				F_CLR(dbc, C_ROOT_COLLAPSED);
 				if ((ret =
 				    __bam_dpages(dbc, 0, BTD_RELINK)) != 0)
 					goto err;
+				if (F_ISSET(dbc, C_ROOT_COLLAPSED))
+					npgno = PGNO_INVALID;
 				c_data->compact_pages_free++;
 				if ((ret = __TLPUT(dbc, prev_lock)) != 0)
 					goto err;
@@ -1241,7 +1244,7 @@ __bam_merge_records(dbc, ndbc, factor, c_data, pgs_donep)
 	    ((B_TYPE(bk->type) == B_BLOB) ? BBLOB_DSIZE : BOVERFLOW_SIZE);
 	if (indx != 0 && BINTERNAL_SIZE(len) >= pfree) {
 		if (F_ISSET(dbc, DBC_OPD)) {
-			if (dbp->dup_compare == __bam_defcmp)
+			if (dbp->dup_compare == __dbt_defcmp)
 				func = __bam_defpfx;
 			else
 				func = NULL;
@@ -1356,10 +1359,10 @@ no_check: is_dup = first_dup = next_dup = 0;
 				goto err;
 			break;
 		default:
+			ret = USR_ERR(env, EINVAL);
 			__db_errx(env, DB_STR_A("1022",
 			    "Unknown record format, page %lu, indx 0",
 			    "%lu"), (u_long)PGNO(pg));
-			ret = EINVAL;
 			goto err;
 		}
 		pind++;
@@ -1944,7 +1947,7 @@ __bam_compact_dups(dbc, ppg, factor, have_lock, c_data, pgs_donep)
 	DB_ASSERT(NULL, dbc != NULL);
 	dbp = dbc->dbp;
 	dbmp = dbp->mpf;
-	/* XXX Don't reserve any free bytes (Force 100% fillfactor) in OPD trees
+	/* !!! Don't reserve any free bytes (Force 100% fillfactor) in OPD trees
 	 * to ensure forward progress.
 	 */
 	factor = 0;
@@ -2564,6 +2567,8 @@ new_txn:
 
 	if ((ret = __LPUT(dbc, root_lock)) != 0)
 		goto err;
+	if ((ret = __LPUT(dbc, meta_lock)) != 0)
+		goto err;
 	if ((ret = __dbc_close(dbc)) != 0)
 		goto err;
 	dbc = NULL;
@@ -2667,6 +2672,8 @@ again:	if (F_ISSET(dbp, DB_AM_SUBDB) &&
 		if ((ret = __memp_fput(dbp->mpf, ip, meta, dbp->priority)) != 0)
 			goto err;
 		meta = NULL;
+		if (txn == NULL && (ret = __LPUT(dbc, meta_lock)) != 0)
+			goto err;
 		if ((ret = __dbc_close(dbc)) != 0)
 			goto err;
 		dbc = NULL;

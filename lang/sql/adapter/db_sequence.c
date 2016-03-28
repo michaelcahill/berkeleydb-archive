@@ -1,7 +1,7 @@
 /*
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 2010, 2015 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2010, 2016 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -312,7 +312,7 @@ static void db_seq_drop_func(
 	sqlite3_mutex_enter(pBt->mutex);
 	mutex_held = 1;
 	cache_entry =
-	    sqlite3HashFind(&pBt->db_cache, cookie.name, cookie.name_len);
+	    sqlite3HashFind(&pBt->db_cache, cookie.name);
 
 	if (cache_entry == NULL)
 		goto done;
@@ -541,7 +541,7 @@ static int btreeSeqGetHandle(sqlite3_context *context, Btree *p,
 	 */
 	sqlite3_mutex_enter(pBt->mutex);
 	cache_entry =
-	    sqlite3HashFind(&pBt->db_cache, cookie->name, cookie->name_len);
+	    sqlite3HashFind(&pBt->db_cache, cookie->name);
 	sqlite3_mutex_leave(pBt->mutex);
 
 	if (CACHE_ENTRY_VALID(cache_entry)) {
@@ -586,7 +586,7 @@ static int btreeSeqGetHandle(sqlite3_context *context, Btree *p,
 	sqlite3_mutex_enter(pBt->mutex);
 	/* Check to see if someone beat us to adding the handle. */
 	cache_entry =
-	    sqlite3HashFind(&pBt->db_cache, cookie->name, cookie->name_len);
+	    sqlite3HashFind(&pBt->db_cache, cookie->name);
 	if (CACHE_ENTRY_VALID(cache_entry)) {
 		cookie->handle->close(cookie->handle, 0);
 		cookie->handle = (DB_SEQUENCE *)cache_entry->dbp;
@@ -621,8 +621,10 @@ static int btreeSeqGetHandle(sqlite3_context *context, Btree *p,
 	cache_entry->is_sequence = 1;
 	memcpy(cache_entry->cookie, cookie, sizeof(SEQ_COOKIE));
 	stale_db = sqlite3HashInsert(&pBt->db_cache, cache_entry->key,
-	    cookie->name_len, cache_entry);
+	    cache_entry);
 	if (stale_db) {
+		if (stale_db->cookie != NULL)
+			sqlite3_free(stale_db->cookie);
 		sqlite3_free(stale_db);
 		/*
 		 * Hash table out of memory when returned pointer is
@@ -630,8 +632,8 @@ static int btreeSeqGetHandle(sqlite3_context *context, Btree *p,
 		 */
 		if (stale_db == cache_entry) {
 			btreeSeqError(context, SQLITE_NOMEM, MSG_MALLOC_FAIL);
-			ret = SQLITE_NOMEM;
-			goto err;
+			sqlite3_mutex_leave(pBt->mutex);
+			return SQLITE_NOMEM;
 		}
 	}
 
@@ -657,7 +659,7 @@ static int btreeSeqRemoveHandle(
 	memcpy(&cookie, cache_entry->cookie, sizeof(cookie));
 
 	/* Remove the entry from the hash table. */
-	sqlite3HashInsert(&pBt->db_cache, cookie.name, cookie.name_len, NULL);
+	sqlite3HashInsert(&pBt->db_cache, cookie.name, NULL);
 
 	if (cookie.cache != 0) {
 		seq = (DB_SEQUENCE *)cache_entry->dbp;

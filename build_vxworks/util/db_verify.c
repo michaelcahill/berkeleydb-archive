@@ -1,7 +1,7 @@
 /*-
  * See the file LICENSE for redistribution information.
  *
- * Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 1996, 2016 Oracle and/or its affiliates.  All rights reserved.
  *
  * $Id$
  */
@@ -12,11 +12,11 @@
 
 #ifndef lint
 static const char copyright[] =
-    "Copyright (c) 1996, 2015 Oracle and/or its affiliates.  All rights reserved.\n";
+    "Copyright (c) 1996, 2016 Oracle and/or its affiliates.  All rights reserved.\n";
 #endif
 
 int db_verify_main __P((int, char *[]));
-int db_verify_usage __P((void));
+void db_verify_usage __P((void));
 int db_verify_version_check __P((void));
 
 const char *progname;
@@ -60,8 +60,9 @@ db_verify_main(argc, argv)
 	dbenv = NULL;
 	dbp = NULL;
 	cache = MEGABYTE;
-	exitval = mflag = nflag = quiet = 0;
+	mflag = nflag = quiet = 0;
 	flags = 0;
+	exitval = EXIT_SUCCESS;
 	blob_dir = home = passwd = NULL;
 	__db_getopt_reset = 1;
 	while ((ch = getopt(argc, argv, "b:h:mNoP:quV")) != EOF)
@@ -82,15 +83,14 @@ db_verify_main(argc, argv)
 			if (passwd != NULL) {
 				fprintf(stderr, DB_STR("5132",
 					"Password may not be specified twice"));
-				free(passwd);
-				return (EXIT_FAILURE);
+				goto err;
 			}
 			passwd = strdup(optarg);
 			memset(optarg, 0, strlen(optarg));
 			if (passwd == NULL) {
 				fprintf(stderr, "%s: strdup: %s\n",
 				    progname, strerror(errno));
-				return (EXIT_FAILURE);
+				goto err;
 			}
 			break;
 		case 'o':
@@ -104,16 +104,16 @@ db_verify_main(argc, argv)
 			break;
 		case 'V':
 			printf("%s\n", db_version(NULL, NULL, NULL));
-			return (EXIT_SUCCESS);
+			goto done;
 		case '?':
 		default:
-			return (db_verify_usage());
+			goto usage_err;
 		}
 	argc -= optind;
 	argv += optind;
 
 	if (argc <= 0)
-		return (db_verify_usage());
+		goto usage_err;
 
 	/* Handle possible interruptions. */
 	__db_util_siginit();
@@ -257,7 +257,7 @@ retry:	if ((ret = db_env_create(&dbenv, 0)) != 0) {
 		ret = dbp->verify(dbp, fname, dname, NULL, flags);
 		dbp = NULL;
 		if (ret != 0)
-			exitval = 1;
+			exitval = EXIT_FAILURE;
 		if (!quiet)
 			printf(DB_STR_A("5105", "Verification of %s %s.\n",
 			    "%s %s\n"), argv[0], ret == 0 ? 
@@ -265,15 +265,16 @@ retry:	if ((ret = db_env_create(&dbenv, 0)) != 0) {
 	}
 
 	if (0) {
-err:		exitval = 1;
+usage_err:	db_verify_usage();
+err:		exitval = EXIT_FAILURE;
 	}
-
+done:
 	if (dbp != NULL && (ret = dbp->close(dbp, 0)) != 0) {
-		exitval = 1;
+		exitval = EXIT_FAILURE;
 		dbenv->err(dbenv, ret, DB_STR("5106", "close"));
 	}
 	if (dbenv != NULL && (ret = dbenv->close(dbenv, 0)) != 0) {
-		exitval = 1;
+		exitval = EXIT_FAILURE;
 		fprintf(stderr,
 		    "%s: dbenv->close: %s\n", progname, db_strerror(ret));
 	}
@@ -284,15 +285,14 @@ err:		exitval = 1;
 	/* Resend any caught signal. */
 	__db_util_sigresend();
 
-	return (exitval == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
+	return (exitval);
 }
 
-int
+void
 db_verify_usage()
 {
 	fprintf(stderr, "usage: %s %s\n", progname,
 	    "[-mNoqV] [-b blob_dir] [-h home] [-P password] db_file ...");
-	return (EXIT_FAILURE);
 }
 
 int
