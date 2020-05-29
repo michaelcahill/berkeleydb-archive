@@ -1,14 +1,11 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 2008, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 2008, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file EXAMPLES-LICENSE for license information.
  *
- * $Id$ 
  */
 
 package persist.gettingStarted;
-
-import java.io.File;
 
 import com.sleepycat.db.DatabaseException;
 import com.sleepycat.persist.EntityStore;

@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 2001, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 2001, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file EXAMPLES-LICENSE for license information.
  *
- * $Id$
  */
 
 package db.repquote_gsg;
@@ -26,7 +25,6 @@ import com.sleepycat.db.Environment;
 import com.sleepycat.db.EnvironmentConfig;
 import com.sleepycat.db.LockMode;
 import com.sleepycat.db.OperationStatus;
-import db.repquote_gsg.SimpleConfig;
 
 public class SimpleTxn
 {

@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="gettingStarted.css" type="text/css" />
     <meta name="generator" content="DocBook XSL Stylesheets V1.73.2" />
     <link rel="start" href="index.html" title="Berkeley DB Programmer's Reference Guide" />
-    <link rel="up" href="env.html" title="Chapter 10.  The Berkeley DB Environment" />
+    <link rel="up" href="env.html" title="Chapter 9.  The Berkeley DB Environment" />
     <link rel="prev" href="env_error.html" title="Error support" />
     <link rel="next" href="env_naming.html" title="File naming" />
   </head>
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.40</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -23,7 +23,7 @@
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="env_error.html">Prev</a> </td>
-          <th width="60%" align="center">Chapter 10.  The Berkeley DB Environment </th>
+          <th width="60%" align="center">Chapter 9.  The Berkeley DB Environment </th>
           <td width="20%" align="right"> <a accesskey="n" href="env_naming.html">Next</a></td>
         </tr>
       </table>
@@ -41,9 +41,13 @@
       <p>
         Almost all of the configuration information that can be
         specified to <a href="../api_reference/C/env.html" class="olink">DB_ENV class</a> methods can also be specified using
-        a configuration file. If a file named DB_CONFIG exists in the
-        database home directory, it will be read for lines of the
-        format <span class="bold"><strong>NAME VALUE</strong></span>.
+        a configuration file. <code class="literal">DB_ENV-&gt;open()</code> checks for 
+        a readable <code class="literal">DB_CONFIG</code> file in the environment home 
+        directory. If it can be opened it will be read for lines 
+        of the format <span class="bold"><strong>NAME VALUE</strong></span> or 
+        <span class="bold"><strong>NAME SUBNAME VALUE</strong></span>. Any settings 
+        found there will override configuration settings by the 
+        corresponding <code class="literal">DB_ENV</code> API calls.
     </p>
       <p> 
         One or more whitespace characters are used to delimit the

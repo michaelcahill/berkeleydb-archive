@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 2005, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 2005, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file EXAMPLES-LICENSE for license information.
  *
- * $Id$ 
  */
 
 package db.txn;
@@ -11,9 +10,9 @@ package db.txn;
 import java.io.Serializable;
 
 public class PayloadData implements Serializable {
-    private int oID;
-    private String threadName;
-    private double doubleData;
+    private final int oID;
+    private final String threadName;
+    private final double doubleData;
 
     PayloadData(int id, String name, double data) {
         oID = id;

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 2002, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 2002, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file LICENSE for license information.
  *
  */
 
@@ -36,10 +36,13 @@ public class StoreConfig implements Cloneable {
     public static final StoreConfig DEFAULT = new StoreConfig();
 
     private boolean allowCreate;
+    private boolean checksum;
+    private boolean encrypted;
     private boolean exclusiveCreate;
     private boolean transactional;
     private boolean readOnly;
     private boolean secondaryBulkLoad;
+    private String password;
     private EntityModel model;
     private Mutations mutations;
     private DatabaseNamer databaseNamer = DatabaseNamer.DEFAULT;
@@ -57,6 +60,7 @@ public class StoreConfig implements Cloneable {
      *
      * @deprecated As of JE 4.0.13, replaced by {@link StoreConfig#clone()}.
      */
+	@Deprecated
     public StoreConfig cloneConfig() {
         try {
             return (StoreConfig) super.clone();
@@ -180,6 +184,49 @@ public class StoreConfig implements Cloneable {
      */
     public boolean getTransactional() {
         return transactional;
+    }
+    
+    /**
+    Set the password used to perform encryption and decryption.
+    <p>
+    Because databases opened within environments use the password
+    specified to the environment, it is an error to attempt to set a
+    password in a database created within an environment.  To encrypt
+    a database within an encrypted environment use
+    {@link com.sleepycat.db.EnvironmentConfig#setEncrypted EnvironmentConfig.setEncrypted}
+    <p>
+    Berkeley DB uses the Rijndael/AES (also known as the Advanced
+    Encryption Standard and Federal Information Processing
+    Standard (FIPS) 197) algorithm for encryption or decryption.
+    @param password the password used to perform encryption and decryption
+    */
+    public void setEncrypted(final String password) {
+        this.password = password;
+    }
+    
+    /**
+     * Enables encryption when the environment is also encrypted, see
+     * {@link com.sleepycat.db.EnvironmentConfig#setEncrypted EnvironmentConfig.setEncrypted}
+     * <p>
+     * To encrypt a database that does not use an environment, see
+     * {@link com.sleepycat.persist.StoreConfig#setEncrypted StoreConfig.setEncrypted}
+     * @param enable encryption on this database.
+     */
+    public void enableEncrypted(final boolean enable) {
+    	this.encrypted = enable;
+    	this.checksum = enable;
+    }
+
+    /**
+Return true if the database has been configured to perform encryption.
+<p>
+This method may be called at any time during the life of the application.
+<p>
+@return
+True if the database has been configured to perform encryption.
+    */
+    public boolean getEncrypted() {
+        return (password != null || encrypted);
     }
 
     /**
@@ -388,5 +435,9 @@ public class StoreConfig implements Cloneable {
      */
     public DatabaseNamer getDatabaseNamer() {
         return databaseNamer;
+    }
+    
+    public String getPassword() {
+    	return password;
     }
 }

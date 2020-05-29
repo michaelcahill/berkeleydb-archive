@@ -1,16 +1,14 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 2008, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 2008, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file EXAMPLES-LICENSE for license information.
  *
- * $Id$ 
  */
 
 package persist.txn;
 
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
-import static com.sleepycat.persist.model.Relationship.*;
 
 @Entity
 public class PayloadDataEntity {

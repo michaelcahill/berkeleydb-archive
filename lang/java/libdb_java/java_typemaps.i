@@ -910,7 +910,7 @@ Java_com_sleepycat_db_internal_db_1javaJNI_DbEnv_1lock_1vec(JNIEnv *jenv,
 		switch (op) {
 		case DB_LOCK_GET_TIMEOUT:
 			/* Needed: mode, timeout, obj.  Returned: lock. */
-			prereq->op = (db_lockop_t)(*jenv)->GetIntField(
+			prereq->timeout = (db_timeout_t)(*jenv)->GetIntField(
 			    jenv, jlockreq, lockreq_timeout_fid);
 			/* FALLTHROUGH */
 		case DB_LOCK_GET:
@@ -1146,7 +1146,7 @@ JAVA_TYPEMAP(struct __db_repmgr_sites,
 %typemap(out) struct __db_repmgr_sites
 {
 	int i, len;
-	jobject jrep_addr, jrep_info;
+	jobject jrep_addr, jrep_info, jrep_lsn;
 
 	len = $1.nsites;
 	$result = (*jenv)->NewObjectArray(jenv, (jsize)len, repmgr_siteinfo_class,
@@ -1161,9 +1161,13 @@ JAVA_TYPEMAP(struct __db_repmgr_sites,
 		    rephost_class, rephost_construct, addr_host, $1.sites[i].port);
 		if (jrep_addr == NULL)
 			return $null; /* An exception is pending */
+		jrep_lsn = (*jenv)->NewObject(jenv, dblsn_class, dblsn_construct,
+			$1.sites[i].max_ack_lsn.file, $1.sites[i].max_ack_lsn.offset);
+		if (jrep_lsn == NULL)
+			return $null; /* An exception is pending */
 
 		jrep_info = (*jenv)->NewObject(jenv,
-		    repmgr_siteinfo_class, repmgr_siteinfo_construct, jrep_addr, $1.sites[i].eid);
+		    repmgr_siteinfo_class, repmgr_siteinfo_construct, jrep_addr, jrep_lsn, $1.sites[i].eid);
 		if (jrep_info == NULL)
 			return $null; /* An exception is pending */
 		(*jenv)->SetIntField(jenv, jrep_info, repmgr_siteinfo_flags_fid,

@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.40</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;lock_get()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;lock_get()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="lockdetect.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="lockget"></a>DB_ENV-&gt;lock_get()</h2>
+            <h2 class="title" style="clear: both"><a id="lockget"></a>
+        <span>DB_ENV-&gt;lock_get()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -60,7 +66,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140711176499344"></a>Parameters</h3>
+              <h3 class="title"><a id="idm139753800337088"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -68,7 +74,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711176506752"></a>locker</h4>
+                <h4 class="title"><a id="idm139753800370320"></a>locker</h4>
               </div>
             </div>
           </div>
@@ -82,7 +88,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711176541792"></a>flags</h4>
+                <h4 class="title"><a id="idm139753800306080"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -109,7 +115,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711176467200"></a>object</h4>
+                <h4 class="title"><a id="idm139753800344944"></a>object</h4>
               </div>
             </div>
           </div>
@@ -128,7 +134,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711176466704"></a>lock_mode</h4>
+                <h4 class="title"><a id="idm139753800344752"></a>lock_mode</h4>
               </div>
             </div>
           </div>
@@ -183,7 +189,10 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
             </ul>
           </div>
           <p>
-                    See <a class="xref" href="envset_lk_conflicts.html" title="DB_ENV-&gt;set_lk_conflicts()">DB_ENV-&gt;set_lk_conflicts()</a> 
+                    See <a class="xref" href="envset_lk_conflicts.html" title="DB_ENV-&gt;set_lk_conflicts()">
+        <span>DB_ENV-&gt;set_lk_conflicts()</span>
+        
+    </a> 
                     and <a href="../../programmer_reference/lock_stdmode.html" class="olink">Standard Lock Modes</a>
                     for more information on the lock conflict matrix.
             </p>
@@ -192,7 +201,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711176454496"></a>lock</h4>
+                <h4 class="title"><a id="idm139753800286208"></a>lock</h4>
               </div>
             </div>
           </div>
@@ -206,7 +215,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140711176470560"></a>Errors</h3>
+              <h3 class="title"><a id="idm139753800348816"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -222,7 +231,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711176451584"></a>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm139753800270288"></a>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -235,7 +244,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711176461184"></a>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm139753800339264"></a>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -247,7 +256,10 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">DB-&gt;set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">
+        <span>DB-&gt;set_lk_exclusive()</span>
+        
+    </a>
                 for more information.
             </p>
         </div>
@@ -255,7 +267,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711176548896"></a>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm139753800294176"></a>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -269,7 +281,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711176461040"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm139753800285248"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -281,7 +293,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711176478176"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm139753800295552"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -294,7 +306,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711176439792"></a>ENOMEM</h4>
+                <h4 class="title"><a id="idm139753800270016"></a>ENOMEM</h4>
               </div>
             </div>
           </div>
@@ -307,7 +319,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140711176441424"></a>Class</h3>
+              <h3 class="title"><a id="idm139753800272096"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -320,7 +332,7 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140711176465552"></a>See Also</h3>
+              <h3 class="title"><a id="idm139753800318096"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -340,11 +352,17 @@ DB_ENV-&gt;lock_get(DB_ENV *env, u_int32_t locker,
           <td width="40%" align="right"> <a accesskey="n" href="lockid.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;lock_detect() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;lock_detect()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;lock_id()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;lock_id()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

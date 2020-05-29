@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 1996, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 1996, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -12,7 +12,7 @@
 
 #ifndef lint
 static const char copyright[] =
-    "Copyright (c) 1996, 2017 Oracle and/or its affiliates.  All rights reserved.\n";
+    "Copyright (c) 1996, 2020 Oracle and/or its affiliates.  All rights reserved.\n";
 #endif
 
 void db_recover_feedback __P((DB_ENV *, int, int));
@@ -65,8 +65,8 @@ main(argc, argv)
 			break;
 		case 'P':
 			if (__db_util_arg_password(progname,
- 			    optarg, &passwd) != 0)
-  				goto err;
+			    optarg, &passwd) != 0)
+				goto err;
 			break;
 		case 'r':
 			region_dir = optarg;

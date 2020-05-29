@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.40</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_STREAM-&gt;write()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_STREAM-&gt;write()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbstream_size.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbstream_write"></a>DB_STREAM-&gt;write()</h2>
+            <h2 class="title" style="clear: both"><a id="dbstream_write"></a>
+        <span>DB_STREAM-&gt;write()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -58,10 +64,16 @@ DB_STREAM-&gt;write(DB_STREAM *dbs, DBT *data, db_off_t offset,
          overwrite existing data, instead of shifting it. If this method
          writes data to the end of the external file, the data is appended to
          the existing external file. You can determine how large an external
-         file is using <a class="xref" href="dbstream_size.html" title="DB_STREAM-&gt;size()">DB_STREAM-&gt;size()</a>.
+         file is using <a class="xref" href="dbstream_size.html" title="DB_STREAM-&gt;size()">
+        <span>DB_STREAM-&gt;size()</span>
+        
+    </a>.
      </p>
       <p>
-         To open a stream, use <a class="xref" href="dbstream.html" title="DBC-&gt;db_stream()">DBC-&gt;db_stream()</a>.
+         To open a stream, use <a class="xref" href="dbstream.html" title="DBC-&gt;db_stream()">
+        <span>DBC-&gt;db_stream()</span>
+        
+    </a>.
      </p>
       <p>
          Unless otherwise specified, the
@@ -76,7 +88,7 @@ DB_STREAM-&gt;write(DB_STREAM *dbs, DBT *data, db_off_t offset,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140711171742992"></a>Parameters</h3>
+              <h3 class="title"><a id="idm139753795459440"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -84,7 +96,7 @@ DB_STREAM-&gt;write(DB_STREAM *dbs, DBT *data, db_off_t offset,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711171736640"></a>data</h4>
+                <h4 class="title"><a id="idm139753795430528"></a>data</h4>
               </div>
             </div>
           </div>
@@ -100,7 +112,7 @@ DB_STREAM-&gt;write(DB_STREAM *dbs, DBT *data, db_off_t offset,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711171749216"></a>offset</h4>
+                <h4 class="title"><a id="idm139753795419504"></a>offset</h4>
               </div>
             </div>
           </div>
@@ -114,7 +126,7 @@ DB_STREAM-&gt;write(DB_STREAM *dbs, DBT *data, db_off_t offset,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711171741088"></a>flags</h4>
+                <h4 class="title"><a id="idm139753795460832"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -132,9 +144,15 @@ DB_STREAM-&gt;write(DB_STREAM *dbs, DBT *data, db_off_t offset,
                          A sync to disk operation is performed on the
                          stream at the end of the write operation. By
                          default, the sync is performed only when the
-                         stream is closed using <a class="xref" href="dbstream_close.html" title="DB_STREAM-&gt;close()">DB_STREAM-&gt;close()</a>. Note that
+                         stream is closed using <a class="xref" href="dbstream_close.html" title="DB_STREAM-&gt;close()">
+        <span>DB_STREAM-&gt;close()</span>
+        
+    </a>. Note that
                          this flag can also be specified when the stream is
-                         created using <a class="xref" href="dbstream.html" title="DBC-&gt;db_stream()">DBC-&gt;db_stream()</a>, in which case the sync
+                         created using <a class="xref" href="dbstream.html" title="DBC-&gt;db_stream()">
+        <span>DBC-&gt;db_stream()</span>
+        
+    </a>, in which case the sync
                          behavior becomes the default behavior for this
                          stream instance.
                     </p>
@@ -147,7 +165,7 @@ DB_STREAM-&gt;write(DB_STREAM *dbs, DBT *data, db_off_t offset,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140711171710528"></a>Errors</h3>
+              <h3 class="title"><a id="idm139753795402656"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -163,7 +181,7 @@ DB_STREAM-&gt;write(DB_STREAM *dbs, DBT *data, db_off_t offset,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711171783952"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm139753795411840"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -179,7 +197,7 @@ DB_STREAM-&gt;write(DB_STREAM *dbs, DBT *data, db_off_t offset,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140711171698832"></a>Class</h3>
+              <h3 class="title"><a id="idm139753795390704"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -191,7 +209,7 @@ DB_STREAM-&gt;write(DB_STREAM *dbs, DBT *data, db_off_t offset,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140711171696256"></a>See Also</h3>
+              <h3 class="title"><a id="idm139753795388128"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -211,11 +229,17 @@ DB_STREAM-&gt;write(DB_STREAM *dbs, DBT *data, db_off_t offset,
           <td width="40%" align="right"> <a accesskey="n" href="envget_blob_dir.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_STREAM-&gt;size() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_STREAM-&gt;size()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;get_ext_file_dir()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;get_ext_file_dir()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

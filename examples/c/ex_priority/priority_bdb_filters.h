@@ -1,7 +1,7 @@
 /*
-* See the file LICENSE for redistribution information.
+* Copyright (c) 2015, 2020 Oracle and/or its affiliates.  All rights reserved.
 *
-* Copyright (c) 2015, 2017 Oracle and/or its affiliates.  All rights reserved.
+* See the file EXAMPLES-LICENSE for license information.
 *
 */
 

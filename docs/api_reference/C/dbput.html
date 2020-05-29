@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.40</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;put()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;put()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbopen.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbput"></a>DB-&gt;put()</h2>
+            <h2 class="title" style="clear: both"><a id="dbput"></a>
+        <span>DB-&gt;put()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -68,7 +74,7 @@ DB-&gt;put(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140711191541280"></a>Parameters</h3>
+              <h3 class="title"><a id="idm139753805403968"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -76,7 +82,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711191543008"></a>txnid</h4>
+                <h4 class="title"><a id="idm139753805403584"></a>txnid</h4>
               </div>
             </div>
           </div>
@@ -84,11 +90,17 @@ DB-&gt;put(DB *db,
                   If the operation is part of an application-specified
                   transaction, the <span class="bold"><strong>txnid</strong></span>
                   parameter is a transaction handle returned from 
-                  <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a>; if
+                  <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a>; if
                   the operation is part of a Berkeley DB Concurrent Data
                   Store group, the <span class="bold"><strong>txnid</strong></span>
                   parameter is a handle returned from 
-                  <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">DB_ENV-&gt;cdsgroup_begin()</a>; 
+                  <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">
+        <span>DB_ENV-&gt;cdsgroup_begin()</span>
+        
+    </a>; 
                   otherwise NULL.  If no transaction handle is specified,
                   but the operation occurs in a transactional database, the
                   operation will be implicitly transaction protected.
@@ -98,7 +110,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711192916208"></a>key</h4>
+                <h4 class="title"><a id="idm139753805512896"></a>key</h4>
               </div>
             </div>
           </div>
@@ -118,7 +130,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711192836960"></a>data</h4>
+                <h4 class="title"><a id="idm139753805519648"></a>data</h4>
               </div>
             </div>
           </div>
@@ -130,7 +142,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711195497136"></a>flags</h4>
+                <h4 class="title"><a id="idm139753805436576"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -245,7 +257,10 @@ DB-&gt;put(DB *db,
                 <p>
                         A successful bulk operation is logically equivalent
                         to a loop through each key/data pair, performing a
-                        <a class="xref" href="dbput.html" title="DB-&gt;put()">DB-&gt;put()</a> for each one.
+                        <a class="xref" href="dbput.html" title="DB-&gt;put()">
+        <span>DB-&gt;put()</span>
+        
+    </a> for each one.
                     </p>
                 <p>
                         See 
@@ -333,7 +348,7 @@ DB-&gt;put(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140711183061456"></a>Errors</h3>
+              <h3 class="title"><a id="idm139753805541648"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -349,7 +364,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711189270912"></a>DB_FOREIGN_CONFLICT</h4>
+                <h4 class="title"><a id="idm139753805351248"></a>DB_FOREIGN_CONFLICT</h4>
               </div>
             </div>
           </div>
@@ -383,7 +398,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711188297568"></a>DB_HEAP_FULL</h4>
+                <h4 class="title"><a id="idm139753805325856"></a>DB_HEAP_FULL</h4>
               </div>
             </div>
           </div>
@@ -391,7 +406,10 @@ DB-&gt;put(DB *db,
                 An attempt was made to add or update a record in a Heap
                 database. However, the size of the database was constrained
                 using the
-                <a class="xref" href="dbset_heapsize.html" title="DB-&gt;set_heapsize()">DB-&gt;set_heapsize()</a>
+                <a class="xref" href="dbset_heapsize.html" title="DB-&gt;set_heapsize()">
+        <span>DB-&gt;set_heapsize()</span>
+        
+    </a>
                 method, and that limit has been reached.
             </p>
         </div>
@@ -399,7 +417,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711189948048"></a>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm139753805369600"></a>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -412,7 +430,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711189546688"></a>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm139753805413552"></a>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -424,7 +442,10 @@ DB-&gt;put(DB *db,
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">DB-&gt;set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">
+        <span>DB-&gt;set_lk_exclusive()</span>
+        
+    </a>
                 for more information.
             </p>
         </div>
@@ -432,7 +453,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711190613808"></a>  DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm139753805327808"></a>  DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -452,7 +473,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711190771424"></a>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm139753805327312"></a>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -464,7 +485,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711190841936"></a>EACCES</h4>
+                <h4 class="title"><a id="idm139753805295360"></a>EACCES</h4>
               </div>
             </div>
           </div>
@@ -476,7 +497,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711190685920"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm139753805294720"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -494,7 +515,7 @@ DB-&gt;put(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140711190522400"></a>ENOSPC</h4>
+                <h4 class="title"><a id="idm139753805293584"></a>ENOSPC</h4>
               </div>
             </div>
           </div>
@@ -507,7 +528,7 @@ DB-&gt;put(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140711190077664"></a>Class</h3>
+              <h3 class="title"><a id="idm139753805365856"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -519,7 +540,7 @@ DB-&gt;put(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140711182778176"></a>See Also</h3>
+              <h3 class="title"><a id="idm139753805359504"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -539,11 +560,17 @@ DB-&gt;put(DB *db,
           <td width="40%" align="right"> <a accesskey="n" href="dbremove.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;open() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;open()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;remove()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;remove()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

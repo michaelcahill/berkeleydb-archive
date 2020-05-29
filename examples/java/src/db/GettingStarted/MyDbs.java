@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 2004, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 2004, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file EXAMPLES-LICENSE for license information.
  *
- * $Id$ 
  */
 
 // File: MyDbs.java
@@ -97,7 +96,7 @@ public class MyDbs {
         // on the item name. So, instantiate the appropriate key creator
         // and open a secondary database.
         ItemNameKeyCreator keyCreator =
-            new ItemNameKeyCreator(new InventoryBinding());
+            new ItemNameKeyCreator<>(new InventoryBinding());
 
 
         // Set up additional secondary properties

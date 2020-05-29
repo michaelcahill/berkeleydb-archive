@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 1996, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 1996, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -14,7 +14,7 @@
 
 #ifndef lint
 static const char copyright[] =
-    "Copyright (c) 1996, 2017 Oracle and/or its affiliates.  All rights reserved.\n";
+    "Copyright (c) 1996, 2020 Oracle and/or its affiliates.  All rights reserved.\n";
 #endif
 
 int	 db_dump_db_init __P((DB_ENV *, char *, int, u_int32_t, int *));
@@ -70,7 +70,7 @@ db_dump_main(argc, argv)
 	private = 0;
 	blob_dir = data_len = dbname = dopt = vopt = filename = home = passwd = NULL;
 	__db_getopt_reset = 1;
-	while ((ch = getopt(argc, argv, "b:d:D:f:F:h:klL:m:NpP:rRs:Vv:")) != EOF)
+	while ((ch = getopt(argc, argv, "b:d:D:f:F:h:klL:m:NpP:rRS:s:Vv:")) != EOF)
 		switch (ch) {
 		case 'b':
 			if (blob_dir!= NULL) {
@@ -89,7 +89,7 @@ db_dump_main(argc, argv)
 			break;
 		case 'f':
 			if (freopen(optarg, "w", stdout) == NULL) {
-				fprintf(stderr, DB_STR_A("5108",
+				fprintf(stderr, DB_STR_A("5072",
 				    "%s: %s: reopen: %s\n", "%s %s %s\n"),
 				    progname, optarg, strerror(errno));
 				goto err;
@@ -119,8 +119,8 @@ db_dump_main(argc, argv)
 			break;
 		case 'P':
 			if (__db_util_arg_password(progname, 
- 			    optarg, &passwd) != 0)
-  				goto err;
+			    optarg, &passwd) != 0)
+				goto err;
 			break;
 		case 'p':
 			pflag = 1;
@@ -136,7 +136,7 @@ db_dump_main(argc, argv)
 		case 'r':
 			rflag = 1;
 			break;
-		case 'v':
+		case 'v': case 'S':
 			vopt = optarg;
 			switch(*vopt) {
 			case 'o':
@@ -332,7 +332,7 @@ err:		exitval = 1;
 	}
 done:	if (dbp != NULL && (ret = dbp->close(dbp, 0)) != 0) {
 		exitval = 1;
-		dbenv->err(dbenv, ret, DB_STR("5117", "close"));
+		dbenv->err(dbenv, ret, DB_STR("0164", "close"));
 	}
 	if (dbenv != NULL && (ret = dbenv->close(dbenv, 0)) != 0) {
 		exitval = 1;
@@ -530,7 +530,7 @@ db_dump_usage()
 	(void)fprintf(stderr, "usage: %s [-bklNprRV]\n\t%s%s\n",
 	    progname,
 	    "[-b blob_dir] [-d ahr] [-f output] [-h home] ",
-	    "[-P password] [-s database] [-v ov] db_file");
+	    "[-P password] [-s database] [-S ov] db_file");
 	(void)fprintf(stderr, "usage: %s [-kNpV] %s\n",
 	    progname,
 	    "[-d ahr] [-D data_len] [-f output] [-h home] [-v ov] -m database");

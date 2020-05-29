@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.40</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -41,7 +41,6 @@
                  environment.  This value is used by Berkeley DB  to estimate how much
                  space to allocate for various lock-table data structures.  
                  When using the DB, the default value is 1,000 lockers.
-                 When using the BDB SQL interface, the default value is 2,000 lockers.
             </p>
       <p>
                  The syntax of this parameter in the <a href="../../programmer_reference/env_db_config.html#env_db_config.DB_CONFIG" class="olink">DB_CONFIG</a> file is a
@@ -54,7 +53,10 @@
                  changed, it is ignored. To change this value after the environment
                  has been created, re-create your environment.
             </p>
-      <p>For more information, see <a class="xref" href="envset_lk_max_lockers.html" title="DbEnv::set_lk_max_lockers()">DbEnv::set_lk_max_lockers()</a>. </p>
+      <p>For more information, see <a class="xref" href="envset_lk_max_lockers.html" title="DbEnv::set_lk_max_lockers()">
+        
+        <span>DbEnv::set_lk_max_lockers()</span>
+    </a>. </p>
     </div>
     <div class="navfooter">
       <hr />

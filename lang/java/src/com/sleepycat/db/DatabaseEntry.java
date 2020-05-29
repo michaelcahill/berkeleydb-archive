@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 2002, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 2002, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -214,6 +214,7 @@ public class DatabaseEntry {
     @param externalFile
     Whether this DatabaseEntry is configured to be stored as an external file.
     */
+	@Deprecated
     public void setBlob(final boolean externalFile) {
         setExternalFile(externalFile);
     }
@@ -224,6 +225,7 @@ public class DatabaseEntry {
     @return
     Whether this DatabaseEntry is configured to be stored as an external file.
     */
+	@Deprecated
     public boolean getBlob() {
         return getExternalFile();
     }
@@ -575,14 +577,12 @@ public class DatabaseEntry {
     }
 
     /**
-Return the record number encoded in this entry's buffer.
-<p>
-This method may be called at any time during the life of the application.
-<p>
-@return
-The record number encoded in this entry's buffer.
-     *
-    @return the decoded record number.
+	Return the record number encoded in this entry's buffer.
+	<p>
+	This method may be called at any time during the life of the application.
+	<p>
+	@return
+	The record number encoded in this entry's buffer.
     */
     public int getRecordNumber() {
         return DbUtil.array2int(data, offset);

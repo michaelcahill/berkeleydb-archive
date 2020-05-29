@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 2000, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 2000, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -381,8 +381,10 @@ __db_verify(dbp, ip, name, subdb, handle, callback, lp, rp, flags)
 		    vdp, name, 0, lp, rp, flags)) != 0) {
 			if (t_ret == DB_VERIFY_BAD)
 				isbad = 1;
-			else
-				goto err;
+			else {
+			    ret = t_ret;
+			    goto err;
+			}
 		}
 
 	/*
@@ -771,9 +773,10 @@ __db_vrfy_walkpages(dbp, vdp, handle, callback, flags)
 		 */
 		if ((t_ret = __memp_fget(mpf, &i,
 		    vdp->thread_info, NULL, 0, &h)) != 0) {
-			if (dbp->type == DB_HASH ||
+			if ((dbp->type == DB_HASH ||
 			    (dbp->type == DB_QUEUE &&
-			    F_ISSET(dbp, DB_AM_INMEM))) {
+			    F_ISSET(dbp, DB_AM_INMEM))) &&
+			    t_ret != DB_RUNRECOVERY) {
 				if ((t_ret =
 				    __db_vrfy_getpageinfo(vdp, i, &pip)) != 0)
 					goto err1;
@@ -896,6 +899,8 @@ err1:			if (ret == 0)
 			 */
 			if (ret == DB_VERIFY_BAD)
 				isbad = 1;
+			else if (ret == DB_VERIFY_FATAL)
+				return (DB_VERIFY_FATAL);
 			else if (ret != 0)
 				goto err;
 
@@ -943,6 +948,8 @@ err:		if (h != NULL && (t_ret = __memp_fput(mpf,
 			return (ret == 0 ? t_ret : ret);
 	}
 
+	if (ret == DB_PAGE_NOTFOUND && isbad == 1)
+		ret = 0;
 	return ((isbad == 1 && ret == 0) ? DB_VERIFY_BAD : ret);
 }
 
@@ -1116,7 +1123,7 @@ __db_vrfy_structure(dbp, vdp, dbname, meta_pgno, lp, rp, flags)
 		    && i <= vdp->meta_last_pgno
 #endif
 		    ) {
-			EPRINT((env, DB_STR_A("0535",
+			EPRINT((env, DB_STR_A("0502",
 			    "Page %lu: totally zeroed page", "%lu"),
 			    (u_long)i));
 			isbad = 1;
@@ -1239,7 +1246,7 @@ __db_vrfy_common(dbp, vdp, h, pgno, flags)
 	case P_HEAPMETA:
 		break;
 	default:
-		EPRINT((env, DB_STR_A("0537", "Page %lu: bad page type %lu",
+		EPRINT((env, DB_STR_A("0528", "Page %lu: bad page type %lu",
 		    "%lu %lu"), (u_long)pgno, (u_long)h->type));
 		ret = DB_VERIFY_BAD;
 	}
@@ -1336,7 +1343,7 @@ __db_vrfy_datapage(dbp, vdp, h, pgno, flags)
 		}
 		if (!IS_VALID_PGNO(NEXT_PGNO(h)) || NEXT_PGNO(h) == pip->pgno) {
 			isbad = 1;
-			EPRINT((env, DB_STR_A("0540",
+			EPRINT((env, DB_STR_A("0538",
 			    "Page %lu: invalid next_pgno %lu", "%lu %lu"),
 			    (u_long)pip->pgno, (u_long)NEXT_PGNO(h)));
 		}
@@ -1528,7 +1535,7 @@ __db_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	if (meta->metaflags != 0) {
 		if (FLD_ISSET(meta->metaflags, ~DBMETA_ALLFLAGS)) {
 			isbad = 1;
-			EPRINT((env, DB_STR_A("0549",
+			EPRINT((env, DB_STR_A("0529",
 			    "Page %lu: bad meta-data flags value %#lx",
 			    "%lu %#lx"), (u_long)PGNO_BASE_MD,
 			    (u_long)meta->metaflags));
@@ -1579,7 +1586,7 @@ __db_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	if (pgno == PGNO_BASE_MD &&
 	    dbtype != DB_QUEUE && meta->last_pgno != vdp->last_pgno) {
 #ifdef HAVE_FTRUNCATE
-		isbad = 1;
+		ret = DB_VERIFY_FATAL;
 		EPRINT((env, DB_STR_A("0552",
 		    "Page %lu: last_pgno is not correct: %lu != %lu",
 		    "%lu %lu %lu"), (u_long)pgno,
@@ -1620,7 +1627,11 @@ __db_vrfy_freelist(dbp, vdp, meta, flags)
 
 	env = dbp->env;
 	pgset = vdp->pgset;
-	DB_ASSERT(env, pgset != NULL);
+	if (pgset == NULL) {
+		EPRINT((env, DB_STR("5543",
+			"Error, database contains no visible pages.")));
+		return (DB_RUNRECOVERY);
+	}
 
 	if ((ret = __db_vrfy_getpageinfo(vdp, meta, &pip)) != 0)
 		return (ret);
@@ -1941,6 +1952,13 @@ __db_vrfy_orderchkonly(dbp, vdp, name, subdb, flags)
 			goto err;
 		for (bucket = 0; bucket <= hmeta->max_bucket; bucket++) {
 			pgno = BS_TO_PAGE(bucket, hmeta->spares);
+			if (!IS_VALID_PGNO(pgno)) {
+				EPRINT((env, DB_STR_A("5502",
+				"Page %lu: invalid pgno found in hash bucket",
+					"%lu"), (u_long)pgno));
+				ret = DB_VERIFY_BAD;
+				continue;
+			}
 			while (pgno != PGNO_INVALID) {
 				if ((ret = __memp_fget(mpf, &pgno,
 				    vdp->thread_info, NULL, 0, &currpg)) != 0)
@@ -2005,7 +2023,8 @@ __db_salvage_pg(dbp, vdp, pgno, h, handle, callback, flags)
 	int keyflag, ret, t_ret;
 
 	env = dbp->env;
-	DB_ASSERT(env, LF_ISSET(DB_SALVAGE));
+	if (!LF_ISSET(DB_SALVAGE))
+		return (EINVAL);
 
 	/*
 	 * !!!
@@ -2138,8 +2157,9 @@ __db_salvage_leaf(dbp, vdp, pgno, h, handle, callback, flags)
 	int (*callback) __P((void *, const void *));
 	u_int32_t flags;
 {
-
-	DB_ASSERT(dbp->env, LF_ISSET(DB_SALVAGE));
+	
+	if (!LF_ISSET(DB_SALVAGE))
+		return (EINVAL);
 
 	/* If we got this page in the subdb pass, we can safely skip it. */
 	if (__db_salvage_isdone(vdp, pgno))
@@ -2233,8 +2253,8 @@ __db_salvage_unknowns(dbp, vdp, handle, callback, flags)
 				ret = t_ret;
 			break;
 		case SALVAGE_OVERFLOW:
-			DB_ASSERT(env, 0);	/* Shouldn't ever happen. */
-			break;
+			EPRINT((env, DB_STR("5544", "Invalid page type to salvage.")));
+			return (EINVAL);
 		case SALVAGE_HASH:
 			if ((t_ret = __ham_salvage(dbp, vdp,
 			    pgno, h, handle, callback, flags)) != 0 && ret == 0)
@@ -2247,8 +2267,8 @@ __db_salvage_unknowns(dbp, vdp, handle, callback, flags)
 			 * Shouldn't happen, but if it does, just do what the
 			 * nice man says.
 			 */
-			DB_ASSERT(env, 0);
-			break;
+			EPRINT((env, DB_STR("5545", "Invalid page type to salvage.")));
+			return (EINVAL);
 		}
 		if ((t_ret = __memp_fput(mpf,
 		    vdp->thread_info, h, dbp->priority)) != 0 && ret == 0)
@@ -2294,8 +2314,8 @@ __db_salvage_unknowns(dbp, vdp, handle, callback, flags)
 					ret = t_ret;
 			break;
 		default:
-			DB_ASSERT(env, 0);	/* Shouldn't ever happen. */
-			break;
+			EPRINT((env, DB_STR("5546", "Invalid page type to salvage.")));
+			return (EINVAL);
 		}
 		if ((t_ret = __memp_fput(mpf,
 		    vdp->thread_info, h, dbp->priority)) != 0 && ret == 0)
@@ -2352,7 +2372,10 @@ __db_vrfy_inpitem(dbp, h, pgno, i, is_btree, flags, himarkp, offsetp)
 
 	env = dbp->env;
 
-	DB_ASSERT(env, himarkp != NULL);
+	if (himarkp == NULL) {
+		__db_msg(env, "Page %lu index has no end.", pgno);
+		return (DB_VERIFY_FATAL);
+	}
 	inp = P_INP(dbp, h);
 
 	/*
@@ -2774,7 +2797,11 @@ __db_salvage_subdbpg(dbp, vdp, master, handle, callback, flags)
 					goto err;
 				ovfl_bufsz = bkkey->len + 1;
 			}
-			DB_ASSERT(env, subdbname != NULL);
+			if (subdbname == NULL) {
+				EPRINT((env, DB_STR("5547", "Subdatabase cannot be null.")));
+				ret = EINVAL;
+				goto err;
+			}
 			memcpy(subdbname, bkkey->data, bkkey->len);
 			subdbname[bkkey->len] = '\0';
 		}

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 2002, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 2002, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -153,6 +153,7 @@ True if the {@link com.sleepycat.db.Environment#openDatabase Environment.openDat
     @param dir
     The path of a directory where external files are stored
     */
+	@Deprecated
     public void setBlobDir(java.io.File dir) {
         setExternalFileDir(dir);
     }
@@ -162,6 +163,7 @@ True if the {@link com.sleepycat.db.Environment#openDatabase Environment.openDat
     @return
     The path of a directory where external files are stored
     */
+	@Deprecated
     public java.io.File getBlobDir() {
         return getExternalFileDir();
     }
@@ -173,6 +175,7 @@ True if the {@link com.sleepycat.db.Environment#openDatabase Environment.openDat
     stored as an external file. If 0, external files will be never used by the
     database.
     */
+	@Deprecated
     public void setBlobThreshold(int value) {
         setExternalFileThreshold(value);
     }
@@ -183,6 +186,7 @@ True if the {@link com.sleepycat.db.Environment#openDatabase Environment.openDat
     The threshold value in bytes beyond which data items are
     stored as external files. If 0, external files are not used by the database.
     */
+	@Deprecated
     public int getBlobThreshold() {
         return getExternalFileThreshold();
     }
@@ -577,6 +581,7 @@ True if the database is configured to support read uncommitted.
     @deprecated This has been replaced by {@link #setReadUncommitted} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public void setDirtyRead(final boolean dirtyRead) {
         setReadUncommitted(dirtyRead);
     }
@@ -592,6 +597,7 @@ True if the database is configured to support read uncommitted.
     @deprecated This has been replaced by {@link #getReadUncommitted} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public boolean getDirtyRead() {
         return getReadUncommitted();
     }
@@ -635,7 +641,9 @@ True if the database is configured to support read uncommitted.
     <p>
     Because databases opened within environments use the password
     specified to the environment, it is an error to attempt to set a
-    password in a database created within an environment.
+    password in a database created within an environment.  To encrypt
+    a database within an encrypted environment use
+    {@link com.sleepycat.db.DatabaseConfig#enableEncrypted DatabaseConfig.enableEncrypted}
     <p>
     Berkeley DB uses the Rijndael/AES (also known as the Advanced
     Encryption Standard and Federal Information Processing
@@ -644,6 +652,19 @@ True if the database is configured to support read uncommitted.
     */
     public void setEncrypted(final String password) {
         this.password = password;
+    }
+    
+    /**
+     * Enables encryption when the environment is also encrypted, see
+     * {@link com.sleepycat.db.EnvironmentConfig#setEncrypted EnvironmentConfig.setEncrypted}
+     * <p>
+     * To encrypt a database that does not use an environment, see
+     * {@link com.sleepycat.db.DatabaseConfig#setEncrypted DatabaseConfig.setEncrypted}
+     * @param enable encryption on this database.
+     */
+    public void enableEncrypted(final boolean enable) {
+    	this.encrypted = enable;
+    	this.checksum = enable;
     }
 
     /**
@@ -655,7 +676,7 @@ This method may be called at any time during the life of the application.
 True if the database has been configured to perform encryption.
     */
     public boolean getEncrypted() {
-        return (password != null);
+        return (password != null || encrypted);
     }
 
     /**
@@ -2474,7 +2495,12 @@ database has been opened.
         dbFlags |= transactionNotDurable ? DbConstants.DB_TXN_NOT_DURABLE : 0;
         if (!db.getPrivateDbEnv())
                 dbFlags |= (password != null) ? DbConstants.DB_ENCRYPT : 0;
+        dbFlags |= encrypted ? DbConstants.DB_ENCRYPT : 0;
         return dbFlags;
+    }
+    
+    public String getPassword() {
+    	return password;
     }
 
     /* package */
@@ -2596,6 +2622,7 @@ database has been opened.
 
         final int dbFlags = db.get_flags();
         checksum = (dbFlags & DbConstants.DB_CHKSUM) != 0;
+        encrypted = (dbFlags & DbConstants.DB_ENCRYPT) != 0; 
         btreeRecordNumbers = (dbFlags & DbConstants.DB_RECNUM) != 0;
         queueInOrder = (dbFlags & DbConstants.DB_INORDER) != 0;
         renumbering = (dbFlags & DbConstants.DB_RENUMBER) != 0;

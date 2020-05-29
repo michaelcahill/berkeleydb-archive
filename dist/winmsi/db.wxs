@@ -7,7 +7,7 @@
     <!-- Let WiX generate guid for us. -->
     <Package Id='*'
      Keywords="Embedded Database Datastore"
-     Description='@PRODUCT_NAME@ @PROD_WIX_VERSION@'
+     Description='@PRODUCT_NAME@'
      Comments='includes sources and binaries' InstallerVersion='300'
      Compressed='yes' Platform="@WIN_BUILD@"
      Languages="1033" SummaryCodepage="1252" />
@@ -44,7 +44,7 @@
       <Directory Id="@PROGRAM_FILES_FOLDER@" Name=".">
         <Directory Id="OracleFolder" Name="Oracle">
           <Directory Id="INSTALLDIR"
-                   Name="@PRODUCT_NAME@ @PROD_WIX_VERSION@">
+                   Name="@PRODUCT_NAME@">
             <Directory Id="INSTALLUTIL" Name="installutil">
             </Directory>
 	  </Directory> <!-- installdir -->
@@ -52,7 +52,7 @@
       </Directory> <!-- ProgramFilesFolder -->
       <Directory Id="ProgramMenuFolder" Name=".">
         <Directory Id="BerkeleyDbMenu"
-         Name="@PRODUCT_NAME@ @PROD_WIX_VERSION@" />
+         Name="@PRODUCT_NAME@" />
       </Directory>
     </Directory>
     <!-- template for location of Visual Studio Merge Modules.  This
@@ -76,9 +76,8 @@
 	o C# runtime
 	o C/C++ devo
 	o examples
-  o Thrift server/client
     -->
-    <Feature Id="Complete" Title="@PRODUCT_NAME@ @PROD_WIX_VERSION@" Description="Complete installation"
+    <Feature Id="Complete" Title="@PRODUCT_NAME@" Description="Complete installation"
 	      Display="expand" Level="1" ConfigurableDirectory="INSTALLDIR">
 
     <Feature Id="AlwaysInstall" Title="Always Install"
@@ -111,19 +110,10 @@
 	<ComponentGroupRef Id="group_csharp"/>
 	<ComponentGroupRef Id="group_runtime"/>
     </Feature>
-    <Feature Id="SQLRuntime" Title="SQL runtime and development files" Description="Libraries and header files required for development and running of applications using BDB's SQL interface.  This option includes the Core Runtime." AllowAdvertise="no" Display="expand" Level="1" InstallDefault="source" ConfigurableDirectory="INSTALLDIR">
-	<ComponentGroupRef Id="group_sql"/>
-	<ComponentGroupRef Id="group_runtime"/>
-    </Feature>
     <Feature Id="Examples" Title="Examples (all languages)" Description="@PRODUCT_NAME@ examples for all language interfaces." AllowAdvertise="no" Display="expand" Level="1" InstallDefault="source" ConfigurableDirectory="INSTALLDIR">
 	<ComponentGroupRef Id="group_examples"/>
 	<ComponentGroupRef Id="group_devo"/>
 	<ComponentGroupRef Id="group_runtime"/>
-    </Feature>
-    <Feature Id="Thrift" Title="Server/Client runtime and configuration files" Description="Thrift .jar and configuration files required for running a BDB Server and Client.  This option includes the Core Runtime and Java Runtime." AllowAdvertise="no" Display="expand" Level="1" InstallDefault="source" ConfigurableDirectory="INSTALLDIR">
-      <ComponentGroupRef Id="group_thrift"/>
-      <ComponentGroupRef Id="group_java"/>
-      <ComponentGroupRef Id="group_runtime"/>
     </Feature>
     </Feature> <!-- end of all Features -->
 

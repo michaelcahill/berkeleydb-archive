@@ -216,12 +216,12 @@ AC_ARG_ENABLE(java,
 	[db_cv_java="$enable_java"], [db_cv_java="no"])
 AC_MSG_RESULT($db_cv_java)
 
-AC_MSG_CHECKING(if --enable-server option specified)
-AC_ARG_ENABLE(server,
-	[AC_HELP_STRING([--enable-server],
-			[Install Thrift Server and Client Driver API.])],
-	[db_cv_server="$enable_server"], [db_cv_server="no"])
-AC_MSG_RESULT($db_cv_server)
+AC_MSG_CHECKING(if --enable-gui option specified)
+AC_ARG_ENABLE(gui,
+	[AC_HELP_STRING([--enable-gui],
+			[Build the BDB Graphical User Interface.])],
+	[db_cv_gui="$enable_gui"], [db_cv_gui="no"])
+AC_MSG_RESULT($db_cv_gui)
 
 AC_MSG_CHECKING(if --enable-mingw option specified)
 AC_ARG_ENABLE(mingw,
@@ -262,52 +262,6 @@ AC_ARG_ENABLE(slices,
 			[Build in sliced environment support.])],
 	[db_cv_slices="$enable_slices"], [db_cv_slices="no"])
 AC_MSG_RESULT($db_cv_slices)
-
-AC_MSG_CHECKING(if --enable-sql option specified)
-AC_ARG_ENABLE(sql,
-	[AC_HELP_STRING([--enable-sql],
-			[Build the SQL API.])],
-	[db_cv_sql="$enable_sql"], [db_cv_sql="no"])
-AC_MSG_RESULT($db_cv_sql)
-
-AC_MSG_CHECKING(if --enable-sql_compat option specified)
-AC_ARG_ENABLE(sql_compat,
-	[AC_HELP_STRING([--enable-sql_compat],
-			[Build a drop-in replacement sqlite3 library.])],
-	[db_cv_sql_compat="$enable_sql_compat"], [db_cv_sql_compat="no"])
-AC_MSG_RESULT($db_cv_sql_compat)
-
-AC_MSG_CHECKING(if --enable-jdbc option specified)
-AC_ARG_ENABLE(jdbc,
-	[AC_HELP_STRING([--enable-jdbc],
-			[Build BDB SQL JDBC library.])],
-	[db_cv_jdbc="$enable_jdbc"], [db_cv_jdbc="no"])
-AC_MSG_RESULT($db_cv_jdbc)
-
-AC_MSG_CHECKING([if --with-jdbc=DIR option specified])
-AC_ARG_WITH(jdbc,
-       [AC_HELP_STRING([--with-jdbc=DIR],
-                       [Specify source directory of JDBC.])],
-       [with_jdbc="$withval"], [with_jdbc="no"])
-AC_MSG_RESULT($with_jdbc)
-if test "$with_jdbc" != "no"; then
-	db_cv_jdbc="yes"
-fi
-
-AC_MSG_CHECKING(if --enable-amalgamation option specified)
-AC_ARG_ENABLE(amalgamation,
-	AC_HELP_STRING([--enable-amalgamation],
-	    [Build a SQL amalgamation instead of building files separately.]),
-	[db_cv_sql_amalgamation="$enable_amalgamation"],
-	[db_cv_sql_amalgamation="no"])
-AC_MSG_RESULT($db_cv_sql_amalgamation)
-
-AC_MSG_CHECKING(if --enable-sql_codegen option specified)
-AC_ARG_ENABLE(sql_codegen,
-	[AC_HELP_STRING([--enable-sql_codegen],
-			[Build the SQL-to-C code generation tool.])],
-	[db_cv_sql_codegen="$enable_sql_codegen"], [db_cv_sql_codegen="no"])
-AC_MSG_RESULT($db_cv_sql_codegen)
 
 AC_MSG_CHECKING(if --enable-stl option specified)
 AC_ARG_ENABLE(stl,
@@ -479,22 +433,13 @@ else
 	AC_MSG_RESULT($DB_VERSION_UNIQUE_NAME)
 fi
 
-# Undocumented option used for the dbsql command line tool (to match SQLite).
+# Undocumented options used for the dbsql command line tool (to match SQLite).
+AC_ARG_ENABLE(editline, [], [with_editline=$enableval], [with_editline=no])
 AC_ARG_ENABLE(readline, [], [with_readline=$enableval], [with_readline=no])
 
-# --enable-sql_compat implies --enable-sql
-if test "$db_cv_sql_compat" = "yes" -a "$db_cv_sql" = "no"; then
-	db_cv_sql=$db_cv_sql_compat
-fi
-
-# --enable-jdbc implies --enable-sql
-if test "$db_cv_jdbc" = "yes" -a "$db_cv_sql" = "no"; then
-	db_cv_sql=$db_cv_jdbc
-fi
-
-# --enable-server implies --enable-java
-if test "$db_cv_server" = "yes" -a "$db_cv_java" = "no"; then
-	db_cv_java=$db_cv_server
+# --enable-gui implies --enable-java
+if test "$db_cv_gui" = "yes" -a "$db_cv_java" = "no"; then
+	db_cv_java=$db_cv_gui
 fi
 
 # Cryptography support.
@@ -506,18 +451,15 @@ fi
 #   3) build using the Intel IPP implementation (ipp)
 # We handle this by making the primary configuration method:
 #   --with-cryptography={yes|no|ipp}
-# which defaults to yes, unless building the SQL library(--enable-sql).
+# which defaults to yes.
 # The old enable/disable-cryptography argument is still
 # supported for backwards compatibility.
 AC_MSG_CHECKING(if --with-cryptography option specified)
 build_cryptography="$db_cv_build_full";
-if test "$db_cv_sql" = "yes" -a "$build_cryptography" = "yes"; then
-	build_cryptography="no";
-fi
 AC_ARG_ENABLE(cryptography, [], [], [enableval=$build_cryptography])
 enable_cryptography="$enableval"
 AC_ARG_WITH([cryptography],
-	AC_HELP_STRING([--with-cryptography=yes|no|ipp], [Build database cryptography support. The default value is "yes", unless building the SQL library.]),
+	AC_HELP_STRING([--with-cryptography=yes|no|ipp], [Build database cryptography support. The default value is "yes".]),
 	[], [with_cryptography=$enable_cryptography])
 case "$with_cryptography" in
 yes|no|ipp) ;;
@@ -530,6 +472,27 @@ else
 	db_cv_build_cryptography="no"
 	AC_MSG_WARN(Ignoring --with-cryptography flag value. The NC package builds a Berkeley DB library that does not support encryption.)
 fi
+
+#SSL support for Replication Manager
+AC_MSG_CHECKING(if --with-repmgr-ssl option specified)
+build_repmgr_ssl="default";
+AC_ARG_WITH([repmgr-ssl],
+	AC_HELP_STRING([--with-repmgr-ssl=yes|no|default], [Build SSL support for Replication Manager. The default value is "default", unless not building the replication support.]),
+	[with_repmgr_ssl=$withval], [with_repmgr_ssl=$build_repmgr_ssl])
+
+case "$with_repmgr_ssl" in
+yes|no|default) ;;
+*) AC_MSG_ERROR([unknown --with-repmgr-ssl argument \'$with_repmgr_ssl\']) ;;
+esac
+
+if test "$with_repmgr_ssl" = "default" -a "$db_cv_build_replication" = "no"; then
+	with_repmgr_ssl="no";
+fi
+
+AC_MSG_RESULT($with_repmgr_ssl)
+
+db_cv_build_repmgr_ssl="$with_repmgr_ssl"
+
 
 # Testing requires Tcl.
 if test "$db_cv_test" = "yes" -a "$db_cv_tcl" = "no"; then

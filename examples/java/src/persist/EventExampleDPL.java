@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 2004, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 2004, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file EXAMPLES-LICENSE for license information.
  *
- * $Id$
  */
 
 package persist;
@@ -96,7 +95,7 @@ public class EventExampleDPL {
             sb.append(" price=").append(price);
             sb.append(" customerName=").append(customerName);
             sb.append(" reps=");
-            if (accountReps.size() == 0) {
+            if (accountReps.isEmpty()) {
                 sb.append("none");
             } else {
                 for (String rep: accountReps) {

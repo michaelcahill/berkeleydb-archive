@@ -1,5 +1,7 @@
 /*-
- * Copyright (c) 2004, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * Copyright (c) 2004, 2020 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  * 

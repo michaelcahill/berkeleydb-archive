@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 1999, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 1999, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -53,7 +53,7 @@ __qam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 		    "%lu %u %s"), (u_long)pgno, TYPE(meta),
 		    __db_dbtype_to_string(dbp->type)));
 		return DB_VERIFY_FATAL;
-	}	
+	}
 
 	if ((ret = __db_vrfy_getpageinfo(vdp, pgno, &pip)) != 0)
 		return (ret);
@@ -116,6 +116,25 @@ __qam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 		qp->re_len = vdp->re_len = meta->re_len;
 		qp->rec_page = vdp->rec_page = meta->rec_page;
 		qp->page_ext = vdp->page_ext = meta->page_ext;
+	}
+
+	/*
+	 * Check for invalid meta data values.
+	 */
+	if (meta->re_len == 0) {
+		EPRINT((env, DB_STR("5537", "Invalid record length of 0.")));
+		ret = DB_VERIFY_FATAL;
+		goto err;
+	}
+	if (meta->first_recno == 0) {
+		EPRINT((env, DB_STR("5538", "Invalid first_recno value of 0.")));
+		ret = DB_VERIFY_FATAL;
+		goto err;
+	}
+	if (meta->cur_recno == 0) {
+		EPRINT((env, DB_STR("5539", "Invalid cur_recno value of 0.")));
+		ret = DB_VERIFY_FATAL;
+		goto err;
 	}
 
 	/*
@@ -345,7 +364,7 @@ __qam_vrfy_data(dbp, vdp, h, pgno, flags)
 		    "Page %lu: invalid page type %u for %s database",
 		    "%lu %u %s"), (u_long)pgno, TYPE(h),
 		    __db_dbtype_to_string(dbp->type)));
-		return DB_VERIFY_BAD;
+		return DB_VERIFY_FATAL;
 	}
 
 	/*
@@ -488,7 +507,14 @@ __qam_vrfy_walkqueue(dbp, vdp, handle, callback, flags)
 	/* Verify/salvage each page. */
 	if ((ret = __db_cursor(dbp, vdp->thread_info, NULL, &dbc, 0)) != 0)
 		return (ret);
-begin:	for (; i <= stop; i++) {
+begin:	if ((stop - i) > 100000) {
+		EPRINT((env, DB_STR_A("5551",
+"Warning, many possible extends files (%lu), will take a long time to verify",
+          "%lu"), (u_long)(stop - i)));
+	}
+	for (; i <= stop; i++) {
+		if (i == UINT32_MAX)
+			break;
 		/*
 		 * If DB_SALVAGE is set, we inspect our database of completed
 		 * pages, and skip any we've already printed in the subdb pass.
@@ -549,7 +575,7 @@ begin:	for (; i <= stop; i++) {
 			if (F_ISSET(pip, VRFY_IS_ALLZEROES))
 				goto put;
 			if (pip->type != P_QAMDATA) {
-				EPRINT((env, DB_STR_A("1154",
+				EPRINT((env, DB_STR_A("1153",
 		    "Page %lu: queue database page of incorrect type %lu",
 				    "%lu %lu"), (u_long)i, (u_long)pip->type));
 				isbad = 1;

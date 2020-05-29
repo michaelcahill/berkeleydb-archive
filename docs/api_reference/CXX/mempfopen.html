@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.40</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbMpoolFile::open()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbMpoolFile::open()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="mempfget.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="mempfopen"></a>DbMpoolFile::open()</h2>
+            <h2 class="title" style="clear: both"><a id="mempfopen"></a>
+        
+        <span>DbMpoolFile::open()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -60,7 +66,7 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139670057714224"></a>Parameters</h3>
+              <h3 class="title"><a id="idm139755612084528"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -68,7 +74,7 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139670057828064"></a>file</h4>
+                <h4 class="title"><a id="idm139755612100688"></a>file</h4>
               </div>
             </div>
           </div>
@@ -90,7 +96,7 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139670057708480"></a>flags</h4>
+                <h4 class="title"><a id="idm139755612078784"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -127,7 +133,10 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
                 <p>
                                         Open the file with support for 
                                         <a href="../../programmer_reference/transapp_read.html" class="olink">multiversion concurrency control</a>. 
-                                        Calls to <a class="xref" href="mempfget.html" title="DbMpoolFile::get()">DbMpoolFile::get()</a>
+                                        Calls to <a class="xref" href="mempfget.html" title="DbMpoolFile::get()">
+        
+        <span>DbMpoolFile::get()</span>
+    </a>
                                         with dirty pages will cause copies to be made in the cache.
                                 </p>
               </li>
@@ -138,7 +147,10 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
                 <p>
                                         Always copy this file into the local cache instead of potentially mapping it
                                         into process memory (see the
-                                        <a class="xref" href="envset_mp_mmapsize.html" title="DbEnv::set_mp_mmapsize()">DbEnv::set_mp_mmapsize()</a>  
+                                        <a class="xref" href="envset_mp_mmapsize.html" title="DbEnv::set_mp_mmapsize()">
+        
+        <span>DbEnv::set_mp_mmapsize()</span>
+    </a>  
                                         method for further information).
                                 </p>
               </li>
@@ -169,7 +181,7 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139670057637760"></a>mode</h4>
+                <h4 class="title"><a id="idm139755612007600"></a>mode</h4>
               </div>
             </div>
           </div>
@@ -194,7 +206,7 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139670057654304"></a>pagesize</h4>
+                <h4 class="title"><a id="idm139755612024080"></a>pagesize</h4>
               </div>
             </div>
           </div>
@@ -210,7 +222,7 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139670057750384"></a>Errors</h3>
+              <h3 class="title"><a id="idm139755612003776"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -228,7 +240,7 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139670057691984"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm139755612042128"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -244,7 +256,7 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139670057658512"></a>ENOMEM</h4>
+                <h4 class="title"><a id="idm139755612001504"></a>ENOMEM</h4>
               </div>
             </div>
           </div>
@@ -257,7 +269,7 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139670057634096"></a>Class</h3>
+              <h3 class="title"><a id="idm139755612020576"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -269,7 +281,7 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139670057633968"></a>See Also</h3>
+              <h3 class="title"><a id="idm139755612003392"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -289,11 +301,17 @@ DbMpoolFile::open(const char *file, u_int32_t flags, int mode,
           <td width="40%" align="right"> <a accesskey="n" href="mempput.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbMpoolFile::get() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbMpoolFile::get()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbMpoolFile::put()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbMpoolFile::put()</span>
+    </td>
         </tr>
       </table>
     </div>

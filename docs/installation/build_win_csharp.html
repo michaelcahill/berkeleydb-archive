@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="gettingStarted.css" type="text/css" />
     <meta name="generator" content="DocBook XSL Stylesheets V1.73.2" />
     <link rel="start" href="index.html" title="Berkeley DB Installation and Build Guide" />
-    <link rel="up" href="build_win.html" title="Chapter 5.  Building Berkeley DB for Windows" />
+    <link rel="up" href="build_win.html" title="Chapter 4.  Building Berkeley DB for Windows" />
     <link rel="prev" href="build_win_java.html" title="Building the Java API" />
-    <link rel="next" href="build_win_sql.html" title="Building the SQL API" />
+    <link rel="next" href="build_win_tcl.html" title="Building the Tcl API" />
   </head>
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.40</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -22,8 +22,8 @@
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="build_win_java.html">Prev</a> </td>
-          <th width="60%" align="center">Chapter 5.  Building Berkeley DB for Windows </th>
-          <td width="20%" align="right"> <a accesskey="n" href="build_win_sql.html">Next</a></td>
+          <th width="60%" align="center">Chapter 4.  Building Berkeley DB for Windows </th>
+          <td width="20%" align="right"> <a accesskey="n" href="build_win_tcl.html">Next</a></td>
         </tr>
       </table>
       <hr />
@@ -40,16 +40,15 @@
             The C# support is built by a separate Visual Studio
             solution and requires version 2.0 (or higher) of the .NET
             platform. If the Berkeley DB utilities are required, build
-            Berkeley DB first following the instructions under <a class="xref" href="build_win.html#win_build32" title="Building Berkeley DB for 32 bit Windows">Building Berkeley DB for 32 bit Windows</a> or
-            <a class="xref" href="win_build64.html" title="Building Berkeley DB for 64-bit Windows">Building Berkeley DB for 64-bit Windows</a>.
+            Berkeley DB first following the instructions under <a class="xref" href="build_win.html#win_build32" title="Building Berkeley DB for Windows">Building Berkeley DB for Windows</a>.
         </p>
       <p>
-            To build the C# API in Visual Studio 2008, the solution is
-            <code class="filename">build_windows\BDB_dotnet.sln</code>; in
-            Visual Studio 2010 the solution is
+            To build the C# API in Visual Studio 2010 the solution is
             <code class="filename">build_windows\BDB_dotnet_vs2010.sln</code>; 
-	    and in Visual Studio 2012 the solution is
-            <code class="filename">build_windows\BDB_dotnet_vs2012.sln</code>.
+	    in Visual Studio 2012 and 2013 the solution is
+            <code class="filename">build_windows\BDB_dotnet_vs2012.sln</code>;
+	    and in Visual Studio 2015 the solution is
+            <code class="filename">build_windows\BDB_dotnet_vs2015.sln</code>.
         </p>
       <p>
             By default, the solution will build the native
@@ -62,22 +61,22 @@
       <table class="simplelist" border="0" summary="Simple list">
         <tr>
           <td>
-            <code class="filename">build_windows\Win32\Debug</code>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <code class="filename">build_windows\Win32\Release</code>
-          </td>
-        </tr>
-        <tr>
-          <td>
             <code class="filename">build_windows\x64\Debug</code>
           </td>
         </tr>
         <tr>
           <td>
             <code class="filename">build_windows\x64\Release</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code class="filename">build_windows\Win32\Debug</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code class="filename">build_windows\Win32\Release</code>
           </td>
         </tr>
       </table>
@@ -115,14 +114,14 @@
           <td width="20%" align="center">
             <a accesskey="u" href="build_win.html">Up</a>
           </td>
-          <td width="40%" align="right"> <a accesskey="n" href="build_win_sql.html">Next</a></td>
+          <td width="40%" align="right"> <a accesskey="n" href="build_win_tcl.html">Next</a></td>
         </tr>
         <tr>
           <td width="40%" align="left" valign="top">Building the Java API </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Building the SQL API</td>
+          <td width="40%" align="right" valign="top"> Building the Tcl API</td>
         </tr>
       </table>
     </div>

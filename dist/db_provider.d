@@ -7,6 +7,10 @@
 provider bdb {
 /*
  * 
+ * Copyright (c) 2011, 2020 Oracle and/or its affiliates.  All rights reserved.
+ * 
+ * See the file LICENSE for license information.
+ * 
  * dist/events.in - This description of Oracle Berkeley DB's internal
  * events hierarchy is processed by 'dist/s_include' to generate the
  * platform-independant file dist/db_provider.d. The 'configure' step on the
@@ -23,8 +27,6 @@ provider bdb {
  * Events are listed grouped by their relation to one another, rather than
  * alphabetically. For instance allocation and free events are adjacent.
  * New, unrelated events are placed at the end of their event class.
- * 
- * Copyright (c) 2011, 2017 Oracle and/or its affiliates.  All rights reserved.
  * 
  */
 

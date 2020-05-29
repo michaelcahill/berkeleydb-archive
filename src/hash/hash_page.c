@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 1996, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 1996, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1990, 1993, 1994
@@ -869,7 +869,11 @@ __ham_verify_sorted_page (dbc, p)
 	/* Validate that next, prev pointers are OK */
 	n = NUM_ENT(p);
 	dbp = dbc->dbp;
-	DB_ASSERT(dbp->env, n%2 == 0 );
+	if (n % 2 != 0) {
+		__db_errx(dbp->env, DB_STR_A("5549",
+		  "Odd number of entries on page: %lu", "%lu"), (u_long)p->pgno);
+		return (DB_VERIFY_FATAL);
+	}
 
 	env = dbp->env;
 	t = dbp->h_internal;
@@ -940,7 +944,12 @@ __ham_verify_sorted_page (dbc, p)
 			if ((ret = __db_prpage(dbp, p, DB_PR_PAGE)) != 0)
 				return (ret);
 #endif
-			DB_ASSERT(dbp->env, res < 0);
+			if (res >= 0) {
+				__db_errx(env, DB_STR_A("5550",
+					"Odd number of entries on page: %lu", "%lu"),
+					(u_long)p->pgno);
+				return (DB_VERIFY_FATAL);
+			}
 		}
 
 		prev = curr;

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 1996, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 1996, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -520,10 +520,18 @@ __bam_key_range(dbc, dbt, kp, flags)
 
 	factor = 1.0;
 
+	/* If the first page has no entries, then the database is empty. */
+	if (cp->sp->entries == 0) {
+		kp->equal = 0;
+		goto end;
+	}
+
 	/* Correct the leaf page. */
 	cp->csp->entries /= 2;
 	cp->csp->indx /= 2;
 	for (sp = cp->sp; sp <= cp->csp; ++sp) {
+		if (sp->entries == 0)
+			return (__db_pgfmt(dbc->env, cp->pgno));
 		/*
 		 * At each level we know that pages greater than indx contain
 		 * keys greater than what we are looking for and those less
@@ -557,7 +565,7 @@ __bam_key_range(dbc, dbt, kp, flags)
 		kp->equal = 0;
 	}
 
-	if ((ret = __bam_stkrel(dbc, 0)) != 0)
+ end:	if ((ret = __bam_stkrel(dbc, 0)) != 0)
 		return (ret);
 
 	return (0);

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 1999, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 1999, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -70,7 +70,7 @@ __qam_db_close(dbp, flags)
 	array = &t->array1;
 again:
 	mpfp = array->mpfarray;
-	if (mpfp != NULL) {
+	if (mpfp != NULL && mpfp->mpf != NULL) {
 		for (i = array->low_extent;
 		    i <= array->hi_extent; i++, mpfp++) {
 			mpf = mpfp->mpf;
@@ -346,7 +346,7 @@ __qam_rr(dbp, ip, txn, name, subdb, newname, op)
 		ret = __qam_nameop(tmpdbp, txn, newname, op);
 
 	if (!F2_ISSET(dbp, DB2_AM_MPOOL_OPENED)) {
-err:		
+err:
 		/* We need to remove the lock event we associated with this. */
 		if (txn != NULL)
 			__txn_remlock(env, txn, NULL, tmpdbp->locker);

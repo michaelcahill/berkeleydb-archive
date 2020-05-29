@@ -12,7 +12,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.40</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -30,25 +30,37 @@
       <div class="titlepage">
         <div>
           <div>
-            <h1 class="title"><a id="idm140188117875008"></a>Berkeley DB Installation and Build Guide</h1>
+            <h1 class="title"><a id="idm140649574362288"></a>Berkeley DB Installation and Build Guide</h1>
           </div>
           <div>
             <div class="legalnotice">
-              <a id="idm140188019235504"></a>
+              <a id="idm140649574648880"></a>
               <p class="legalnotice-title">
                 <b>Legal Notice</b>
               </p>
-              <span>
-        <p>
-            This documentation is distributed under an open source license.
-            You may review the terms of this license at:
-            <a class="ulink" href="http://www.oracle.com/technetwork/database/berkeleydb/downloads/oslicense-093458.html" target="_top">http://www.oracle.com/technetwork/database/berkeleydb/downloads/oslicense-093458.html</a>
-            
-            
+              <p>
+            Copyright © 2002 - 2019 Oracle and/or its affiliates. All rights
+            reserved.
         </p>
-
-        <p>
-                Oracle, Berkeley DB,
+              <p>
+            This software and related documentation are provided under a
+            license agreement containing restrictions on use and disclosure
+            and are protected by intellectual property laws. Except as
+            expressly permitted in your license agreement or allowed by
+            law, you may not use, copy, reproduce, translate, broadcast,
+            modify, license, transmit, distribute, exhibit, perform,
+            publish, or display any part, in any form, or by any means.
+            Reverse engineering, disassembly, or decompilation of this
+            software, unless required by law for interoperability, is
+            prohibited.
+        </p>
+              <p>
+            The information contained herein is subject to change without
+            notice and is not warranted to be error-free. If you find any
+            errors, please report them to us in writing.
+        </p>
+              <p>
+                Berkeley DB,
                 
                 
                 and
@@ -57,22 +69,69 @@
                 No third-party use is permitted without the
                 express prior written consent of Oracle.
         </p>
-        
-        <p>
+              <p>
             Other names may be trademarks of their respective owners.
         </p>
-        <p>
-            To obtain a copy of this document's original source code, please
-            submit a request to the Oracle Technology Network forum at:
-            <a class="ulink" href="https://forums.oracle.com/forums/forum.jspa?forumID=271" target="_top">https://forums.oracle.com/forums/forum.jspa?forumID=271</a>
-            
-            
+              <p>
+            If this is software or related documentation that is delivered
+            to the U.S. Government or anyone licensing it on behalf of the
+            U.S. Government, the following notice is applicable:
         </p>
-    </span>
+              <p>
+            U.S. GOVERNMENT END USERS: Oracle programs, including any
+            operating system, integrated software, any programs installed
+            on the hardware, and/or documentation, delivered to U.S.
+            Government end users are "commercial computer software"
+            pursuant to the applicable Federal Acquisition Regulation and
+            agency-specific supplemental regulations. As such, use,
+            duplication, disclosure, modification, and adaptation of the
+            programs, including any operating system, integrated software,
+            any programs installed on the hardware, and/or documentation,
+            shall be subject to license terms and license restrictions
+            applicable to the programs. No other rights are granted to the
+            U.S. Government.
+        </p>
+              <p>
+            This software or hardware is developed for general use in a
+            variety of information management applications. It is not
+            developed or intended for use in any inherently dangerous
+            applications, including applications that may create a risk of
+            personal injury. If you use this software or hardware in
+            dangerous applications, then you shall be responsible to take
+            all appropriate fail-safe, backup, redundancy, and other
+            measures to ensure its safe use. Oracle Corporation and its
+            affiliates disclaim any liability for any damages caused by use
+            of this software or hardware in dangerous applications.
+        </p>
+              <p>
+            Oracle and Java are registered trademarks of Oracle and/or its
+            affiliates. Other names may be trademarks of their respective
+            owners.
+        </p>
+              <p>
+            Intel and Intel Xeon are trademarks or registered trademarks of
+            Intel Corporation. All SPARC trademarks are used under license
+            and are trademarks or registered trademarks of SPARC
+            International, Inc. AMD, Opteron, the AMD logo, and the AMD
+            Opteron logo are trademarks or registered trademarks of
+            Advanced Micro Devices. UNIX is a registered trademark of The
+            Open Group.
+        </p>
+              <p>
+            This software or hardware and documentation may provide access
+            to or information on content, products, and services from third
+            parties. Oracle Corporation and its affiliates are not
+            responsible for and expressly disclaim all warranties of any
+            kind with respect to third-party content, products, and
+            services. Oracle Corporation and its affiliates will not be
+            responsible for any loss, costs, or damages incurred due to
+            your access to or use of third-party content, products, or
+            services.
+        </p>
             </div>
           </div>
           <div>
-            <p class="pubdate">4/13/2017</p>
+            <p class="pubdate">1-Jun-2020</p>
           </div>
         </div>
         <hr />
@@ -199,32 +258,32 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="debug_printlog.html#idm140188019043680">Augmenting the Log for Debugging</a>
+                      <a href="debug_printlog.html#idm140649574887408">Augmenting the Log for Debugging</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="debug_printlog.html#idm140188019174416">Extracting Committed Transactions and Transaction Status</a>
+                      <a href="debug_printlog.html#idm140649575218160">Extracting Committed Transactions and Transaction Status</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="debug_printlog.html#idm140188019059552">Extracting Transaction Histories</a>
+                      <a href="debug_printlog.html#idm140649575129712">Extracting Transaction Histories</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="debug_printlog.html#idm140188019036896">Extracting File Histories</a>
+                      <a href="debug_printlog.html#idm140649575143200">Extracting File Histories</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="debug_printlog.html#idm140188018982176">Extracting Page Histories</a>
+                      <a href="debug_printlog.html#idm140649575012496">Extracting Page Histories</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="debug_printlog.html#idm140188018980624">Other log processing tools</a>
+                      <a href="debug_printlog.html#idm140649574800944">Other log processing tools</a>
                     </span>
                   </dt>
                 </dl>
@@ -233,93 +292,41 @@
           </dd>
           <dt>
             <span class="chapter">
-              <a href="build_android_intro.html">4. Building Berkeley DB for
-        Android</a>
+              <a href="build_win.html">4.  Building Berkeley DB for Windows </a>
             </span>
           </dt>
           <dd>
             <dl>
               <dt>
                 <span class="sect1">
-                  <a href="build_android_intro.html#build_android">Building the Drop-In Replacement
-        for Android</a>
+                  <a href="build_win.html#win_build32">Building Berkeley DB for Windows</a>
                 </span>
               </dt>
               <dd>
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="build_android_intro.html#build_android_migrate">Migrating from SQLite to
-        Berkeley DB</a>
-                    </span>
-                  </dt>
-                </dl>
-              </dd>
-              <dt>
-                <span class="sect1">
-                  <a href="build_android_jdbc.html">Building the Android JDBC
-        Driver</a>
-                </span>
-              </dt>
-              <dt>
-                <span class="sect1">
-                  <a href="build_android_config.html">Android Configuration
-        Options</a>
-                </span>
-              </dt>
-              <dt>
-                <span class="sect1">
-                  <a href="build_android_adfmobile.html">Using the JDBC Driver in ADF Mobile for Android</a>
-                </span>
-              </dt>
-            </dl>
-          </dd>
-          <dt>
-            <span class="chapter">
-              <a href="build_win.html">5.  Building Berkeley DB for Windows </a>
-            </span>
-          </dt>
-          <dd>
-            <dl>
-              <dt>
-                <span class="sect1">
-                  <a href="build_win.html#win_build32">Building Berkeley DB for 32 bit Windows</a>
-                </span>
-              </dt>
-              <dd>
-                <dl>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win.html#idm140188018820800">Visual C++ .NET 2012</a>
+                      <a href="build_win.html#idm140649576933248">Visual C++ .NET 2015</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="build_win.html#idm140188018853184">Visual C++ .NET 2010</a>
+                      <a href="build_win.html#idm140649574658032">Visual C++ .NET 2013</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="build_win.html#idm140188018850512">Visual C++ .NET 2008</a>
+                      <a href="build_win.html#idm140649576126544">Visual C++ .NET 2012</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="build_win.html#idm140188018809440">Build results</a>
+                      <a href="build_win.html#idm140649576534560">Visual C++ .NET 2010</a>
                     </span>
                   </dt>
-                </dl>
-              </dd>
-              <dt>
-                <span class="sect1">
-                  <a href="win_build64.html">Building Berkeley DB for 64-bit Windows</a>
-                </span>
-              </dt>
-              <dd>
-                <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="win_build64.html#idm140188018788080">x64 build with Visual Studio 2008 or newer</a>
+                      <a href="build_win.html#idm140649576001648">Build results</a>
                     </span>
                   </dt>
                 </dl>
@@ -351,71 +358,12 @@
               </dt>
               <dt>
                 <span class="sect1">
-                  <a href="build_win_sql.html">Building the SQL API</a>
+                  <a href="build_win_tcl.html">Building the Tcl API</a>
                 </span>
               </dt>
-              <dd>
-                <dl>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win_sql.html#idm140188018737024">Setting User Authentication</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win_sql.html#idm140188018776032">Binary Compatibility With SQLite</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win_sql.html#idm140188018742464">Setting Encryption</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win_sql.html#idm140188018740160">Changing Compile Options</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win_sql.html#idm140188018722480">Enabling Extensions</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win_sql.html#win-disablechecksums">Disabling Log Checksums</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win_sql.html#build_jdbc">Building the JDBC Driver</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win_sql.html#idm140188018724976">Using the JDBC Driver</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win_sql.html#idm140188018636080">Using the JDBC Driver in ADF/JDeveloper</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win_sql.html#idm140188018597328">Building the ODBC Driver</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win_sql.html#idm140188018713008"> Using the ADO.NET Driver </a>
-                    </span>
-                  </dt>
-                </dl>
-              </dd>
               <dt>
                 <span class="sect1">
-                  <a href="build_win_tcl.html">Building the Tcl API</a>
+                  <a href="build_win_replication_ssl.html">Building Secure Sockets Layer (SSL) Support for the Replication Manager</a>
                 </span>
               </dt>
               <dt>
@@ -444,19 +392,13 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="build_win_test.html#idm140188018513168">Building the software needed
+                      <a href="build_win_test.html#idm140649574841888">Building the software needed
             by the tests</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="build_win_test.html#idm140188018829152">Running the test suite under Windows</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_win_test.html#build_win_test_sql">Building the software
-            needed by the SQL tests</a>
+                      <a href="build_win_test.html#idm140649574900688">Running the test suite under Windows</a>
                     </span>
                   </dt>
                 </dl>
@@ -475,76 +417,7 @@
           </dd>
           <dt>
             <span class="chapter">
-              <a href="build_wince.html">6.  Building Berkeley DB for Windows Mobile </a>
-            </span>
-          </dt>
-          <dd>
-            <dl>
-              <dt>
-                <span class="sect1">
-                  <a href="build_wince.html#build_wince_intro">Building for Windows
-        Mobile</a>
-                </span>
-              </dt>
-              <dd>
-                <dl>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_wince.html#idm140188018839136">Building Berkeley DB for Windows Mobile</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_wince.html#idm140188018439088">Changing Build Configuration Type</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_wince.html#build_wince_intro.add_platform">Building Berkeley DB for different target platforms</a>
-                    </span>
-                  </dt>
-                </dl>
-              </dd>
-              <dt>
-                <span class="sect1">
-                  <a href="build_wince_notes.html">Windows Mobile notes</a>
-                </span>
-              </dt>
-              <dt>
-                <span class="sect1">
-                  <a href="build_wince_faq.html">Windows Mobile FAQ</a>
-                </span>
-              </dt>
-              <dt>
-                <span class="sect1">
-                  <a href="build_winec_intro.html">Building for Windows
-        Embedded Compact 7</a>
-                </span>
-              </dt>
-              <dd>
-                <dl>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_winec_intro.html#idm140188018402512">Building Berkeley DB for Windows Embedded Compact 7</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_winec_intro.html#idm140188018324144">Changing Build Configuration Type</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_winec_intro.html#idm140188018289312">Troubleshooting Common Build Errors</a>
-                    </span>
-                  </dt>
-                </dl>
-              </dd>
-            </dl>
-          </dd>
-          <dt>
-            <span class="chapter">
-              <a href="build_unix.html">7.  Building Berkeley DB for UNIX/POSIX
+              <a href="build_unix.html">5.  Building Berkeley DB for UNIX/POSIX
     </a>
             </span>
           </dt>
@@ -555,60 +428,11 @@
                   <a href="build_unix.html#build_unix_intro">Building for UNIX/POSIX</a>
                 </span>
               </dt>
-              <dd>
-                <dl>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_unix.html#build_unix_sqlinter">Building the Berkeley DB SQL Interface</a>
-                    </span>
-                  </dt>
-                </dl>
-              </dd>
               <dt>
                 <span class="sect1">
                   <a href="build_unix_conf.html">Configuring Berkeley DB</a>
                 </span>
               </dt>
-              <dt>
-                <span class="sect1">
-                  <a href="build_unix_sql.html">Configuring the SQL
-        Interface</a>
-                </span>
-              </dt>
-              <dd>
-                <dl>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_unix_sql.html#config_sql">Changing Compile Options</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_unix_sql.html#idm140188018126512">Enabling Extensions</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_unix_sql.html#build_unix_jdbc">Building the JDBC Driver</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_unix_sql.html#idm140188018072496">Using the JDBC Driver</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_unix_sql.html#idm140188018034496">Building the ODBC Driver</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_unix_sql.html#bfile">Building the BFILE extension</a>
-                    </span>
-                  </dt>
-                </dl>
-              </dd>
               <dt>
                 <span class="sect1">
                   <a href="build_unix_small.html">Building a small memory footprint library</a>
@@ -643,15 +467,6 @@
         UNIX</a>
                 </span>
               </dt>
-              <dd>
-                <dl>
-                  <dt>
-                    <span class="sect2">
-                      <a href="build_unix_test.html#build_unix_test_sql">Building SQL Test Suite on Unix</a>
-                    </span>
-                  </dt>
-                </dl>
-              </dd>
               <dt>
                 <span class="sect1">
                   <a href="build_unix_notes.html">Architecture independent FAQ</a>
@@ -694,11 +509,6 @@
               </dt>
               <dt>
                 <span class="sect1">
-                  <a href="build_unix_qnx.html">QNX</a>
-                </span>
-              </dt>
-              <dt>
-                <span class="sect1">
                   <a href="build_unix_sco.html">SCO</a>
                 </span>
               </dt>
@@ -716,21 +526,22 @@
           </dd>
           <dt>
             <span class="chapter">
-              <a href="build_vxworks.html">8.  Building Berkeley DB for VxWorks </a>
+              <a href="build_vxworks.html">6.  Building Berkeley DB for VxWorks </a>
             </span>
           </dt>
           <dd>
             <dl>
               <dt>
                 <span class="sect1">
-                  <a href="build_vxworks.html#build_vxworks_intro6x">Building for VxWorks 6.x</a>
+                  <a href="build_vxworks.html#build_vxworks_intro6x">
+	Building for VxWorks 6.x and VxWorks 7</a>
                 </span>
               </dt>
               <dd>
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="build_vxworks.html#idm140188017679808">Building With Wind
+                      <a href="build_vxworks.html#idm140649573233648">Building With Wind
             River Workbench using the Makefile</a>
                     </span>
                   </dt>
@@ -745,17 +556,17 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="build_vxworks_notes.html#idm140188017689744">Building and Running the Demo Program</a>
+                      <a href="build_vxworks_notes.html#idm140649573212704">Building and Running the Demo Program</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="build_vxworks_notes.html#idm140188017765120">Building and Running the Utility Programs</a>
+                      <a href="build_vxworks_notes.html#idm140649573263936">Building and Running the Utility Programs</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="build_vxworks_notes.html#idm140188017676704">Support for Replication Manager</a>
+                      <a href="build_vxworks_notes.html#idm140649573230960">Support for Replication Manager</a>
                     </span>
                   </dt>
                 </dl>
@@ -765,6 +576,375 @@
                   <a href="build_vxworks_faq.html">VxWorks FAQ</a>
                 </span>
               </dt>
+            </dl>
+          </dd>
+          <dt>
+            <span class="chapter">
+              <a href="build_thirdparty.html">7.  Building Third Party APIs </a>
+            </span>
+          </dt>
+          <dd>
+            <dl>
+              <dt>
+                <span class="sect1">
+                  <a href="build_thirdparty.html#build_goapi">Building the Go API</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect2">
+                      <a href="build_thirdparty.html#install-bdb">Install Oracle Berkeley DB</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="build_thirdparty.html#build_gobdb">Build Go Berkeley DB (go-bdb)</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="build_thirdparty.html#test_gobdb">Test Go Berkeley DB (go-bdb)</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="build_thirdparty.html#additional_information">Additional Information</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+              <dt>
+                <span class="sect1">
+                  <a href="build_nodejs.html">Building Node.js</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect2">
+                      <a href="build_nodejs.html#additional_info-node.js">Additional Information</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+            </dl>
+          </dd>
+          <dt>
+            <span class="chapter">
+              <a href="upgrade_181_toc.html">8.  Upgrading Berkeley DB 12.1.6.2 applications to 
+Berkeley DB 18.1 </a>
+            </span>
+          </dt>
+          <dd>
+            <dl>
+              <dt>
+                <span class="sect1">
+                  <a href="upgrade_181_toc.html#upgrade_181_intro">Introduction</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect1">
+                  <a href="license_change.html">License Change
+        </a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect1">
+                  <a href="ssl_rep_manager.html">Secure Sockets Layer (SSL) Support for the Replication 
+        Manager</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect2">
+                      <a href="ssl_rep_manager.html#idm140649573081984">New Function</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="ssl_rep_manager.html#idm140649573100368">New Flags</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+              <dt>
+                <span class="sect1">
+                  <a href="mvcc_rep_clients.html">Multiversion Concurrency Control (MVCC) 
+        for Replication Clients</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect1">
+                  <a href="new_rep_objects.html">New Replication Environment Region Objects</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect2">
+                      <a href="new_rep_objects.html#idm140649573081216">New Parameters</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+              <dt>
+                <span class="sect1">
+                  <a href="new_flags.html">New Replication Manager Flags</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect2">
+                      <a href="new_flags.html#idm140649573050000">New Parameter Values</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+              <dt>
+                <span class="sect1">
+                  <a href="new_information.html">New Information Available to Replicated Applications</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect2">
+                      <a href="new_information.html#idm140649573136096">New Error</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="new_information.html#idm140649573059328">New Replication Manager Event</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="new_information.html#idm140649573041520">New Replication Manager Statistic</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="new_information.html#idm140649573039440">New Replication Manager Site Field</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="new_information.html#idm140649573037360">New Replication Manager Site Flag</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+              <dt>
+                <span class="sect1">
+                  <a href="new_utility.html">New Utility <code class="literal">db_convert</code></a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect1">
+                  <a href="ddl_api.html">New Direct Persistence Layer (DPL) API</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect1">
+                  <a href="new_command.html">New Utility Command Line Option</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect1">
+                  <a href="sql_api_change.html">SQL API Changes</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect2">
+                      <a href="sql_api_change.html#idm140649573110992">SQL User Authentication</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="sql_api_change.html#idm140649573019808">New PRAGMAs</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="sql_api_change.html#idm140649573034672">Internal Berkeley DB Messages</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="sql_api_change.html#idm140649573045136">Updated SQL Version</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+              <dt>
+                <span class="sect1">
+                  <a href="visual_studio.html">Changed Visual Studio Support</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect1">
+                  <a href="bdb_support.html">Added VxWorks Support</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect1">
+                  <a href="php_support.html">Added PHP 7 Support</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect1">
+                  <a href="recog_mess_num.html">Error Message Numbers</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect1">
+                  <a href="remove_utility.html">Removed Utility <code class="literal">db_sql_codegen</code></a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect1">
+                  <a href="remove_support.html">Removed QNX Support</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect1">
+                  <a href="changelog_18_1.html">Berkeley DB Library Version 18.1.40 Change Log</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649573000992">Changes between version 18.1.32 and version 18.1.40</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649573044560">Changes between version 18.1.25 and version 18.1.32</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649573043792">Database or Log File On-Disk Format Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572997344">New Features/Improvements</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572996576">Database Environment Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649573004240">Concurrent Data Store Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572978608">Access Method Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572969760">API Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572965584">SQL-specific API Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572964144">Tcl-specific API Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572961792">Java-specific API Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572960352">C#-specific API Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572954576">Replication Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572953136">Locking Subsystem Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572949536">Logging Subsystem Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572947984">Memory Pool Subsystem Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572944560">Mutex Subsystem Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572942960">Transaction Subsystem Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572941520">Test Suite Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572939888">Utility Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572937216">Configuration, Documentation, Sample Apps, Portability and Build Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572934640">Example Changes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572933200">Miscellaneous Bug Fixes</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572929792">Deprecated Features</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect2">
+                      <a href="changelog_18_1.html#idm140649572918608">Known Bugs</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
             </dl>
           </dd>
           <dt>
@@ -788,17 +968,17 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_slices.html#idm140188017655648">New Functions</a>
+                      <a href="upgrade_slices.html#idm140649572912624">New Functions</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_slices.html#idm140188017598896">New Error</a>
+                      <a href="upgrade_slices.html#idm140649572903136">New Error</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_slices.html#idm140188017603536">New Parameter Values</a>
+                      <a href="upgrade_slices.html#idm140649572894448">New Parameter Values</a>
                     </span>
                   </dt>
                 </dl>
@@ -812,17 +992,17 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="renaming_blobs_external.html#idm140188017622128">Functions</a>
+                      <a href="renaming_blobs_external.html#idm140649572890384">Functions</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="renaming_blobs_external.html#idm140188017571904">New Parameter Values</a>
+                      <a href="renaming_blobs_external.html#idm140649572879488">New Parameter Values</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="renaming_blobs_external.html#idm140188017574352">New Statistics</a>
+                      <a href="renaming_blobs_external.html#idm140649572871264">New Statistics</a>
                     </span>
                   </dt>
                 </dl>
@@ -836,7 +1016,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_regiondir.html#idm140188017665200">New Functions</a>
+                      <a href="upgrade_regiondir.html#idm140649573024080">New Functions</a>
                     </span>
                   </dt>
                 </dl>
@@ -850,7 +1030,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_writeforward.html#idm140188017595616">New Parameter Values</a>
+                      <a href="upgrade_writeforward.html#idm140649572901888">New Parameter Values</a>
                     </span>
                   </dt>
                 </dl>
@@ -864,7 +1044,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_repmgripv6.html#idm140188017575344">New Function</a>
+                      <a href="upgrade_repmgripv6.html#idm140649572912080">New Function</a>
                     </span>
                   </dt>
                 </dl>
@@ -878,12 +1058,12 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_msgprefix.html#idm140188017538192">New Functions</a>
+                      <a href="upgrade_msgprefix.html#idm140649572994272">New Functions</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_msgprefix.html#idm140188017634688">Message Call Function Signature Change</a>
+                      <a href="upgrade_msgprefix.html#idm140649572880944">Message Call Function Signature Change</a>
                     </span>
                   </dt>
                 </dl>
@@ -942,122 +1122,117 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017503984">Changes between version 12.1.6.2.23 and version 12.1.6.2.32</a>
+                      <a href="changelog_6_2.html#idm140649572811776">Database or Log File On-Disk Format Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017503216">Database or Log File On-Disk Format Changes</a>
+                      <a href="changelog_6_2.html#idm140649572817936">New Features/Improvements</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017526592">New Features/Improvements</a>
+                      <a href="changelog_6_2.html#idm140649572834880">Database Environment Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017501040">Database Environment Changes</a>
+                      <a href="changelog_6_2.html#idm140649572900080">Concurrent Data Store Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017505328">Concurrent Data Store Changes</a>
+                      <a href="changelog_6_2.html#idm140649572803616">Access Method Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017475184">Access Method Changes</a>
+                      <a href="changelog_6_2.html#idm140649572795760">API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017511008">API Changes</a>
+                      <a href="changelog_6_2.html#idm140649572788784">SQL-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017511392">SQL-specific API Changes</a>
+                      <a href="changelog_6_2.html#idm140649572789216">Tcl-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017512224">Tcl-specific API Changes</a>
+                      <a href="changelog_6_2.html#idm140649572784672">Java-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017456256">Java-specific API Changes</a>
+                      <a href="changelog_6_2.html#idm140649572781328">C#-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017452912">C#-specific API Changes</a>
+                      <a href="changelog_6_2.html#idm140649572772144">Replication Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017497120">Replication Changes</a>
+                      <a href="changelog_6_2.html#idm140649572770704">Locking Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017499488">Locking Subsystem Changes</a>
+                      <a href="changelog_6_2.html#idm140649572769136">Logging Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017440640">Logging Subsystem Changes</a>
+                      <a href="changelog_6_2.html#idm140649572767584">Memory Pool Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017439168">Memory Pool Subsystem Changes</a>
+                      <a href="changelog_6_2.html#idm140649572761744">Mutex Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017433136">Mutex Subsystem Changes</a>
+                      <a href="changelog_6_2.html#idm140649572759472">Transaction Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017430864">Transaction Subsystem Changes</a>
+                      <a href="changelog_6_2.html#idm140649572812288">Test Suite Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017429072">Test Suite Changes</a>
+                      <a href="changelog_6_2.html#idm140649572762112">Utility Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017425824">Utility Changes</a>
+                      <a href="changelog_6_2.html#idm140649572751216">Configuration, Documentation, Sample Apps, Portability and Build Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017421968">Configuration, Documentation, Sample Apps, Portability and Build Changes</a>
+                      <a href="changelog_6_2.html#idm140649572749184">Example Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017419664">Example Changes</a>
+                      <a href="changelog_6_2.html#idm140649572747744">Miscellaneous Bug Fixes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017418032">Miscellaneous Bug Fixes</a>
+                      <a href="changelog_6_2.html#idm140649572743104">Deprecated Features</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017413392">Deprecated Features</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="changelog_6_2.html#idm140188017409264">Known Bugs</a>
+                      <a href="changelog_6_2.html#idm140649572738656">Known Bugs</a>
                     </span>
                   </dt>
                 </dl>
@@ -1085,12 +1260,12 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="fcbc_notif.html#idm140188017545792">New Parameter Value</a>
+                      <a href="fcbc_notif.html#idm140649572715584">New Parameter Value</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="fcbc_notif.html#idm140188017723200">New Events</a>
+                      <a href="fcbc_notif.html#idm140649572931056">New Events</a>
                     </span>
                   </dt>
                 </dl>
@@ -1104,7 +1279,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="log_nosync.html#idm140188017545024">New Parameter Value</a>
+                      <a href="log_nosync.html#idm140649572838208">New Parameter Value</a>
                     </span>
                   </dt>
                 </dl>
@@ -1119,7 +1294,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="repmgr_prefmas.html#idm140188017388048">New Parameter Values</a>
+                      <a href="repmgr_prefmas.html#idm140649572712704">New Parameter Values</a>
                     </span>
                   </dt>
                 </dl>
@@ -1134,12 +1309,12 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="repmgr_inqueue.html#idm140188017385744">New Functions</a>
+                      <a href="repmgr_inqueue.html#idm140649572837440">New Functions</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="repmgr_inqueue.html#idm140188017418400">New Event</a>
+                      <a href="repmgr_inqueue.html#idm140649572754800">New Event</a>
                     </span>
                   </dt>
                 </dl>
@@ -1182,127 +1357,127 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017355696">Database or Log File On-Disk Format Changes</a>
+                      <a href="changelog_6_1.html#idm140649572684272">Database or Log File On-Disk Format Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017328832">New Features/Improvements</a>
+                      <a href="changelog_6_1.html#idm140649572657296">New Features/Improvements</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017362752">Database Environment Changes</a>
+                      <a href="changelog_6_1.html#idm140649572691408">Database Environment Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017326064">Concurrent Data Store Changes</a>
+                      <a href="changelog_6_1.html#idm140649572677168">Concurrent Data Store Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017362624">Access Method Changes</a>
+                      <a href="changelog_6_1.html#idm140649572691280">Access Method Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017354800">API Changes</a>
+                      <a href="changelog_6_1.html#idm140649572676336">API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017348272">SQL-specific API Changes</a>
+                      <a href="changelog_6_1.html#idm140649572639168">SQL-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017331456">Tcl-specific API Changes</a>
+                      <a href="changelog_6_1.html#idm140649572660080">Tcl-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017315216">Java-specific API Changes</a>
+                      <a href="changelog_6_1.html#idm140649572697424">Java-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017307344">C#-specific API Changes</a>
+                      <a href="changelog_6_1.html#idm140649572638400">C#-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017311376">C++-specific API Changes</a>
+                      <a href="changelog_6_1.html#idm140649572637952">C++-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017308688">Replication Changes</a>
+                      <a href="changelog_6_1.html#idm140649572634624">Replication Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017306576">Locking Subsystem Changes</a>
+                      <a href="changelog_6_1.html#idm140649572625824">Locking Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017294752">Logging Subsystem Changes</a>
+                      <a href="changelog_6_1.html#idm140649572621296">Logging Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017293184">Memory Pool Subsystem Changes</a>
+                      <a href="changelog_6_1.html#idm140649572619728">Memory Pool Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017287296">Mutex Subsystem Changes</a>
+                      <a href="changelog_6_1.html#idm140649572613648">Mutex Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017285856">Transaction Subsystem Changes</a>
+                      <a href="changelog_6_1.html#idm140649572612016">Transaction Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017284416">Test Suite Changes</a>
+                      <a href="changelog_6_1.html#idm140649572610384">Test Suite Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017282976">Utility Changes</a>
+                      <a href="changelog_6_1.html#idm140649572608944">Utility Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017280848">Configuration, Documentation, Sample Apps, Portability and Build Changes</a>
+                      <a href="changelog_6_1.html#idm140649572607008">Configuration, Documentation, Sample Apps, Portability and Build Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017322288">Example Changes</a>
+                      <a href="changelog_6_1.html#idm140649572612320">Example Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017277968">Miscellaneous Bug Fixes</a>
+                      <a href="changelog_6_1.html#idm140649572603744">Miscellaneous Bug Fixes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017300048">Platform Certification Changes</a>
+                      <a href="changelog_6_1.html#idm140649572633536">Platform Certification Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017269744">Deprecated Features</a>
+                      <a href="changelog_6_1.html#idm140649572595520">Deprecated Features</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_1.html#idm140188017268112">Known Bugs</a>
+                      <a href="changelog_6_1.html#idm140649572593888">Known Bugs</a>
                     </span>
                   </dt>
                 </dl>
@@ -1330,22 +1505,22 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="blob-support.html#idm140188017259792">New Functions</a>
+                      <a href="blob-support.html#idm140649572585568">New Functions</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="blob-support.html#idm140188017241136">New Flags Accepted by Blob Streaming Interfaces</a>
+                      <a href="blob-support.html#idm140649572673136">New Flags Accepted by Blob Streaming Interfaces</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="blob-support.html#idm140188017246176">Other New Flags</a>
+                      <a href="blob-support.html#idm140649572571952">Other New Flags</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="blob-support.html#idm140188017244096">New Pragma</a>
+                      <a href="blob-support.html#idm140649572674384">New Pragma</a>
                     </span>
                   </dt>
                 </dl>
@@ -1359,12 +1534,12 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="rep_views.html#idm140188017461440">New Function</a>
+                      <a href="rep_views.html#idm140649572648752">New Function</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="rep_views.html#idm140188017228272">New Flag</a>
+                      <a href="rep_views.html#idm140649572550224">New Flag</a>
                     </span>
                   </dt>
                 </dl>
@@ -1378,7 +1553,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="bdbsql_ha_more_options.html#idm140188017324368">New Pragmas</a>
+                      <a href="bdbsql_ha_more_options.html#idm140649572650880">New Pragmas</a>
                     </span>
                   </dt>
                 </dl>
@@ -1392,7 +1567,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="rep_auto_takeover.html#idm140188017323824">New Event</a>
+                      <a href="rep_auto_takeover.html#idm140649572546336">New Event</a>
                     </span>
                   </dt>
                 </dl>
@@ -1406,7 +1581,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="sql_logbuf.html#idm140188017268880">New Pragma</a>
+                      <a href="sql_logbuf.html#idm140649572536768">New Pragma</a>
                     </span>
                   </dt>
                 </dl>
@@ -1456,117 +1631,117 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017173184">Database or Log File On-Disk Format Changes</a>
+                      <a href="changelog_6_0.html#idm140649572499216">Database or Log File On-Disk Format Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017205440">New Features</a>
+                      <a href="changelog_6_0.html#idm140649572531520">New Features</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017179776">Database Environment Changes</a>
+                      <a href="changelog_6_0.html#idm140649572505808">Database Environment Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017159648">Concurrent Data Store Changes</a>
+                      <a href="changelog_6_0.html#idm140649572487712">Concurrent Data Store Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017157824">Access Method Changes</a>
+                      <a href="changelog_6_0.html#idm140649572486080">Access Method Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017149328">API Changes</a>
+                      <a href="changelog_6_0.html#idm140649572477616">API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017146672">SQL-specific API Changes</a>
+                      <a href="changelog_6_0.html#idm140649572474960">SQL-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017145040">Tcl-specific API Changes</a>
+                      <a href="changelog_6_0.html#idm140649572473328">Tcl-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017140224">Java-specific API Changes</a>
+                      <a href="changelog_6_0.html#idm140649572468512">Java-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017137344">C#-specific API Changes</a>
+                      <a href="changelog_6_0.html#idm140649572465392">C#-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017131520">Replication Changes</a>
+                      <a href="changelog_6_0.html#idm140649572459568">Replication Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017145344">Locking Subsystem Changes</a>
+                      <a href="changelog_6_0.html#idm140649572473632">Locking Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017127088">Logging Subsystem Changes</a>
+                      <a href="changelog_6_0.html#idm140649572455136">Logging Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017125072">Memory Pool Subsystem Changes</a>
+                      <a href="changelog_6_0.html#idm140649572452560">Memory Pool Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017115392">Mutex Subsystem Changes</a>
+                      <a href="changelog_6_0.html#idm140649572442640">Mutex Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017112576">Transaction Subsystem Changes</a>
+                      <a href="changelog_6_0.html#idm140649572439824">Transaction Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017110992">Test Suite Changes</a>
+                      <a href="changelog_6_0.html#idm140649572438240">Test Suite Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017107888">Utility Changes</a>
+                      <a href="changelog_6_0.html#idm140649572435136">Utility Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017115888">Configuration, Documentation, Sample Apps, Portability and Build Changes</a>
+                      <a href="changelog_6_0.html#idm140649572443136">Configuration, Documentation, Sample Apps, Portability and Build Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017103072">Example Changes</a>
+                      <a href="changelog_6_0.html#idm140649572430512">Example Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017101440">Miscellaneous Bug Fixes</a>
+                      <a href="changelog_6_0.html#idm140649572428880">Miscellaneous Bug Fixes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017094096">Deprecated Features</a>
+                      <a href="changelog_6_0.html#idm140649572421456">Deprecated Features</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_6_0.html#idm140188017089616">Known Bugs</a>
+                      <a href="changelog_6_0.html#idm140649572416976">Known Bugs</a>
                     </span>
                   </dt>
                 </dl>
@@ -1599,17 +1774,17 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_conn_status.html#idm140188017082048">New Function</a>
+                      <a href="upgrade_11gr2_53_conn_status.html#idm140649572409536">New Function</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_conn_status.html#idm140188017190576">New Class</a>
+                      <a href="upgrade_11gr2_53_conn_status.html#idm140649572606448">New Class</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_conn_status.html#idm140188017081744">Deprecated Function</a>
+                      <a href="upgrade_11gr2_53_conn_status.html#idm140649572398336">Deprecated Function</a>
                     </span>
                   </dt>
                 </dl>
@@ -1623,7 +1798,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_excl.html#idm140188017065680">New Functions</a>
+                      <a href="upgrade_11gr2_53_excl.html#idm140649572393216">New Functions</a>
                     </span>
                   </dt>
                 </dl>
@@ -1637,7 +1812,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_heap_regionsize.html#idm140188017205680">New Functions</a>
+                      <a href="upgrade_11gr2_53_heap_regionsize.html#idm140649572533472">New Functions</a>
                     </span>
                   </dt>
                 </dl>
@@ -1651,22 +1826,22 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_hotbackup.html#idm140188017060032">New Functions</a>
+                      <a href="upgrade_11gr2_53_hotbackup.html#idm140649572387568">New Functions</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_hotbackup.html#idm140188017049872">Flags Accepted by DB_ENV-&gt;backup()</a>
+                      <a href="upgrade_11gr2_53_hotbackup.html#idm140649572377408">Flags Accepted by DB_ENV-&gt;backup()</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_hotbackup.html#idm140188017046448">Flags Accepted by DB_ENV-&gt;dbbackup()</a>
+                      <a href="upgrade_11gr2_53_hotbackup.html#idm140649572373984">Flags Accepted by DB_ENV-&gt;dbbackup()</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_hotbackup.html#idm140188017036592">Enumerations Accepted by DB_ENV-&gt;set_backup_config()</a>
+                      <a href="upgrade_11gr2_53_hotbackup.html#idm140649572363280">Enumerations Accepted by DB_ENV-&gt;set_backup_config()</a>
                     </span>
                   </dt>
                 </dl>
@@ -1685,7 +1860,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_meta_dir.html#idm140188017020144">New Functions</a>
+                      <a href="upgrade_11gr2_53_meta_dir.html#idm140649572375344">New Functions</a>
                     </span>
                   </dt>
                 </dl>
@@ -1704,7 +1879,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_sql_pragma.html#idm140188017009056">New PRAGMAs</a>
+                      <a href="upgrade_11gr2_53_sql_pragma.html#idm140649572333888">New PRAGMAs</a>
                     </span>
                   </dt>
                 </dl>
@@ -1718,12 +1893,12 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_sql_rep.html#idm140188017014880">PRAGMAs With Permanent Effects</a>
+                      <a href="upgrade_11gr2_53_sql_rep.html#idm140649572339712">PRAGMAs With Permanent Effects</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_53_sql_rep.html#idm140188017003936">PRAGMAs That Can Now Operate on Existing Databases</a>
+                      <a href="upgrade_11gr2_53_sql_rep.html#idm140649572332416">PRAGMAs That Can Now Operate on Existing Databases</a>
                     </span>
                   </dt>
                 </dl>
@@ -1742,77 +1917,77 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188017018032">Database or Log File On-Disk Format Changes</a>
+                      <a href="changelog_5_3.html#idm140649572343008">Database or Log File On-Disk Format Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188017064240">New Features</a>
+                      <a href="changelog_5_3.html#idm140649572330816">New Features</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016995552">Database Environment Changes</a>
+                      <a href="changelog_5_3.html#idm140649572331904">Database Environment Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016986688">Access Method Changes</a>
+                      <a href="changelog_5_3.html#idm140649572311920">Access Method Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016990896">SQL API Changes</a>
+                      <a href="changelog_5_3.html#idm140649572315984">SQL API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016975200">Java-specific API changes</a>
+                      <a href="changelog_5_3.html#idm140649572300512">Java-specific API changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016972080">Replication Changes</a>
+                      <a href="changelog_5_3.html#idm140649572297392">Replication Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016961904">Locking Subsystem Changes</a>
+                      <a href="changelog_5_3.html#idm140649572287216">Locking Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016955488">Logging Subsystem Changes</a>
+                      <a href="changelog_5_3.html#idm140649572280608">Logging Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016952848">Memory Pool Subsystem Changes</a>
+                      <a href="changelog_5_3.html#idm140649572277968">Memory Pool Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016948528">Mutex Subsystem Changes</a>
+                      <a href="changelog_5_3.html#idm140649572273648">Mutex Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016946752">Transaction Subsystem Changes</a>
+                      <a href="changelog_5_3.html#idm140649572272064">Transaction Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016944400">Utility Changes</a>
+                      <a href="changelog_5_3.html#idm140649572269904">Utility Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016940656">Configuration, Documentation, Sample Apps, Portability and Build Changes</a>
+                      <a href="changelog_5_3.html#idm140649572266160">Configuration, Documentation, Sample Apps, Portability and Build Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_3.html#idm140188016938448">Known Bugs</a>
+                      <a href="changelog_5_3.html#idm140649572263952">Known Bugs</a>
                     </span>
                   </dt>
                 </dl>
@@ -1850,7 +2025,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_rep_dbt_readonly.html#idm140188016927088">New Flag</a>
+                      <a href="upgrade_11gr2_52_rep_dbt_readonly.html#idm140649572253200">New Flag</a>
                     </span>
                   </dt>
                 </dl>
@@ -1864,12 +2039,12 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_dyn_env.html#idm140188016935120">New Functions</a>
+                      <a href="upgrade_11gr2_52_dyn_env.html#idm140649572432832">New Functions</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_dyn_env.html#idm140188016917808">Deprecated Functions</a>
+                      <a href="upgrade_11gr2_52_dyn_env.html#idm140649572244256">Deprecated Functions</a>
                     </span>
                   </dt>
                 </dl>
@@ -1888,37 +2063,37 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140188016882480">Upgrading</a>
+                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140649572208704">Upgrading</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140188016921552">New Functions</a>
+                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140649572248000">New Functions</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140188016925008">Modified Functions</a>
+                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140649572251040">Modified Functions</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140188016929984">New Events</a>
+                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140649572456400">New Events</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140188016866736">Removed Functions</a>
+                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140649572192448">Removed Functions</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140188016925488">New Parameters</a>
+                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140649572316752">New Parameters</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140188016998592">New Structure</a>
+                      <a href="upgrade_11gr2_52_grp_mbr.html#idm140649572455888">New Structure</a>
                     </span>
                   </dt>
                 </dl>
@@ -1932,17 +2107,17 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_heap.html#idm140188016869728">New Functions</a>
+                      <a href="upgrade_11gr2_52_heap.html#idm140649572196032">New Functions</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_heap.html#idm140188016845888">Modified Functions</a>
+                      <a href="upgrade_11gr2_52_heap.html#idm140649572172544">Modified Functions</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_heap.html#idm140188016874160">New Definition</a>
+                      <a href="upgrade_11gr2_52_heap.html#idm140649572194496">New Definition</a>
                     </span>
                   </dt>
                 </dl>
@@ -1956,7 +2131,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_mvcc_sql.html#idm140188016902768">New Pragmas</a>
+                      <a href="upgrade_11gr2_52_mvcc_sql.html#idm140649572229056">New Pragmas</a>
                     </span>
                   </dt>
                 </dl>
@@ -1975,7 +2150,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_rep_sql.html#idm140188016817632">New Pragmas</a>
+                      <a href="upgrade_11gr2_52_rep_sql.html#idm140649572145760">New Pragmas</a>
                     </span>
                   </dt>
                 </dl>
@@ -1989,7 +2164,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_repmgr_channels.html#idm140188016826128">New Functions</a>
+                      <a href="upgrade_11gr2_52_repmgr_channels.html#idm140649572166400">New Functions</a>
                     </span>
                   </dt>
                 </dl>
@@ -2004,7 +2179,7 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_seq_sql.html#idm140188016816560">New Functions</a>
+                      <a href="upgrade_11gr2_52_seq_sql.html#idm140649572144688">New Functions</a>
                     </span>
                   </dt>
                 </dl>
@@ -2018,17 +2193,17 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_xa.html#idm140188016838384">Constraints</a>
+                      <a href="upgrade_11gr2_52_xa.html#idm140649572130176">Constraints</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_xa.html#idm140188016785408">New Flag</a>
+                      <a href="upgrade_11gr2_52_xa.html#idm140649572122448">New Flag</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="upgrade_11gr2_52_xa.html#idm140188016777536">Modified Function</a>
+                      <a href="upgrade_11gr2_52_xa.html#idm140649572142960">Modified Function</a>
                     </span>
                   </dt>
                 </dl>
@@ -2047,112 +2222,112 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016799872">Database or Log File On-Disk Format Changes</a>
+                      <a href="changelog_5_2.html#idm140649572107392">Database or Log File On-Disk Format Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016764944">New Features</a>
+                      <a href="changelog_5_2.html#idm140649572142448">New Features</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016764176">Database Environment Changes</a>
+                      <a href="changelog_5_2.html#idm140649572144560">Database Environment Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016754464">Concurrent Data Store Changes</a>
+                      <a href="changelog_5_2.html#idm140649572090160">Concurrent Data Store Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016751232">Access Method Changes</a>
+                      <a href="changelog_5_2.html#idm140649572086592">Access Method Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016751664">SQL API Changes</a>
+                      <a href="changelog_5_2.html#idm140649572087536">SQL API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016770848">C API Changes</a>
+                      <a href="changelog_5_2.html#idm140649572127872">C API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016739168">Tcl-specific API Changes</a>
+                      <a href="changelog_5_2.html#idm140649572074144">Tcl-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016728336">C#-specific API Changes</a>
+                      <a href="changelog_5_2.html#idm140649572063408">C#-specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016719168">Replication Changes</a>
+                      <a href="changelog_5_2.html#idm140649572054240">Replication Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016714992">Locking Subsystem Changes</a>
+                      <a href="changelog_5_2.html#idm140649572050064">Locking Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016713552">Logging Subsystem Changes</a>
+                      <a href="changelog_5_2.html#idm140649572048432">Logging Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016710960">Memory Pool Subsystem Changes</a>
+                      <a href="changelog_5_2.html#idm140649572095568">Memory Pool Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016698016">Mutex Subsystem Changes</a>
+                      <a href="changelog_5_2.html#idm140649572032816">Mutex Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016694640">Transaction Subsystem Changes</a>
+                      <a href="changelog_5_2.html#idm140649572029440">Transaction Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016691808">Test Suite Changes</a>
+                      <a href="changelog_5_2.html#idm140649572026416">Test Suite Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016690224">Utility Changes</a>
+                      <a href="changelog_5_2.html#idm140649572024832">Utility Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016687168">Configuration, Documentation, Sample Apps, Portability and Build Changes</a>
+                      <a href="changelog_5_2.html#idm140649572021776">Configuration, Documentation, Sample Apps, Portability and Build Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016683952">Example Changes</a>
+                      <a href="changelog_5_2.html#idm140649572018560">Example Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016682320">Miscellaneous Bug Fixes</a>
+                      <a href="changelog_5_2.html#idm140649572016928">Miscellaneous Bug Fixes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016679088">Deprecated Features</a>
+                      <a href="changelog_5_2.html#idm140649572013696">Deprecated Features</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_2.html#idm140188016674640">Known Bugs</a>
+                      <a href="changelog_5_2.html#idm140649572009248">Known Bugs</a>
                     </span>
                   </dt>
                 </dl>
@@ -2200,122 +2375,122 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016661552">Database or Log File On-Disk Format Changes</a>
+                      <a href="changelog_5_1.html#idm140649571995600">Database or Log File On-Disk Format Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016865936">New Features</a>
+                      <a href="changelog_5_1.html#idm140649572162672">New Features</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016781056">Database Environment Changes</a>
+                      <a href="changelog_5_1.html#idm140649572274400">Database Environment Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016648352">Concurrent Data Store Changes</a>
+                      <a href="changelog_5_1.html#idm140649571983344">Concurrent Data Store Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016644160">Access Method Changes</a>
+                      <a href="changelog_5_1.html#idm140649571979824">Access Method Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016633312">API Changes</a>
+                      <a href="changelog_5_1.html#idm140649571968976">API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016629264">SQL-Specific API Changes</a>
+                      <a href="changelog_5_1.html#idm140649571964928">SQL-Specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016655200">Tcl-Specific API Changes</a>
+                      <a href="changelog_5_1.html#idm140649571989360">Tcl-Specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016620736">Java-Specific API Changes</a>
+                      <a href="changelog_5_1.html#idm140649571956592">Java-Specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016633872">C#-Specific API Changes</a>
+                      <a href="changelog_5_1.html#idm140649571969536">C#-Specific API Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016611728">Direct Persistence Layer (DPL), Bindings and Collections API</a>
+                      <a href="changelog_5_1.html#idm140649571947392">Direct Persistence Layer (DPL), Bindings and Collections API</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016602992">Replication Changes</a>
+                      <a href="changelog_5_1.html#idm140649571938656">Replication Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016618528">Locking Subsystem Changes</a>
+                      <a href="changelog_5_1.html#idm140649571935184">Locking Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016589168">Logging Subsystem Changes</a>
+                      <a href="changelog_5_1.html#idm140649571924912">Logging Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016630528">Memory Pool Subsystem Changes</a>
+                      <a href="changelog_5_1.html#idm140649571966192">Memory Pool Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016600400">Mutex Subsystem Changes</a>
+                      <a href="changelog_5_1.html#idm140649571948272">Mutex Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016597360">Transaction Subsystem Changes</a>
+                      <a href="changelog_5_1.html#idm140649571933104">Transaction Subsystem Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016662768">Test Suite Changes</a>
+                      <a href="changelog_5_1.html#idm140649571994704">Test Suite Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016580208">Utility Changes</a>
+                      <a href="changelog_5_1.html#idm140649571935808">Utility Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016586192">Configuration, Documentation, Sample Apps, Portability, and Build Changes</a>
+                      <a href="changelog_5_1.html#idm140649571921936">Configuration, Documentation, Sample Apps, Portability, and Build Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016618784">Example Changes</a>
+                      <a href="changelog_5_1.html#idm140649571954512">Example Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016574400">Miscellaneous Bug Fixes</a>
+                      <a href="changelog_5_1.html#idm140649571915888">Miscellaneous Bug Fixes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016577760">Deprecated Features</a>
+                      <a href="changelog_5_1.html#idm140649571913248">Deprecated Features</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_1.html#idm140188016560864">Known Bugs</a>
+                      <a href="changelog_5_1.html#idm140649571896352">Known Bugs</a>
                     </span>
                   </dt>
                 </dl>
@@ -2378,22 +2553,22 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_0.html#idm140188016540336">Changes between 11.2.5.0.26  and 11.2.5.0.32</a>
+                      <a href="changelog_5_0.html#idm140649571875120">Changes between 11.2.5.0.26  and 11.2.5.0.32</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_0.html#idm140188016593184">Changes between 11.2.5.0.21  and 11.2.5.0.26</a>
+                      <a href="changelog_5_0.html#idm140649571928336">Changes between 11.2.5.0.21  and 11.2.5.0.26</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_0.html#idm140188016527632">Changes between 4.8 and 11.2.5.0.21</a>
+                      <a href="changelog_5_0.html#idm140649571863168">Changes between 4.8 and 11.2.5.0.21</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_5_0.html#idm140188016528144">Known Bugs</a>
+                      <a href="changelog_5_0.html#idm140649571863584">Known Bugs</a>
                     </span>
                   </dt>
                 </dl>
@@ -2441,183 +2616,183 @@
                 <dl>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016473888">
+                      <a href="changelog_4_8.html#idm140649571795568">
 Changes between 4.8.26 and 4.8.28:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016511392">
+                      <a href="changelog_4_8.html#idm140649571844592">
 Known bugs in 4.8 </a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016468144">
+                      <a href="changelog_4_8.html#idm140649571901968">
 Changes between 4.8.24 and 4.8.26:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016534416">
+                      <a href="changelog_4_8.html#idm140649571807424">
 Changes between 4.8.21 and 4.8.24:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016383504">
+                      <a href="changelog_4_8.html#idm140649571853040">
 Changes between 4.7 and 4.8.21:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016547664">
+                      <a href="changelog_4_8.html#idm140649571853296">
 Database or Log File On-Disk Format Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016381728">
+                      <a href="changelog_4_8.html#idm140649571717376">
 New Features:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016467792">
+                      <a href="changelog_4_8.html#idm140649571733104">
 Database Environment Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016369376">
+                      <a href="changelog_4_8.html#idm140649571704912">
 Concurrent Data Store Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016397200">
+                      <a href="changelog_4_8.html#idm140649572046368">
 General Access Method Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016392736">
+                      <a href="changelog_4_8.html#idm140649571729312">
 Btree Access Method Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016359712">
+                      <a href="changelog_4_8.html#idm140649571725088">
 Hash Access Method Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016356736">
+                      <a href="changelog_4_8.html#idm140649571692576">
 Queue Access Method Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016348432">
+                      <a href="changelog_4_8.html#idm140649571684544">
 Recno Access Method Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016345008">
+                      <a href="changelog_4_8.html#idm140649571705152">
 C-specific API Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016342704">
+                      <a href="changelog_4_8.html#idm140649571719472">
 C++-specific API Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016339088">
+                      <a href="changelog_4_8.html#idm140649571675120">
 Java-specific API Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016336224">
+                      <a href="changelog_4_8.html#idm140649571672336">
 
  Direct Persistence Layer (DPL), Bindings and Collections API:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016375024">
+                      <a href="changelog_4_8.html#idm140649571670784">
 
  Tcl-specific API Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016332352">
+                      <a href="changelog_4_8.html#idm140649571668272">
 RPC-specific Client/Server Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016329168">
+                      <a href="changelog_4_8.html#idm140649571696384">
 Replication Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016316720">
+                      <a href="changelog_4_8.html#idm140649571652288">
 XA Resource Manager Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016348880">
+                      <a href="changelog_4_8.html#idm140649571675552">
 Locking Subsystem Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016360128">
+                      <a href="changelog_4_8.html#idm140649571682384">
 Logging Subsystem Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016296608">
+                      <a href="changelog_4_8.html#idm140649571632176">
 Memory Pool Subsystem Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016294880">
+                      <a href="changelog_4_8.html#idm140649571630448">
 Mutex Subsystem Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016290288">
+                      <a href="changelog_4_8.html#idm140649571671024">
 Test Suite Changes</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016329856">
+                      <a href="changelog_4_8.html#idm140649571665680">
 Transaction Subsystem Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016283824">
+                      <a href="changelog_4_8.html#idm140649571619424">
 Utility Changes:</a>
                     </span>
                   </dt>
                   <dt>
                     <span class="sect2">
-                      <a href="changelog_4_8.html#idm140188016278128">
+                      <a href="changelog_4_8.html#idm140649571613968">
 Configuration, Documentation, Sample Application, Portability and Build Changes:</a>
                     </span>
                   </dt>
@@ -2637,20 +2812,6 @@ Configuration, Documentation, Sample Application, Portability and Build Changes:
                   <a href="test.html#test_run">Running the test suite</a>
                 </span>
               </dt>
-              <dd>
-                <dl>
-                  <dt>
-                    <span class="sect2">
-                      <a href="test.html#idm140188016250832">Running SQL Test Suite on Unix</a>
-                    </span>
-                  </dt>
-                  <dt>
-                    <span class="sect2">
-                      <a href="test.html#idm140188016264384">Running SQL Test Suite on Windows</a>
-                    </span>
-                  </dt>
-                </dl>
-              </dd>
               <dt>
                 <span class="sect1">
                   <a href="test_faq.html">Test suite FAQ</a>

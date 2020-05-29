@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
+ * Copyright (c) 2002, 2020 Oracle and/or its affiliates.  All rights reserved.
  *
- * Copyright (c) 2002, 2017 Oracle and/or its affiliates.  All rights reserved.
+ * See the file EXAMPLES-LICENSE for license information.
  *
- * $Id$
  */
 
 package collections.ship.basic;
@@ -22,9 +21,9 @@ import java.io.Serializable;
  */
 public class SupplierData implements Serializable {
 
-    private String name;
-    private int status;
-    private String city;
+    private final String name;
+    private final int status;
+    private final String city;
 
     public SupplierData(String name, int status, String city) {
 
@@ -48,6 +47,7 @@ public class SupplierData implements Serializable {
         return city;
     }
 
+    @Override
     public String toString() {
 
         return "[SupplierData: name=" + name +
